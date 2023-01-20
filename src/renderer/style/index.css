@@ -1,0 +1,29 @@
+.sakura-color {
+    color: #dfb6c4;
+}
+
+.sakura-logo {
+    transform: scale(5);
+    margin-bottom: 30px;
+}
+
+.header-five {
+    margin: 0;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-weight: 400;
+    font-size: 1.3rem;
+    line-height: 1.334;
+    letter-spacing: 0em;
+    padding-bottom: 10px;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.2s linear;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+

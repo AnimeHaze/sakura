@@ -1,0 +1,78 @@
+<template>
+  <n-config-provider :theme="theme">
+    <n-layout style="height: 100vh; user-select: none;"
+has-sider>
+      <Sidebar/>
+      <n-layout>
+<!--        <div class="frame">-->
+<!--          <div style="display: inline-flex">-->
+<!--            <div @click="collapse" class="button">-->
+<!--              <n-icon size="18">-->
+<!--                <remove-outline />-->
+<!--              </n-icon>-->
+<!--            </div>-->
+<!--            <div @click="maximizeMinimize()" class="button">-->
+<!--              <n-icon size="18">-->
+<!--                <browsers-outline />-->
+<!--              </n-icon>-->
+<!--            </div>-->
+<!--            <div @click="close" class="button">-->
+<!--              <n-icon size="18">-->
+<!--                <close-outline/>-->
+<!--              </n-icon>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+        <transition name="fade">
+          <router-view></router-view>
+        </transition>
+      </n-layout>
+    </n-layout>
+  </n-config-provider>
+</template>
+
+<style scoped>
+.button {
+  -webkit-app-region: no-drag;
+  padding: 4px 4px 0px;
+}
+.button:hover {
+  background: #8d86861c;
+}
+.frame {
+  flex-direction: row-reverse;
+  display: flex;
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+}
+</style>
+
+<script>
+import { computed, defineComponent } from 'vue'
+import { darkTheme } from 'naive-ui'
+import Sidebar from './sidebar/Sidebar.vue'
+import { useConfigStore } from '../store'
+import { CloseOutline, BrowsersOutline, RemoveOutline } from '@vicons/ionicons5'
+
+export default defineComponent({
+  methods: {
+    collapse () {
+      window.api.collapseApp()
+    },
+    close () {
+      window.api.closeApp()
+    },
+    maximizeMinimize () {
+      window.api.minimizeMaximizeApp()
+    }
+  },
+  components: { Sidebar, CloseOutline, BrowsersOutline, RemoveOutline },
+  setup () {
+    const config = useConfigStore()
+    const theme = computed(() => config.theme === 'dark' ? darkTheme : null)
+    return {
+      theme,
+    }
+  }
+})
+</script>
