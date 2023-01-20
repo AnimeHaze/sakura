@@ -10,7 +10,9 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .js,.vue src",
-    "devtools": "vue-devtools"
+    "devtools": "vue-devtools",
+    "prepare": "husky install",
+    "precommit": "npm run lint"
   },
   "keywords": [],
   "author": {
@@ -20,6 +22,8 @@
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.20.12",
+    "@commitlint/cli": "^17.4.2",
+    "@commitlint/config-conventional": "^17.4.2",
     "@electron-forge/cli": "^6.0.4",
     "@electron-forge/maker-deb": "^6.0.4",
     "@electron-forge/maker-rpm": "^6.0.4",
@@ -34,6 +38,7 @@
     "electron": "22.0.2",
     "eslint": "^8.32.0",
     "eslint-plugin-vue": "^9.9.0",
+    "husky": "^8.0.3",
     "naive-ui": "^2.34.3",
     "node-loader": "^2.0.0",
     "style-loader": "^3.3.1",
