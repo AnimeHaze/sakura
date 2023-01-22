@@ -3,6 +3,7 @@ import Home from '../views/HomeView.vue'
 import About from '../views/AboutView.vue'
 import Profile from '../views/ProfileView.vue'
 import Login from '../views/LoginView.vue'
+import Release from '../views/ReleaseView.vue'
 
 import { useUserStore } from '../store'
 
@@ -13,6 +14,7 @@ const routes = [
   { path: '/profile', component: Profile, name: 'Profile' },
   { path: '/about', component: About, name: 'About' },
   { path: '/login', component: Login, name: 'Login' },
+  { path: '/release', component: Release, name: 'Release' },
   { path: '/', component: Home, name: 'Home' }
 ]
 
