@@ -1,18 +1,11 @@
 <template>
   <h5
-    style="margin-top: 20px"
-    class="header-five"
+    class="header-five mt-2"
   >
     Новости
   </h5>
   <swiper
-    :breakpoints="{
-      860: { slidesPerView: 2, spaceBetween: 40 },
-      1200: { slidesPerView: 3, spaceBetween: 20 },
-      1500: { slidesPerView: 4, spaceBetween: 30 },
-      1750: { slidesPerView: 5, spaceBetween: 60 },
-      2160: { slidesPerView: 6, spaceBetween: 60 },
-    }"
+    :breakpoints="breakpoints"
     :pagination="{
       clickable: true,
     }"
@@ -47,8 +40,16 @@
 import { ref } from 'vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
-
 const loadingSwiper = ref(true)
+
+const breakpoints = {
+  860: { slidesPerView: 2, spaceBetween: 50 },
+  960: { slidesPerView: 3, spaceBetween: 220 },
+  1130: { slidesPerView: 3, spaceBetween: 50 },
+  1500: { slidesPerView: 4, spaceBetween: 30 },
+  1750: { slidesPerView: 5, spaceBetween: 60 },
+  2160: { slidesPerView: 6, spaceBetween: 60 }
+}
 
 const news = [
   'https://www.anilibria.tv/storage/media/videos/previews/502/b9RO7UiMtHMKaRpE__361fb1a0ea18c8855ed9081411da0e9d.jpg',
