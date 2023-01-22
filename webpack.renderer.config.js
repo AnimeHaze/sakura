@@ -1,5 +1,6 @@
 const rules = require('./webpack.rules')
 const { VueLoaderPlugin } = require('vue-loader')
+const WindiCSSWebpackPlugin = require('windicss-webpack-plugin')
 const path = require('path')
 
 module.exports = {
@@ -19,12 +20,12 @@ module.exports = {
         ]
       },
       ...rules
-    ],
+    ]
   },
   resolve: {
     extensions: ['*', '.js', '.vue', '.json'],
     alias: {
-      vue: "vue/dist/vue.esm-bundler.js"
+      vue: 'vue/dist/vue.esm-bundler.js'
     },
     fallback: {
       child_process: false,
@@ -44,6 +45,7 @@ module.exports = {
     }
   },
   plugins: [
-    new VueLoaderPlugin()
+    new VueLoaderPlugin(),
+    new WindiCSSWebpackPlugin()
   ]
 }
