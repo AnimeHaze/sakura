@@ -46,6 +46,7 @@
               <div
                 v-if="!loadingSwiper"
                 class="poster"
+                @click="openRelease"
               >
                 <img
                   :alt="titles[slide]"
@@ -69,10 +70,17 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
 
+const router = useRouter()
+
 const loadingSwiper = ref(true)
+
+function openRelease () {
+  router.push({ name: 'Release' })
+}
 
 const titles = [
   'Невероятные приключения ДжоДжо: каменный океан',
