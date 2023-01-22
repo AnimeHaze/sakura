@@ -1,5 +1,6 @@
 <template>
   <n-layout-sider
+    class="z-2"
     bordered
     collapse-mode="width"
     :collapsed-width="64"
