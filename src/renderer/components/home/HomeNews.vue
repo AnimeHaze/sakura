@@ -52,17 +52,17 @@ const breakpoints = {
 }
 
 const news = [
-  'https://www.anilibria.tv/storage/media/videos/previews/502/b9RO7UiMtHMKaRpE__361fb1a0ea18c8855ed9081411da0e9d.jpg',
-  'https://www.anilibria.tv/storage/media/videos/previews/529/EkyFeY8bWyn7Ua4p__964da049dab94a4e1a5b10b2a8322ceb.jpg',
-  'https://www.anilibria.tv/storage/media/videos/previews/476/50VKeX3Lbk8OInVm__d311fbb6a9df7201ecbf9abc9f06a86c.jpg',
-  'https://www.anilibria.tv/storage/media/videos/previews/527/KEnw2V8oL21hUoOw__4d10cf311d78591be8040d057b7fc488.jpg',
-  'https://www.anilibria.tv/storage/media/videos/previews/436/dTa8hcfKkjH32fQC__cde385f61288910c4efb892ec8db4780.jpg',
-  'https://www.anilibria.tv/storage/media/videos/previews/528/OplgIzu955bUZxyw__3530664dbbe629fa41f7791c9fa23978.jpg',
-  'https://www.anilibria.tv/storage/media/videos/previews/400/FIaYWCYOx9NGLOOR__f10306ed7d404e7e40ef9d595d1288fc.jpg',
-  'https://www.anilibria.tv/storage/media/videos/previews/526/7Sm17ZuzMrhmr16E__2b2729787c202566bd888cc1895ff492.jpg',
-  'https://www.anilibria.tv/storage/media/videos/previews/525/Jje8XoIFerhG78N4__3fcc93cd365a86b027f995ba19d79934.jpg',
-  'https://www.anilibria.tv/storage/media/videos/previews/335/ys9dzX3CPZ0BnabD__0da1c26622e6f7fda2e5b437082a318d.jpg',
-  'https://www.anilibria.tv/storage/media/videos/previews/524/lNuP85eCehXGtWgb__0161889acd57fc2d9ecb392570cdeabf.jpg'
+  'https://top.anilibria.cf/storage/media/videos/previews/502/b9RO7UiMtHMKaRpE__361fb1a0ea18c8855ed9081411da0e9d.jpg',
+  'https://top.anilibria.cf/storage/media/videos/previews/529/EkyFeY8bWyn7Ua4p__964da049dab94a4e1a5b10b2a8322ceb.jpg',
+  'https://top.anilibria.cf/storage/media/videos/previews/476/50VKeX3Lbk8OInVm__d311fbb6a9df7201ecbf9abc9f06a86c.jpg',
+  'https://top.anilibria.cf/storage/media/videos/previews/527/KEnw2V8oL21hUoOw__4d10cf311d78591be8040d057b7fc488.jpg',
+  'https://top.anilibria.cf/storage/media/videos/previews/436/dTa8hcfKkjH32fQC__cde385f61288910c4efb892ec8db4780.jpg',
+  'https://top.anilibria.cf/storage/media/videos/previews/528/OplgIzu955bUZxyw__3530664dbbe629fa41f7791c9fa23978.jpg',
+  'https://top.anilibria.cf/storage/media/videos/previews/400/FIaYWCYOx9NGLOOR__f10306ed7d404e7e40ef9d595d1288fc.jpg',
+  'https://top.anilibria.cf/storage/media/videos/previews/526/7Sm17ZuzMrhmr16E__2b2729787c202566bd888cc1895ff492.jpg',
+  'https://top.anilibria.cf/storage/media/videos/previews/525/Jje8XoIFerhG78N4__3fcc93cd365a86b027f995ba19d79934.jpg',
+  'https://top.anilibria.cf/storage/media/videos/previews/335/ys9dzX3CPZ0BnabD__0da1c26622e6f7fda2e5b437082a318d.jpg',
+  'https://top.anilibria.cf/storage/media/videos/previews/524/lNuP85eCehXGtWgb__0161889acd57fc2d9ecb392570cdeabf.jpg'
 ]
 
 setTimeout(() => (loadingSwiper.value = false), Math.floor(Math.random() * (2000 - 500) + 500))

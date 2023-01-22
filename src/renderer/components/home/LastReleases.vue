@@ -95,15 +95,15 @@ const titles = [
 ]
 
 const images = [
-  'https://www.anilibria.tv/storage/releases/posters/9097/PEFjpxCXaLMFATFJ__e2dec6218fdd4fb51d6b981611a98ee8.jpg',
-  'https://www.anilibria.tv/storage/releases/posters/9266/edk2kCItHOx6fUNu__01efc0a63761fddf43db766f5b1522d9.jpg',
-  'https://www.anilibria.tv/storage/releases/posters/9327/MmsRDWtqNaf4O865__4fc73dcc5520b79569232a4f0e7d4b8c.jpg',
-  'https://www.anilibria.tv/storage/releases/posters/9333/vR71EBPQHC4iG2B9__53c7ccdf7f04fefcf7e25080c0270a04.jpg',
-  'https://www.anilibria.tv/storage/releases/posters/9325/REom0UxgVviCWHW7__77b5e99dbfbfa58ac8185728c956a1bf.jpg',
-  'https://www.anilibria.tv/storage/releases/posters/3996/EYY4BbyYQ8AfZKIj__6467adcb67dc2e5f7078c7f645ccb9e5.jpg',
-  'https://www.anilibria.tv/storage/releases/posters/9331/gTIANFa3uqdhk1yE__b6009168990d1c7ac1880f7eae0f073c.jpg',
-  'https://www.anilibria.tv/storage/releases/posters/9337/2YhbpJ4vV6PRijFO__15feab82deffdbdf2abcc3bf0dccf27d.jpg',
-  'https://www.anilibria.tv/storage/releases/posters/9260/7iezY4NrImAx6eWb__da55cdb7655d58464fe7c08bd70d6812.jpg'
+  'https://top.anilibria.cf/storage/releases/posters/9097/PEFjpxCXaLMFATFJ__e2dec6218fdd4fb51d6b981611a98ee8.jpg',
+  'https://top.anilibria.cf/storage/releases/posters/9266/edk2kCItHOx6fUNu__01efc0a63761fddf43db766f5b1522d9.jpg',
+  'https://top.anilibria.cf/storage/releases/posters/9327/MmsRDWtqNaf4O865__4fc73dcc5520b79569232a4f0e7d4b8c.jpg',
+  'https://top.anilibria.cf/storage/releases/posters/9333/vR71EBPQHC4iG2B9__53c7ccdf7f04fefcf7e25080c0270a04.jpg',
+  'https://top.anilibria.cf/storage/releases/posters/9325/REom0UxgVviCWHW7__77b5e99dbfbfa58ac8185728c956a1bf.jpg',
+  'https://top.anilibria.cf/storage/releases/posters/3996/EYY4BbyYQ8AfZKIj__6467adcb67dc2e5f7078c7f645ccb9e5.jpg',
+  'https://top.anilibria.cf/storage/releases/posters/9331/gTIANFa3uqdhk1yE__b6009168990d1c7ac1880f7eae0f073c.jpg',
+  'https://top.anilibria.cf/storage/releases/posters/9337/2YhbpJ4vV6PRijFO__15feab82deffdbdf2abcc3bf0dccf27d.jpg',
+  'https://top.anilibria.cf/storage/releases/posters/9260/7iezY4NrImAx6eWb__da55cdb7655d58464fe7c08bd70d6812.jpg'
 ]
 
 setTimeout(() => (loadingSwiper.value = false), Math.floor(Math.random() * (2000 - 500) + 500))

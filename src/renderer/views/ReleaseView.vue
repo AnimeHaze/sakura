@@ -14,7 +14,7 @@
           class="poster mb-3"
           round
           lazy
-          src="https://storage.manga.ovh/book/only-fools-rely-on-cat-eared-slaves/poster/9fc1404d-3847-4dc7-accd-57aa660b6534.jpeg?width=400&type=webp"
+          src="https://moe.shikimori.one/uploads/poster/animes/11757/main_alt-d6f74ec77f55e436b31e07cff06c19e7.jpeg"
         >
           <template #placeholder>
             <div
@@ -69,26 +69,32 @@
               55
             </div>
           </n-space>
-
+          <a class="titlename">
+            Мастера меча онлайн!
+          </a>
+          <br>
+          <a class="additionaltitlename">
+            Sword Art Online
+          </a>
           <n-space
             size="small"
             class="mt-2"
           >
             <n-tag
               :bordered="false"
-              size="small"
+              size="medium"
             >
-              Tag A
+              Детектив
             </n-tag>
             <n-tag
               :bordered="false"
-              size="small"
+              size="medium"
             >
-              Tag B
+              Реинкарнация
             </n-tag>
             <n-tag
               :bordered="false"
-              size="small"
+              size="medium"
             >
               ...
             </n-tag>

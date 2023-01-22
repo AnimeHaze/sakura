@@ -17,6 +17,21 @@
     padding-bottom: 10px;
 }
 
+
+.titlename {
+    word-break: break-word;
+    color: #FFFFFFE5;
+    font-weight: 500;
+    flex: 1;
+    min-width: 0;
+    font-size: 1.5rem;
+}
+
+.additionaltitlename {
+    color: rgb(110, 110, 110);
+
+}
+
 .fade-enter-active,
 .fade-leave-active {
     transition: opacity 0.2s linear;
