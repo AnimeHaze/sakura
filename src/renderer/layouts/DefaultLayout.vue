@@ -1,7 +1,7 @@
 <template>
   <n-config-provider :theme="theme">
     <n-layout
-      class="layout"
+      class="h-screen select-none"
       has-sider
     >
       <Sidebar />
@@ -23,10 +23,3 @@ import { useConfigStore } from '../store'
 const config = useConfigStore()
 const theme = computed(() => config.theme === 'dark' ? darkTheme : null)
 </script>
-
-<style scoped>
-.layout {
-  height: 100vh;
-  user-select: none;
-}
-</style>
