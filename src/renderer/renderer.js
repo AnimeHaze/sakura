@@ -52,9 +52,9 @@ const app = createApp({
   template: '<App/>'
 })
 
-app.use(router)
 app.use(naive)
 app.use(pinia)
+app.use(router)
 
 app.mount('#app')
 devtools.connect()
