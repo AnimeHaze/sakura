@@ -4,6 +4,9 @@ export const useUserStore = defineStore('user', {
   state: () => ({
     /** @type {
      {
+       authToken: {
+         authToken: string|null
+       },
        name: string,
        id: number,
        comments: number,
@@ -13,6 +16,7 @@ export const useUserStore = defineStore('user', {
        avatar: string
      }
     } */
+    authToken: null,
     information: {
       id: 0,
       avatar: 'https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg',
