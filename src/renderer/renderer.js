@@ -27,7 +27,7 @@
  */
 
 import './style/index.css'
-
+import 'windi.css'
 // import Vue from '../node_modules/vue/dist/vue.esm.browser.min.js';
 //
 // new Vue({
