@@ -7,9 +7,9 @@ import Profile from '../views/ProfileView.vue'
 // Each route should map to a component.
 // We'll talk about nested routes later.
 const routes = [
-  { path: '/profile', component: Profile },
-  { path: '/about', component: About },
-  { path: '/', component: Home }
+  { path: '/profile', component: Profile, name: 'Profile' },
+  { path: '/about', component: About, name: 'About' },
+  { path: '/', component: Home, name: 'Home' }
 ]
 
 // 3. Create the router instance and pass the `routes` option
