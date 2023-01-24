@@ -6,18 +6,12 @@
     :src="posterImage"
   >
     <template #placeholder>
-      <div
-        style="
-            width: 224px;
-            height: 321px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #8882;
-          "
-      >
-        Loading
-      </div>
+      <n-skeleton
+        :height="321"
+        :width="224"
+        :sharp="false"
+        size="medium"
+      />
     </template>
   </n-image>
 
