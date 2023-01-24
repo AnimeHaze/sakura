@@ -9,6 +9,7 @@ contextBridge.exposeInMainWorld(
     toggleDevtools: () => ipcRenderer.invoke('toggle:devtools'),
     closeApp: () => ipcRenderer.invoke('app:close'),
     minimizeMaximizeApp: () => ipcRenderer.invoke('app:maximize-minimize'),
-    collapseApp: () => ipcRenderer.invoke('app:collapse')
+    collapseApp: () => ipcRenderer.invoke('app:collapse'),
+    preventSleep: () => ipcRenderer.invoke('app:prevent-sleep')
   }
 )
