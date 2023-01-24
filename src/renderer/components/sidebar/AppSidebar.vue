@@ -15,7 +15,6 @@
       :collapsed-width="64"
       :collapsed-icon-size="28"
       :options="menuOptions"
-      :render-label="renderMenuLabel"
       :render-icon="renderMenuIcon"
       :expand-icon="expandIcon"
       @update:value="handleClick"
@@ -27,12 +26,13 @@
 import { h } from 'vue'
 import { NAvatar, NIcon } from 'naive-ui'
 import { AppsOutline, BookmarkOutline, BugOutline, CaretDownOutline, InformationCircleOutline, SearchOutline, SettingsOutline, SyncCircle, TerminalOutline } from '@vicons/ionicons5'
-import { RouterLink } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useConfigStore, useUserStore } from '../../store'
 import ThemeIcon from './ThemeIcon.vue'
 
 const config = useConfigStore()
 const user = useUserStore()
+const router = useRouter()
 
 const menuOptions = [
   { label: 'Каталог', key: 'catalog', href: '/' },
@@ -60,19 +60,12 @@ if (window.api.isDev()) {
   })
 }
 
-function renderMenuLabel (option) {
-  if ('href' in option) {
-    return h(RouterLink, { to: option.href }, () => option.label)
-  }
-
-  return option.label
-}
-
 function expandIcon () {
   return h(NIcon, null, { default: () => h(CaretDownOutline) })
 }
 
-function handleClick (key) {
+function handleClick (key, option) {
+  if (option.href) { router.push(option.href) }
   if (key === 'theme') { config.toggleTheme() }
   if (key === 'devtools') { window.api.toggleDevtools() }
 }
