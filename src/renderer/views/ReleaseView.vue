@@ -78,7 +78,7 @@
           </a>
           <n-space
             size="small"
-            class="mt-2"
+            class="mt-3"
           >
             <n-tag
               :bordered="false"
