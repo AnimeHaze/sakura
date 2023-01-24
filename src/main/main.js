@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
 const { createMainWindow } = require('./utils/windows')
+const { preventDisplaySleep } = require('./utils/powerSaveBlocker')
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -15,6 +16,8 @@ ipcMain.handle('app:maximize-minimize', () => {
   } else win.maximize()
 })
 ipcMain.handle('app:collapse', () => BrowserWindow.getFocusedWindow().minimize())
+
+ipcMain.handle('app:prevent-sleep', () => preventDisplaySleep())
 
 app.on('ready', () => createMainWindow())
 app.on('window-all-closed', () => process.platform !== 'darwin' && app.quit())
