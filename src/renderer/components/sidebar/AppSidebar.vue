@@ -39,13 +39,6 @@ const menuOptions = [
   { label: 'AniCoder', key: 'profile', href: '/profile' },
   { label: 'Избранное', key: 'favorite' },
   { label: 'Поиск', key: 'search' },
-  {
-    label: 'Отладка',
-    key: 'debug',
-    children: [
-      { label: 'Открыть консоль', key: 'devtools' }
-    ]
-  },
   { label: 'Тема', key: 'theme' },
   {
     label: 'Настройки',
@@ -56,6 +49,16 @@ const menuOptions = [
   },
   { label: 'О приложении', key: 'about', href: '/about' }
 ]
+
+if (window.api.isDev()) {
+  menuOptions.push({
+    label: 'Отладка',
+    key: 'debug',
+    children: [
+      { label: 'Открыть консоль', key: 'devtools' }
+    ]
+  })
+}
 
 function renderMenuLabel (option) {
   if ('href' in option) {
