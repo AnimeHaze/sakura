@@ -10,57 +10,9 @@
       <n-layout-sider
         content-style="padding: 24px;"
       >
-        <n-image
-          class="poster mb-3"
-          round
-          lazy
-          src="https://storage.manga.ovh/book/only-fools-rely-on-cat-eared-slaves/poster/9fc1404d-3847-4dc7-accd-57aa660b6534.jpeg?width=400&type=webp"
-        >
-          <template #placeholder>
-            <div
-              style="
-            width: 224px;
-            height: 321px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #8882;
-          "
-            >
-              Loading
-            </div>
-          </template>
-        </n-image>
-
-        <n-button class="w-full mb-3">
-          Смотреть
-        </n-button>
-
-        <n-select
-          v-model:value="value"
-          placeholder="Добавить в папку"
-          :options="foolders"
-        >
-          <template #action>
-            <div>
-              <n-button class="w-full mb-2">
-                Удалить из папки
-              </n-button>
-            </div>
-            <div class="flex inline">
-              <div class="mr-2">
-                <n-input placeholder="Создать папку" />
-              </div>
-              <div>
-                <n-button>
-                  <n-icon size="24">
-                    <checkmark-outline />
-                  </n-icon>
-                </n-button>
-              </div>
-            </div>
-          </template>
-        </n-select>
+        <release-sider
+          :poster-image="posterImage"
+        />
       </n-layout-sider>
       <n-layout>
         <n-layout-content class="p-4 py-2">
@@ -168,8 +120,11 @@
 </template>
 
 <script setup>
-import { CheckmarkOutline, Star, Heart, Eye, Bookmarks } from '@vicons/ionicons5'
+import { Star, Heart, Eye, Bookmarks } from '@vicons/ionicons5'
 import { computed, ref } from 'vue'
+import ReleaseSider from '../components/release/ReleaseSider.vue'
+
+const posterImage = 'https://moe.shikimori.one/uploads/poster/animes/11757/main_alt-d6f74ec77f55e436b31e07cff06c19e7.jpeg'
 
 const release = {
   title: 'Мастера меча онлайн!',
@@ -215,43 +170,5 @@ const createColumns = () => {
   ]
 }
 
-const foolders = [
-  {
-    label: 'Смотрю',
-    value: '1'
-  },
-  {
-    label: 'Запланировано',
-    value: '2'
-  },
-  {
-    label: 'Пересматриваю',
-    value: '3'
-  },
-  {
-    label: 'Любимое',
-    value: '4'
-  },
-  {
-    label: 'Брошено',
-    value: '5'
-  }
-]
-
 const columns = createColumns()
 </script>
-
-<style>
-.poster {
-  max-width: 240px;
-  justify-content: center;
-  opacity: 0.8;
-  object-fit: cover;
-  border-radius: 4px;
-  transition: opacity 125ms ease-in-out;
-}
-
-.poster:hover {
-  opacity: 1;
-}
-</style>
