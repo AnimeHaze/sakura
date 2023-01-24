@@ -72,23 +72,23 @@
 
           <n-space
             size="small"
-            class="mt-2"
+            class="mt-3"
           >
             <n-tag
               :bordered="false"
-              size="small"
+              size="medium"
             >
               Tag A
             </n-tag>
             <n-tag
               :bordered="false"
-              size="small"
+              size="medium"
             >
               Tag B
             </n-tag>
             <n-tag
               :bordered="false"
-              size="small"
+              size="medium"
             >
               ...
             </n-tag>
