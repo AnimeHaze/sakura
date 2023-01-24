@@ -63,10 +63,13 @@
         </n-select>
       </n-layout-sider>
       <n-layout>
-        <n-layout-content content-style="padding: 24px;">
-          <n-space justify="end">
-            <div style="word-break: break-all">
-              55
+        <n-layout-content class="p-4 py-2">
+          <n-space vertical>
+            <div class="break-words font-600 flex-1 text-2xl">
+              {{ release.title }}
+            </div>
+            <div class="text-gray-500 break-words whitespace-pre-line">
+              {{ altTitles }}
             </div>
           </n-space>
           <a class="titlename">
@@ -172,7 +175,14 @@
 
 <script setup>
 import { CheckmarkOutline, Star, Heart, Eye, Bookmarks } from '@vicons/ionicons5'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+
+const release = {
+  title: 'Мастера меча онлайн!',
+  altTitles: ['Sword Art Online', '1234567']
+}
+
+const altTitles = computed(() => release.altTitles.join('\n'))
 
 const data = Array.from({ length: 46 }).map((_, index) => ({
   name: `Edward King ${index}`,
