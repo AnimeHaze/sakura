@@ -27,7 +27,11 @@ export const useUserStore = defineStore('user', {
       views: 0
     }
   }),
-  getters: {},
+  getters: {
+    isAuthorized () {
+      return this.authToken !== null
+    }
+  },
   actions: {
     // any amount of arguments, return a promise or not
     incrementComments (count = 1) {
