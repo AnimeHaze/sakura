@@ -36,6 +36,9 @@ export const useUserStore = defineStore('user', {
     // any amount of arguments, return a promise or not
     incrementComments (count = 1) {
       this.information.comments += count
+    },
+    logout () {
+      this.authToken = null
     }
   }
 })
