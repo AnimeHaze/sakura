@@ -24,13 +24,6 @@
               {{ altTitles }}
             </div>
           </n-space>
-          <a class="titlename">
-            Мастера меча онлайн!
-          </a>
-          <br>
-          <a class="additionaltitlename">
-            Sword Art Online
-          </a>
           <n-space
             size="small"
             class="mt-3"
