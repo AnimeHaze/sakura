@@ -23,9 +23,13 @@
 </template>
 
 <script setup>
-import { h } from 'vue'
-import { NAvatar, NIcon } from 'naive-ui'
-import { AppsOutline, BookmarkOutline, BugOutline, CaretDownOutline, InformationCircleOutline, SearchOutline, SettingsOutline, SyncCircle, TerminalOutline } from '@vicons/ionicons5'
+import { computed, h } from 'vue'
+import { NAvatar, NIcon, useDialog } from 'naive-ui'
+import {
+  AppsOutline, BookmarkOutline, BugOutline, CaretDownOutline,
+  InformationCircleOutline, SearchOutline, SettingsOutline,
+  SyncCircle, TerminalOutline, LogOutOutline
+} from '@vicons/ionicons5'
 import { useRouter } from 'vue-router'
 import { useConfigStore, useUserStore } from '../../store'
 import ThemeIcon from './ThemeIcon.vue'
@@ -33,8 +37,9 @@ import ThemeIcon from './ThemeIcon.vue'
 const config = useConfigStore()
 const user = useUserStore()
 const router = useRouter()
+const dialog = useDialog()
 
-const menuOptions = [
+const menuOptions = computed(() => [
   { label: 'Каталог', key: 'catalog', href: '/' },
   { label: 'AniCoder', key: 'profile', href: '/profile' },
   { label: 'Избранное', key: 'favorite' },
@@ -47,18 +52,17 @@ const menuOptions = [
       { label: 'Синхронизации', key: 'sync' }
     ]
   },
-  { label: 'О приложении', key: 'about', href: '/about' }
-]
-
-if (window.api.isDev()) {
-  menuOptions.push({
+  { label: 'О приложении', key: 'about', href: '/about' },
+  { label: 'Выйти из аккаунта', key: 'logout', show: user.isAuthorized },
+  {
     label: 'Отладка',
     key: 'debug',
     children: [
       { label: 'Открыть консоль', key: 'devtools' }
-    ]
-  })
-}
+    ],
+    show: window.api.isDev()
+  }
+])
 
 function expandIcon () {
   return h(NIcon, null, { default: () => h(CaretDownOutline) })
@@ -66,6 +70,19 @@ function expandIcon () {
 
 function handleClick (key, option) {
   if (option.href) { router.push(option.href) }
+  if (key === 'logout') {
+    dialog.warning({
+      title: 'Подтверждение',
+      content: 'Вы хотите выйти?',
+      positiveText: 'Да',
+      negativeText: 'Отмена',
+      onPositiveClick: () => {
+        user.logout()
+        router.push({ name: 'Home' })
+      },
+      onNegativeClick: () => {}
+    })
+  }
   if (key === 'theme') { config.toggleTheme() }
   if (key === 'devtools') { window.api.toggleDevtools() }
 }
@@ -78,6 +95,7 @@ function renderMenuIcon (option) {
   if (option.key === 'sync') { return h(NIcon, null, { default: () => h(SyncCircle) }) }
   if (option.key === 'theme') { return h(NIcon, {}, { default: () => h(ThemeIcon) }) }
   if (option.key === 'devtools') { return h(NIcon, {}, { default: () => h(TerminalOutline) }) }
+  if (option.key === 'logout') { return h(NIcon, {}, { default: () => h(LogOutOutline) }) }
   if (option.key === 'profile') {
     return h(NAvatar, {
       size: 'small',
