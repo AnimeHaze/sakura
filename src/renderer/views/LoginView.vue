@@ -22,19 +22,35 @@
         или
       </n-divider>
       <n-form
-        ref="formRefEl"
+        ref="formRef"
         size="large"
+        :model="formData"
       >
-        <n-form-item path="username">
+        <n-form-item
+          path="login"
+          :rule="{
+            required: true,
+            message: 'Логин не может быть пустым',
+            trigger: ['input', 'blur']
+          }"
+        >
           <n-input
+            v-model:value="formData.login"
+            name="password"
             placeholder="Логин или Email"
           />
         </n-form-item>
         <n-form-item
           class="block"
           path="password"
+          :rule="{
+            required: true,
+            message: 'Пароль не может быть пустым',
+            trigger: ['input', 'blur']
+          }"
         >
           <n-input
+            v-model:value="formData.password"
             type="password"
             placeholder="Пароль"
             show-password-on="click"
@@ -63,6 +79,7 @@
             type="primary"
             class="w-full"
             attr-type="submit"
+            :disabled="loginLoading"
             :loading="loginLoading"
             @click="handleLogin"
           >
@@ -76,22 +93,49 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useThemeVars } from 'naive-ui'
+import { useThemeVars, useMessage } from 'naive-ui'
 import { useUserStore } from '../store'
 import { useRouter } from 'vue-router'
 
 const theme = useThemeVars()
-const loginLoading = ref(false)
 const user = useUserStore()
 const router = useRouter()
+const message = useMessage()
 
-function handleLogin () {
-  loginLoading.value = true
-  setTimeout(() => {
-    loginLoading.value = false
-    user.authToken = 'test'
-    router.push({ name: 'Home' })
-  }, 2500)
+const loginLoading = ref(false)
+const formRef = ref(null)
+const formData = ref({
+  login: '',
+  password: ''
+})
+
+let errorMessage = null
+let mockNotFound = true
+
+async function handleLogin () {
+  if (errorMessage) {
+    errorMessage.destroy()
+    errorMessage = null
+  }
+
+  const valid = await formRef.value?.validate().then(o => true).catch(e => false)
+
+  if (valid) {
+    loginLoading.value = true
+
+    if (mockNotFound) {
+      errorMessage = message.error('Аккаунт не найден', { duration: 3000 })
+      mockNotFound = false
+      loginLoading.value = false
+      return
+    }
+
+    setTimeout(() => {
+      loginLoading.value = false
+      user.authToken = 'test'
+      router.push({ name: 'Home' })
+    }, 2500)
+  }
 }
 </script>
 
