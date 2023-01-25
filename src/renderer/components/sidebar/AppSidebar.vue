@@ -11,6 +11,7 @@
     @expand="config.expandSidebar"
   >
     <n-menu
+      :value="selectedKey"
       :collapsed="config.sidebarCollapsed"
       :collapsed-width="64"
       :collapsed-icon-size="28"
@@ -38,6 +39,14 @@ const config = useConfigStore()
 const user = useUserStore()
 const router = useRouter()
 const dialog = useDialog()
+
+const mappingKeys = {
+  Home: 'catalog',
+  Profile: 'profile',
+  About: 'about'
+}
+
+const selectedKey = computed(() => mappingKeys[router.currentRoute.value.name] ?? null)
 
 const menuOptions = computed(() => [
   { label: 'Каталог', key: 'catalog', href: '/' },
