@@ -1,16 +1,20 @@
 <template>
   <n-config-provider :theme="theme">
-    <n-layout
-      class="h-screen select-none"
-      has-sider
-    >
-      <Sidebar />
-      <n-layout>
-        <transition name="fade">
-          <router-view />
-        </transition>
-      </n-layout>
-    </n-layout>
+    <n-dialog-provider>
+      <n-message-provider>
+        <n-layout
+          class="h-screen select-none"
+          has-sider
+        >
+          <Sidebar />
+          <n-layout>
+            <transition name="fade">
+              <router-view />
+            </transition>
+          </n-layout>
+        </n-layout>
+      </n-message-provider>
+    </n-dialog-provider>
   </n-config-provider>
 </template>
 
