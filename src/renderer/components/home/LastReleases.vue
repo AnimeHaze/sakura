@@ -4,14 +4,7 @@
       Последние релизы
     </h5>
     <swiper
-      :breakpoints="{
-        860: { slidesPerView: 5, spaceBetween: 60 },
-        1020: { slidesPerView: 6, spaceBetween: 20 },
-        1280: { slidesPerView: 7, spaceBetween: 30 },
-        1400: { slidesPerView: 9, spaceBetween: 40 },
-        1800: { slidesPerView: 11, spaceBetween: 50 },
-        2160: { slidesPerView: 14, spaceBetween: 60 },
-      }"
+      :breakpoints="breakpoints"
       :pagination="{
         clickable: true,
       }"
@@ -73,9 +66,14 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
-
 const router = useRouter()
 
+defineProps({
+  breakpoints: {
+    type: Object,
+    required: true
+  }
+})
 const loadingSwiper = ref(true)
 
 function openRelease () {
