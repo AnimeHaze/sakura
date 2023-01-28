@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, ipcMain, shell } = require('electron')
 const { createMainWindow } = require('./utils/windows')
 const { preventDisplaySleep } = require('./utils/powerSaveBlocker')
 
@@ -18,6 +18,26 @@ ipcMain.handle('app:maximize-minimize', () => {
 ipcMain.handle('app:collapse', () => BrowserWindow.getFocusedWindow().minimize())
 
 ipcMain.handle('app:prevent-sleep', () => preventDisplaySleep())
+
+app.on('web-contents-created', (event, webContents) => {
+  webContents.on('will-navigate', (e, url) => {
+    // eslint-disable-next-line no-undef
+    if (!url.startsWith(MAIN_WINDOW_WEBPACK_ENTRY)) {
+      e.preventDefault()
+      shell.openExternal(url)
+    }
+  })
+
+  webContents.setWindowOpenHandler(({ url }) => {
+    // eslint-disable-next-line no-undef
+    if (url.startsWith(MAIN_WINDOW_WEBPACK_ENTRY)) {
+      return { action: 'allow' }
+    }
+
+    shell.openExternal(url)
+    return { action: 'deny' }
+  })
+})
 
 app.on('ready', () => createMainWindow())
 app.on('window-all-closed', () => process.platform !== 'darwin' && app.quit())
