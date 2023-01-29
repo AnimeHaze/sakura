@@ -54,6 +54,25 @@
           </n-grid>
         </n-form>
       </n-card>
+      <n-card
+        :bordered="false"
+        title="Прочее"
+        class="mt-3"
+      >
+        <n-space>
+          <n-button
+            type="primary"
+          >
+            Очистить кеш приложения
+          </n-button>
+
+          <n-button
+            type="primary"
+          >
+            Установить настройки по умолчанию
+          </n-button>
+        </n-space>
+      </n-card>
     </div>
   </div>
 </template>
