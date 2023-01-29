@@ -6,11 +6,12 @@
 import DefaultLayout from '../layouts/DefaultLayout.vue'
 import { useConfigStore } from '../store'
 import { onBeforeUnmount } from 'vue'
+import { appTheme } from '../../enums'
 
 const config = useConfigStore()
 
 function themeChange (event) {
-  config.systemThemeColor = event.matches ? 'dark' : 'light'
+  config.systemThemeColor = event.matches ? appTheme.DARK : appTheme.LIGHT
 }
 
 const mediaDark = window.matchMedia('(prefers-color-scheme: dark)')

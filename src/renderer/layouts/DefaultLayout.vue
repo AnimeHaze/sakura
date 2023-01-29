@@ -23,7 +23,8 @@ import { computed } from 'vue'
 import { darkTheme } from 'naive-ui'
 import Sidebar from '../components/sidebar/AppSidebar.vue'
 import { useConfigStore } from '../store'
+import { appTheme } from '../../enums'
 
 const config = useConfigStore()
-const theme = computed(() => config.theme === 'dark' ? darkTheme : null)
+const theme = computed(() => config.theme === appTheme.DARK ? darkTheme : null)
 </script>

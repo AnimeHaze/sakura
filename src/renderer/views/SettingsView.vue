@@ -21,13 +21,13 @@
                 v-model:value="config.themeColor"
               >
                 <n-space>
-                  <n-radio value="auto">
+                  <n-radio :value="appTheme.AUTO">
                     Использовать тему системы
                   </n-radio>
-                  <n-radio value="dark">
+                  <n-radio :value="appTheme.DARK">
                     Темная
                   </n-radio>
-                  <n-radio value="light">
+                  <n-radio :value="appTheme.LIGHT">
                     Светлая
                   </n-radio>
                 </n-space>
@@ -42,10 +42,10 @@
                 v-model:value="config.backButtonType"
               >
                 <n-space>
-                  <n-radio value="0">
+                  <n-radio :value="backButton.REPLACE_CATALOG">
                     Заменять кнопку домашней страницы
                   </n-radio>
-                  <n-radio value="1">
+                  <n-radio :value="backButton.EXTRA">
                     Отдельная кнопка
                   </n-radio>
                 </n-space>
@@ -79,5 +79,6 @@
 
 <script setup>
 import { useConfigStore } from '../store'
+import { appTheme, backButton } from '../../enums'
 const config = useConfigStore()
 </script>

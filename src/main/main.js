@@ -1,23 +1,24 @@
 const { app, BrowserWindow, ipcMain, shell } = require('electron')
 const { createMainWindow } = require('./utils/windows')
 const { preventDisplaySleep } = require('./utils/powerSaveBlocker')
+const { ipc } = require('../enums')
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit()
 }
 
-ipcMain.handle('toggle:devtools', () => BrowserWindow.getFocusedWindow().webContents.toggleDevTools())
-ipcMain.handle('app:close', () => app.quit())
-ipcMain.handle('app:maximize-minimize', () => {
+ipcMain.handle(ipc.TOGGLE_DEVTOOLS, () => BrowserWindow.getFocusedWindow().webContents.toggleDevTools())
+ipcMain.handle(ipc.APP_CLOSE, () => app.quit())
+ipcMain.handle(ipc.APP_MAXIMIZE_MINIMIZE, () => {
   const win = BrowserWindow.getFocusedWindow()
   if (win.isMaximized()) {
     win.unmaximize()
   } else win.maximize()
 })
-ipcMain.handle('app:collapse', () => BrowserWindow.getFocusedWindow().minimize())
+ipcMain.handle(ipc.APP_COLLAPSE, () => BrowserWindow.getFocusedWindow().minimize())
 
-ipcMain.handle('app:prevent-sleep', () => preventDisplaySleep())
+ipcMain.handle(ipc.PREVENT_SLEEP, () => preventDisplaySleep())
 
 app.on('web-contents-created', (event, webContents) => {
   webContents.on('will-navigate', (e, url) => {
