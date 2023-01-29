@@ -24,14 +24,14 @@
 </template>
 
 <script setup>
-import { computed, h } from 'vue'
+import { computed, h, ref, watch } from 'vue'
 import { NAvatar, NIcon, useDialog } from 'naive-ui'
 import {
   AppsOutline, BookmarkOutline, BugOutline, CaretDownOutline,
   InformationCircleOutline, SearchOutline, SettingsOutline,
-  SyncCircle, TerminalOutline, LogOutOutline
+  SyncCircle, TerminalOutline, LogOutOutline, ArrowBackOutline
 } from '@vicons/ionicons5'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useConfigStore, useUserStore } from '../../store'
 import ThemeIcon from './ThemeIcon.vue'
 
@@ -39,6 +39,13 @@ const config = useConfigStore()
 const user = useUserStore()
 const router = useRouter()
 const dialog = useDialog()
+const route = useRoute()
+
+const showBack = ref(false)
+
+watch(() => route.name, () => {
+  showBack.value = ['Release'].includes(route.name)
+})
 
 const mappingKeys = {
   Home: 'catalog',
@@ -46,10 +53,12 @@ const mappingKeys = {
   About: 'about'
 }
 
-const selectedKey = computed(() => mappingKeys[router.currentRoute.value.name] ?? null)
+const selectedKey = computed(() => mappingKeys[route.name] ?? null)
+const showCatalog = computed(() => !(showBack.value && config.backButtonType === '0'))
 
 const menuOptions = computed(() => [
-  { label: 'Каталог', key: 'catalog', href: '/' },
+  { label: 'Назад', key: 'back', show: showBack.value },
+  { label: 'Каталог', key: 'catalog', href: '/', show: showCatalog.value },
   { label: 'AniCoder', key: 'profile', href: '/profile' },
   { label: 'Избранное', key: 'favorite' },
   { label: 'Поиск', key: 'search' },
@@ -57,9 +66,7 @@ const menuOptions = computed(() => [
   {
     label: 'Настройки',
     key: 'settings',
-    children: [
-      { label: 'Синхронизации', key: 'sync' }
-    ]
+    href: '/settings'
   },
   { label: 'О приложении', key: 'about', href: '/about' },
   { label: 'Выйти из аккаунта', key: 'logout', show: user.isAuthorized },
@@ -92,11 +99,29 @@ function handleClick (key, option) {
       onNegativeClick: () => {}
     })
   }
-  if (key === 'theme') { config.toggleTheme() }
+  if (key === 'theme') {
+    if (config.themeColor === 'auto') {
+      dialog.warning({
+        title: 'Подтверждение',
+        content: 'Сейчас тема привязана к системной, вы действительно хотите ее изменить?',
+        positiveText: 'Да',
+        negativeText: 'Отмена',
+        onPositiveClick: () => {
+          const theme = config.theme === 'dark' ? 'light' : 'dark'
+          config.setTheme(theme)
+        },
+        onNegativeClick: () => {}
+      })
+    } else {
+      config.toggleTheme()
+    }
+  }
   if (key === 'devtools') { window.api.toggleDevtools() }
+  if (key === 'back') { router.back() }
 }
 
 function renderMenuIcon (option) {
+  if (option.key === 'back') { return h(NIcon, null, { default: () => h(ArrowBackOutline) }) }
   if (option.key === 'catalog') { return h(NIcon, null, { default: () => h(AppsOutline) }) }
   if (option.key === 'settings') { return h(NIcon, null, { default: () => h(SettingsOutline) }) }
   if (option.key === 'search') { return h(NIcon, null, { default: () => h(SearchOutline) }) }
