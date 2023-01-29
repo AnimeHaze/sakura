@@ -118,7 +118,7 @@ async function handleLogin () {
     errorMessage = null
   }
 
-  const valid = await formRef.value?.validate().then(o => true).catch(e => false)
+  const valid = await formRef.value?.validate().then(_ => true).catch(_ => false)
 
   if (valid) {
     loginLoading.value = true
