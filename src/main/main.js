@@ -21,10 +21,10 @@ ipcMain.handle(ipc.APP_COLLAPSE, () => BrowserWindow.getFocusedWindow().minimize
 ipcMain.handle(ipc.PREVENT_SLEEP, () => preventDisplaySleep())
 
 app.on('web-contents-created', (event, webContents) => {
-  webContents.on('will-navigate', (e, url) => {
+  webContents.on('will-navigate', (event, url) => {
     // eslint-disable-next-line no-undef
     if (!url.startsWith(MAIN_WINDOW_WEBPACK_ENTRY)) {
-      e.preventDefault()
+      event.preventDefault()
       shell.openExternal(url)
     }
   })
