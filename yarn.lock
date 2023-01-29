@@ -3125,13 +3125,6 @@
     "semver" "^7.1.3"
     "yargs-parser" "^21.1.1"
 
-"electron-squirrel-startup@^1.0.0":
-  "integrity" "sha512-Oce8mvgGdFmwr+DsAcXBmFK8jFfN6yaFAP9IvyhTfupM3nFkBku/7VS/mdtJteWumImkC6P+BKGsxScoDDkv9Q=="
-  "resolved" "https://registry.npmjs.org/electron-squirrel-startup/-/electron-squirrel-startup-1.0.0.tgz"
-  "version" "1.0.0"
-  dependencies:
-    "debug" "^2.2.0"
-
 "electron-to-chromium@^1.4.251":
   "integrity" "sha512-M8WEXFuKXMYMVr45fo8mq0wUrrJHheiKZf6BArTKk9ZBYCKJEOU5H8cdWgDT+qCVZf7Na4lVUaZsA+h6uA9+PA=="
   "resolved" "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.284.tgz"
