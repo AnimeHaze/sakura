@@ -38,7 +38,7 @@ const menuOptions = [
   { label: 'Каталог', key: 'catalog', href: '/' },
   { label: 'AniCoder', key: 'profile', href: '/profile' },
   { label: 'Избранное', key: 'favorite' },
-  { label: 'Поиск', key: 'search' },
+  { label: 'Поиск', key: 'search', href: '/search' },
   { label: 'Тема', key: 'theme' },
   {
     label: 'Настройки',

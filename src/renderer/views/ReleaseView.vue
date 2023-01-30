@@ -1,10 +1,11 @@
 <template>
+  <AnimePoster />
   <n-space
     size="large"
     vertical
   >
     <n-layout
-      class="h-screen"
+      class="h-screen transparent-color"
       has-sider
     >
       <n-layout-sider
@@ -14,16 +15,25 @@
           :poster-image="posterImage"
         />
       </n-layout-sider>
-      <n-layout>
-        <n-layout-content class="p-4 py-2">
+      <n-layout class="transparent-color">
+        <n-layout-content class="p-4 py-2 transparent-color">
           <n-space
             vertical
             class="mt-4"
           >
+            <div class="flex flex-row mt-2">
+              <div class="mx-1 font-500 text-gray-400">
+                Китай
+              </div> <div class="mx-1 font-500 text-gray-400">
+                2042
+              </div> <div class="mx-1 font-500 text-gray-400">
+                Позаимствовано
+              </div>
+            </div>
             <div class="break-words font-600 flex-1 text-2xl">
               {{ release.title }}
             </div>
-            <div class="text-gray-500 break-words whitespace-pre-line">
+            <div class="text-gray-400 font-500 break-words whitespace-pre-line">
               {{ altTitles }}
             </div>
           </n-space>
@@ -51,14 +61,17 @@
             </n-tag>
           </n-space>
 
-          <n-space class="mt-3">
+          <div class="mt-3 flex flex-row">
             <n-tooltip
               trigger="hover"
               :show-arrow="false"
               placement="bottom"
             >
               <template #trigger>
-                <n-button>
+                <n-button
+                  class="px-1 mx-1"
+                  quaternary
+                >
                   <n-icon>
                     <star style="color: #ffa726;" />
                   </n-icon>
@@ -68,27 +81,36 @@
               <n-rate allow-half />
             </n-tooltip>
 
-            <n-button>
+            <n-button
+              class="px-1 mx-1"
+              quaternary
+            >
               <n-icon>
                 <eye />
               </n-icon>
-              <span class="px-1">10.00</span>
+              <span class="px-1 mx-1">10.00</span>
             </n-button>
 
-            <n-button>
+            <n-button
+              class="px-1 mx-1"
+              quaternary
+            >
               <n-icon>
                 <heart />
               </n-icon>
               <span class="px-1">10.00</span>
             </n-button>
 
-            <n-button>
+            <n-button
+              class="px-1 mx-1"
+              quaternary
+            >
               <n-icon>
                 <bookmarks />
               </n-icon>
               <span class="px-1">10.00</span>
             </n-button>
-          </n-space>
+          </div>
 
           <n-tabs
             class="mt-2"
@@ -125,12 +147,13 @@
 import { Star, Heart, Eye, Bookmarks } from '@vicons/ionicons5'
 import { computed, ref } from 'vue'
 import ReleaseSider from '../components/release/ReleaseSider.vue'
+import AnimePoster from '../components/release/AnimePoster.vue'
 
 const posterImage = 'https://moe.shikimori.one/uploads/poster/animes/11757/main_alt-d6f74ec77f55e436b31e07cff06c19e7.jpeg'
 
 const release = {
   title: 'Мастера меча онлайн!',
-  altTitles: ['Sword Art Online', '1234567']
+  altTitles: ['Sword Art Online']
 }
 
 const altTitles = computed(() => release.altTitles.join('\n'))

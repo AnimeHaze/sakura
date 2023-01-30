@@ -3,12 +3,13 @@
     <h5 class="header-five">
       Последние релизы
     </h5>
-    <swiper
+    <Swiper
       :breakpoints="breakpoints"
       :pagination="{
         clickable: true,
       }"
       :grab-cursor="true"
+      @swiper="onSwiper"
     >
       <swiper-slide
         v-for="slide in (loadingSwiper ? Array.from(Array(20).keys()) : Array.from(Array(images.length).keys()))"
@@ -57,23 +58,17 @@
           <span>{{ titles[slide] }}</span>
         </n-tooltip>
       </swiper-slide>
-    </swiper>
+    </Swiper>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
+import { useConfigStore } from '../../store'
 const router = useRouter()
-
-defineProps({
-  breakpoints: {
-    type: Object,
-    required: true
-  }
-})
 const loadingSwiper = ref(true)
 
 function openRelease () {
@@ -103,6 +98,44 @@ const images = [
   'https://top.anilibria.cf/storage/releases/posters/9337/2YhbpJ4vV6PRijFO__15feab82deffdbdf2abcc3bf0dccf27d.jpg',
   'https://top.anilibria.cf/storage/releases/posters/9260/7iezY4NrImAx6eWb__da55cdb7655d58464fe7c08bd70d6812.jpg'
 ]
+const MenuHidenBreakpoints = {
+  860: { slidesPerView: 6, spaceBetween: 60 },
+  1020: { slidesPerView: 7, spaceBetween: 20 },
+  1280: { slidesPerView: 9, spaceBetween: 30 },
+  1400: { slidesPerView: 10, spaceBetween: 40 },
+  1600: { slidesPerView: 12, spaceBetween: 50 },
+  1800: { slidesPerView: 13, spaceBetween: 50 },
+  2160: { slidesPerView: 16, spaceBetween: 60 }
+}
+const MenuOpenBreakpoints = {
+  860: { slidesPerView: 5, spaceBetween: 70 },
+  1020: { slidesPerView: 6, spaceBetween: 40 },
+  1280: { slidesPerView: 8, spaceBetween: 60 },
+  1400: { slidesPerView: 9, spaceBetween: 70 },
+  1600: { slidesPerView: 11, spaceBetween: 80 },
+  1800: { slidesPerView: 12, spaceBetween: 90 },
+  2160: { slidesPerView: 15, spaceBetween: 100 }
+}
+const store = useConfigStore()
+const breakpoints = ref()
+onBeforeMount(function () {
+  if (store.sidebarCollapsed) {
+    breakpoints.value = MenuHidenBreakpoints
+  } else {
+    breakpoints.value = MenuOpenBreakpoints
+  }
+})
+function onSwiper (swiper) {
+  store.$subscribe((mutation, state) => {
+    if (state.sidebarCollapsed) {
+      swiper.params.breakpoints = MenuHidenBreakpoints
+    } else {
+      swiper.params.breakpoints = MenuOpenBreakpoints
+    }
+    swiper.currentBreakpoint = false
+    swiper.update()
+  })
+}
 
 setTimeout(() => (loadingSwiper.value = false), Math.floor(Math.random() * (2000 - 500) + 500))
 </script>

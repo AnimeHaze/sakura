@@ -4,7 +4,7 @@ import About from '../views/AboutView.vue'
 import Profile from '../views/ProfileView.vue'
 import Login from '../views/LoginView.vue'
 import Release from '../views/ReleaseView.vue'
-
+import Search from '../views/SearchView.vue'
 import { useUserStore } from '../store'
 
 // 2. Define some routes
@@ -15,6 +15,7 @@ const routes = [
   { path: '/about', component: About, name: 'About' },
   { path: '/login', component: Login, name: 'Login' },
   { path: '/release', component: Release, name: 'Release' },
+  { path: '/search', component: Search, name: 'Search' },
   { path: '/', component: Home, name: 'Home' }
 ]
 
@@ -27,7 +28,7 @@ export const router = createRouter({
   routes // short for `routes: routes`
 })
 
-router.beforeEach(async (to, from) => {
+router.beforeEach(async (to) => {
   const user = useUserStore()
   const isAuthenticated = user.authToken !== null
 
