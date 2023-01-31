@@ -4,18 +4,12 @@
       Последние релизы
     </h5>
     <swiper
-      :breakpoints="{
-        860: { slidesPerView: 5, spaceBetween: 60 },
-        1020: { slidesPerView: 6, spaceBetween: 20 },
-        1280: { slidesPerView: 7, spaceBetween: 30 },
-        1400: { slidesPerView: 9, spaceBetween: 40 },
-        1800: { slidesPerView: 11, spaceBetween: 50 },
-        2160: { slidesPerView: 14, spaceBetween: 60 },
-      }"
+      :breakpoints="breakpoints"
       :pagination="{
         clickable: true,
       }"
       :grab-cursor="true"
+      @swiper="onSwiper"
     >
       <swiper-slide
         v-for="slide in (loadingSwiper ? Array.from(Array(20).keys()) : Array.from(Array(images.length).keys()))"
@@ -69,14 +63,51 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
+import { useConfigStore } from '../../store'
 
 const router = useRouter()
+const store = useConfigStore()
 
 const loadingSwiper = ref(true)
+const breakpoints = ref()
+
+const SidebarCollapsedBreakpoints = {
+  860: { slidesPerView: 6, spaceBetween: 60 },
+  1020: { slidesPerView: 7, spaceBetween: 20 },
+  1280: { slidesPerView: 9, spaceBetween: 30 },
+  1400: { slidesPerView: 10, spaceBetween: 40 },
+  1600: { slidesPerView: 12, spaceBetween: 50 },
+  1800: { slidesPerView: 13, spaceBetween: 50 },
+  2160: { slidesPerView: 16, spaceBetween: 60 }
+}
+const SidebarExpandedBreakpoints = {
+  860: { slidesPerView: 5, spaceBetween: 70 },
+  1020: { slidesPerView: 6, spaceBetween: 40 },
+  1280: { slidesPerView: 8, spaceBetween: 60 },
+  1400: { slidesPerView: 9, spaceBetween: 70 },
+  1600: { slidesPerView: 11, spaceBetween: 80 },
+  1800: { slidesPerView: 12, spaceBetween: 90 },
+  2160: { slidesPerView: 15, spaceBetween: 100 }
+}
+
+onBeforeMount(function () {
+  breakpoints.value = store.sidebarCollapsed ? SidebarCollapsedBreakpoints : SidebarExpandedBreakpoints
+})
+
+function onSwiper (swiper) {
+  store.$subscribe((mutation, state) => {
+    swiper.params.breakpoints = state.sidebarCollapsed ? SidebarCollapsedBreakpoints : SidebarExpandedBreakpoints
+
+    // TODO: Maybe we should find more the best way in future to make swiper breakpoints recalculate when app sidebar open / close
+    // currentBreakpoint - interval swiper private API, see https://github.com/nolimits4web/swiper/issues/3539
+    swiper.currentBreakpoint = false
+    swiper.update()
+  })
+}
 
 function openRelease () {
   router.push({ name: 'Release' })
