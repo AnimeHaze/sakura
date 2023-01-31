@@ -16,7 +16,10 @@
       </n-layout-sider>
       <n-layout>
         <n-layout-content class="p-4 py-2">
-          <n-space vertical>
+          <n-space
+            vertical
+            class="mt-4"
+          >
             <div class="break-words font-600 flex-1 text-2xl">
               {{ release.title }}
             </div>
