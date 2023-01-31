@@ -65,7 +65,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "path-browserify": "^1.0.1",
     "pinia": "^2.0.28",
-    "swiper": "^8.4.5",
+    "swiper": "8.4.7",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"
   }
