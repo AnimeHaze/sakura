@@ -4,7 +4,7 @@
     vertical
   >
     <n-layout
-      class="h-screen"
+      class="p-6 h-screen"
       has-sider
     >
       <n-layout-sider
