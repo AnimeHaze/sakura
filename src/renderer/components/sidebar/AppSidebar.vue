@@ -69,9 +69,9 @@ const menuOptions = computed(() => [
   { label: 'Выйти из аккаунта', key: appSidebar.LOGOUT, show: user.isAuthorized },
   {
     label: 'Отладка',
-    key: appSidebar.DEBUG,
+    key: appSidebar.DEVTOOLS,
     children: [
-      { label: 'Открыть консоль', key: appSidebar.DEVTOOLS }
+      { label: 'Открыть консоль', key: appSidebar.DEBUG }
     ],
     show: window.api.isDev()
   }
@@ -122,9 +122,9 @@ function renderMenuIcon (option) {
   if (option.key === appSidebar.CATALOG) { return h(NIcon, null, { default: () => h(AppsOutline) }) }
   if (option.key === appSidebar.SETTINGS) { return h(NIcon, null, { default: () => h(SettingsOutline) }) }
   if (option.key === appSidebar.SEARCH) { return h(NIcon, null, { default: () => h(SearchOutline) }) }
-  if (option.key === appSidebar.DEBUG) { return h(NIcon, null, { default: () => h(BugOutline) }) }
+  if (option.key === appSidebar.DEVTOOLS) { return h(NIcon, null, { default: () => h(BugOutline) }) }
   if (option.key === appSidebar.THEME) { return h(NIcon, {}, { default: () => h(ThemeIcon) }) }
-  if (option.key === appSidebar.DEVTOOLS) { return h(NIcon, {}, { default: () => h(TerminalOutline) }) }
+  if (option.key === appSidebar.DEBUG) { return h(NIcon, {}, { default: () => h(TerminalOutline) }) }
   if (option.key === appSidebar.LOGOUT) { return h(NIcon, {}, { default: () => h(LogOutOutline) }) }
   if (option.key === appSidebar.PROFILE) {
     return h(NAvatar, {
