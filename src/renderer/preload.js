@@ -12,6 +12,7 @@ contextBridge.exposeInMainWorld(
     minimizeMaximizeApp: () => ipcRenderer.invoke(ipc.APP_MAXIMIZE_MINIMIZE),
     collapseApp: () => ipcRenderer.invoke(ipc.APP_COLLAPSE),
     preventSleep: () => ipcRenderer.invoke(ipc.PREVENT_SLEEP),
-    isDev: () => process.env.NODE_ENV === 'development'
+    isDev: () => process.env.NODE_ENV === 'development',
+    inspectElement: (x, y) => ipcRenderer.invoke(ipc.INSPECT_ELEMENT, { x, y })
   }
 )

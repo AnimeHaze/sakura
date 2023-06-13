@@ -8,7 +8,21 @@ if (require('electron-squirrel-startup')) {
   app.quit()
 }
 
-ipcMain.handle(ipc.TOGGLE_DEVTOOLS, () => BrowserWindow.getFocusedWindow().webContents.toggleDevTools())
+ipcMain.handle(ipc.TOGGLE_DEVTOOLS, () => {
+  const { webContents } = BrowserWindow.getFocusedWindow()
+
+  if (webContents.isDevToolsOpened()) {
+    webContents.devToolsWebContents.focus()
+  } else webContents.toggleDevTools()
+})
+ipcMain.handle(ipc.INSPECT_ELEMENT, (_, { x, y }) => {
+  const { webContents } = BrowserWindow.getFocusedWindow()
+  webContents.inspectElement(x, y)
+  if (webContents.isDevToolsOpened()) {
+    webContents.devToolsWebContents.focus()
+  }
+})
+
 ipcMain.handle(ipc.APP_CLOSE, () => app.quit())
 ipcMain.handle(ipc.APP_MAXIMIZE_MINIMIZE, () => {
   const win = BrowserWindow.getFocusedWindow()
