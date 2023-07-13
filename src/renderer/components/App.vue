@@ -12,7 +12,7 @@
         <n-popover
           :show-arrow="false"
           placement="bottom-start"
-          :theme="config.theme"
+          :theme="theme"
           :show="showPopover"
           :x="x"
           :y="y"
