@@ -57,75 +57,81 @@ const mappingKeys = {
 const selectedKey = computed(() => mappingKeys[route.name] ?? null)
 const showCatalog = computed(() => !(showBack.value && config.backButtonType === backButton.REPLACE_CATALOG))
 
+const generateOption = (label, key, href, show) => ({ label, key, href, show })
+
 const menuOptions = computed(() => [
-  { label: 'Назад', key: appSidebar.BACK, show: showBack.value },
-  { label: 'Каталог', key: appSidebar.CATALOG, href: '/', show: showCatalog.value },
-  { label: 'AniCoder', key: appSidebar.PROFILE, href: '/profile' },
-  { label: 'Избранное', key: appSidebar.FAVORITE },
-  { label: 'Поиск', key: appSidebar.SEARCH },
-  { label: 'Тема', key: appSidebar.THEME },
-  { label: 'Настройки', key: appSidebar.SETTINGS, href: '/settings' },
-  { label: 'О приложении', key: appSidebar.ABOUT, href: '/about' },
-  { label: 'Выйти из аккаунта', key: appSidebar.LOGOUT, show: user.isAuthorized },
+  generateOption('Назад', appSidebar.BACK, null, showBack.value),
+  generateOption('Каталог', appSidebar.CATALOG, '/', showCatalog.value),
+  generateOption('AniCoder', appSidebar.PROFILE, '/profile'),
+  generateOption('Избранное', appSidebar.FAVORITE),
+  generateOption('Поиск', appSidebar.SEARCH, '/search'),
+  generateOption('Тема', appSidebar.THEME),
+  generateOption('Настройки', appSidebar.SETTINGS, '/settings'),
+  generateOption('О приложении', appSidebar.ABOUT, '/about'),
+  generateOption('Выйти из аккаунта', appSidebar.LOGOUT, null, user.isAuthorized),
   {
     label: 'Отладка',
     key: appSidebar.DEVTOOLS,
     children: [
-      { label: 'Открыть консоль', key: appSidebar.DEBUG }
+      generateOption('Открыть консоль', appSidebar.DEBUG)
     ],
     show: window.api.isDev()
   }
 ])
 
-function expandIcon () {
-  return h(NIcon, null, { default: () => h(CaretDownOutline) })
+function handleLogout () {
+  dialog.warning({
+    title: 'Подтверждение',
+    content: 'Вы хотите выйти?',
+    positiveText: 'Да',
+    negativeText: 'Отмена',
+    onPositiveClick: () => {
+      user.logout()
+      router.push({ name: 'Home' })
+    }
+  })
+}
+
+function handleThemeChange () {
+  if (config.themeColor === appTheme.AUTO) {
+    dialog.warning({
+      title: 'Подтверждение',
+      content: 'Сейчас тема привязана к системной, вы действительно хотите ее изменить?',
+      positiveText: 'Да',
+      negativeText: 'Отмена',
+      onPositiveClick: () => {
+        const theme = config.theme === appTheme.DARK ? appTheme.LIGHT : appTheme.DARK
+        config.setTheme(theme)
+      }
+    })
+  } else {
+    config.toggleTheme()
+  }
+}
+
+const expandIcon = () => h(NIcon, null, { default: () => h(CaretDownOutline) })
+const handleDebug = () => window.api.toggleDevtools()
+const handleBack = () => router.back()
+
+const actionMap = {
+  [appSidebar.LOGOUT]: handleLogout,
+  [appSidebar.THEME]: handleThemeChange,
+  [appSidebar.DEBUG]: handleDebug,
+  [appSidebar.BACK]: handleBack
 }
 
 function handleClick (key, option) {
   if (option.href) { router.push(option.href) }
-  if (key === appSidebar.LOGOUT) {
-    dialog.warning({
-      title: 'Подтверждение',
-      content: 'Вы хотите выйти?',
-      positiveText: 'Да',
-      negativeText: 'Отмена',
-      onPositiveClick: () => {
-        user.logout()
-        router.push({ name: 'Home' })
-      },
-      onNegativeClick: () => {}
-    })
+  if (actionMap[key]) {
+    actionMap[key]()
   }
-  if (key === appSidebar.THEME) {
-    if (config.themeColor === appTheme.AUTO) {
-      dialog.warning({
-        title: 'Подтверждение',
-        content: 'Сейчас тема привязана к системной, вы действительно хотите ее изменить?',
-        positiveText: 'Да',
-        negativeText: 'Отмена',
-        onPositiveClick: () => {
-          const theme = config.theme === appTheme.DARK ? appTheme.LIGHT : appTheme.DARK
-          config.setTheme(theme)
-        },
-        onNegativeClick: () => {}
-      })
-    } else {
-      config.toggleTheme()
-    }
-  }
-  if (key === appSidebar.DEBUG) { window.api.toggleDevtools() }
-  if (key === appSidebar.BACK) { router.back() }
+}
+
+function renderIcon (key) {
+  return h(NIcon, null, { default: () => h(iconMap[key]) })
 }
 
 function renderMenuIcon (option) {
-  if (option.key === appSidebar.BACK) { return h(NIcon, null, { default: () => h(ArrowBackOutline) }) }
-  if (option.key === appSidebar.CATALOG) { return h(NIcon, null, { default: () => h(AppsOutline) }) }
-  if (option.key === appSidebar.SETTINGS) { return h(NIcon, null, { default: () => h(SettingsOutline) }) }
-  if (option.key === appSidebar.SEARCH) { return h(NIcon, null, { default: () => h(SearchOutline) }) }
-  if (option.key === appSidebar.DEVTOOLS) { return h(NIcon, null, { default: () => h(BugOutline) }) }
-  if (option.key === appSidebar.THEME) { return h(NIcon, {}, { default: () => h(ThemeIcon) }) }
-  if (option.key === appSidebar.DEBUG) { return h(NIcon, {}, { default: () => h(TerminalOutline) }) }
-  if (option.key === appSidebar.LOGOUT) { return h(NIcon, {}, { default: () => h(LogOutOutline) }) }
   if (option.key === appSidebar.PROFILE) {
     return h(NAvatar, {
       size: 'small',
@@ -133,7 +139,19 @@ function renderMenuIcon (option) {
       round: true
     })
   }
-  if (option.key === appSidebar.ABOUT) { return h(InformationCircleOutline, null) }
-  if (option.key === appSidebar.FAVORITE) { return h(NIcon, null, { default: () => h(BookmarkOutline) }) }
+  return renderIcon(option.key)
+}
+
+const iconMap = {
+  [appSidebar.BACK]: ArrowBackOutline,
+  [appSidebar.CATALOG]: AppsOutline,
+  [appSidebar.SETTINGS]: SettingsOutline,
+  [appSidebar.SEARCH]: SearchOutline,
+  [appSidebar.DEVTOOLS]: BugOutline,
+  [appSidebar.THEME]: ThemeIcon,
+  [appSidebar.ABOUT]: InformationCircleOutline,
+  [appSidebar.DEBUG]: TerminalOutline,
+  [appSidebar.LOGOUT]: LogOutOutline,
+  [appSidebar.FAVORITE]: BookmarkOutline
 }
 </script>
