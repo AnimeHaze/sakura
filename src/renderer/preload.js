@@ -1,18 +1,18 @@
-// See the Electron documentation for details on how to use preload scripts:
-// https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
-// preload with contextIsolation enabled
 import { ipc } from '../enums'
 import { ipcRenderer, contextBridge } from 'electron'
+
+const invokeIpcRenderer = (command, ...args) => ipcRenderer.invoke(command, ...args)
 
 contextBridge.exposeInMainWorld(
   'api',
   {
-    toggleDevtools: () => ipcRenderer.invoke(ipc.TOGGLE_DEVTOOLS),
-    closeApp: () => ipcRenderer.invoke(ipc.APP_CLOSE),
-    minimizeMaximizeApp: () => ipcRenderer.invoke(ipc.APP_MAXIMIZE_MINIMIZE),
-    collapseApp: () => ipcRenderer.invoke(ipc.APP_COLLAPSE),
-    preventSleep: () => ipcRenderer.invoke(ipc.PREVENT_SLEEP),
+    toggleDevtools: () => invokeIpcRenderer(ipc.TOGGLE_DEVTOOLS),
+    closeApp: () => invokeIpcRenderer(ipc.APP_CLOSE),
+    minimizeMaximizeApp: () => invokeIpcRenderer(ipc.APP_MAXIMIZE_MINIMIZE),
+    collapseApp: () => invokeIpcRenderer(ipc.APP_COLLAPSE),
+    preventSleep: () => invokeIpcRenderer(ipc.PREVENT_SLEEP),
     isDev: () => process.env.NODE_ENV === 'development',
-    inspectElement: (x, y) => ipcRenderer.invoke(ipc.INSPECT_ELEMENT, { x, y })
+    inspectElement: (x, y) => invokeIpcRenderer(ipc.INSPECT_ELEMENT, { x, y }),
+    callApi: (method, options) => invokeIpcRenderer(ipc.API, method, options)
   }
 )

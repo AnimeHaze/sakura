@@ -10,7 +10,8 @@ export const ipc = {
   APP_MAXIMIZE_MINIMIZE: 'app:maximize-minimize',
   APP_COLLAPSE: 'app:collapse',
   PREVENT_SLEEP: 'prevent-sleep',
-  INSPECT_ELEMENT: 'inspect-element'
+  INSPECT_ELEMENT: 'inspect-element',
+  API: 'api:call'
 }
 
 export const appSidebar = {

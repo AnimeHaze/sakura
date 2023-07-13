@@ -1,5 +1,6 @@
 import './style/index.css'
 import 'windi.css'
+import '@mdi/font/css/materialdesignicons.min.css'
 // import Vue from '../node_modules/vue/dist/vue.esm.browser.min.js';
 //
 // new Vue({

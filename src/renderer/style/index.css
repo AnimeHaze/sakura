@@ -27,3 +27,96 @@
     opacity: 0;
 }
 
+.anime-video-poster {
+  width: 100%;
+}
+
+.anime-video-overlay::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+
+.anime-video-overlay-dark::after {
+  background: linear-gradient(180deg, #0c101b00 0%, rgba(16,16,20,255) 100%) !important;
+  transition: .7s;
+}
+
+.anime-video-overlay-light::after {
+  background: linear-gradient(180deg, #0c101b00 0%, rgb(255, 255, 255) 100%) !important;
+  transition: .7s;
+}
+
+.anime-video {
+  position: relative;
+}
+
+.anime-video-info {
+  z-index: 99;
+  font-size: 50px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.anime-poster-overlay::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.anime-poster-overlay-dark::after {
+  background:
+    linear-gradient(180deg, #0c101b00 0%, rgba(16,16,20,255) 100%),
+    linear-gradient(0deg, #0c101b00 0%, rgba(16,16,20,255) 100%);
+  transition: .7s;
+}
+
+.anime-poster-overlay-light::after {
+  background:
+    linear-gradient(180deg, #0c101b00 0%, rgb(255, 255, 255) 100%),
+    linear-gradient(0deg, #0c101b00 0%, rgb(255, 255, 255) 100%);
+  transition: .7s;
+}
+
+.anime-clickable-text:hover {
+  color: rgba(99, 226, 183, 0.7);
+  transition: .3s;
+
+}
+
+.anime-clickable-text {
+  transition: .5s;
+  cursor: pointer;
+}
+
+.video-container {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 */
+  height: 0;
+}
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.anime-poster {
+  z-index: 0;
+}
+
+.transparent-color {
+  background-color: transparent
+}
+
+
+

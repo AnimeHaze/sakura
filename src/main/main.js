@@ -2,37 +2,51 @@ const { app, BrowserWindow, ipcMain, shell } = require('electron')
 const { createMainWindow } = require('./utils/windows')
 const { preventDisplaySleep } = require('./utils/powerSaveBlocker')
 const { ipc } = require('../enums')
+const { API } = require('./api')
 
-// Handle creating/removing shortcuts on Windows when installing/uninstalling.
-if (require('electron-squirrel-startup')) {
-  app.quit()
-}
+const api = new API()
 
-ipcMain.handle(ipc.TOGGLE_DEVTOOLS, () => {
+const handleToggleDevTools = () => {
   const { webContents } = BrowserWindow.getFocusedWindow()
 
   if (webContents.isDevToolsOpened()) {
     webContents.devToolsWebContents.focus()
   } else webContents.toggleDevTools()
-})
-ipcMain.handle(ipc.INSPECT_ELEMENT, (_, { x, y }) => {
+}
+
+const handleInspectElement = (_, { x, y }) => {
   const { webContents } = BrowserWindow.getFocusedWindow()
   webContents.inspectElement(x, y)
   if (webContents.isDevToolsOpened()) {
     webContents.devToolsWebContents.focus()
   }
-})
+}
 
-ipcMain.handle(ipc.APP_CLOSE, () => app.quit())
-ipcMain.handle(ipc.APP_MAXIMIZE_MINIMIZE, () => {
+const handleAppMaximizeMinimize = () => {
   const win = BrowserWindow.getFocusedWindow()
   if (win.isMaximized()) {
     win.unmaximize()
   } else win.maximize()
-})
-ipcMain.handle(ipc.APP_COLLAPSE, () => BrowserWindow.getFocusedWindow().minimize())
+}
 
+const handleAPI = (event, method, options) => {
+  if (api[method] === undefined) throw TypeError('Unknown APi method')
+
+  return api[method](options)
+}
+
+// Check startup and quit if it's a Squirrel startup event
+if (require('electron-squirrel-startup')) {
+  app.quit()
+}
+
+ipcMain.handle(ipc.TOGGLE_DEVTOOLS, handleToggleDevTools)
+ipcMain.handle(ipc.INSPECT_ELEMENT, handleInspectElement)
+ipcMain.handle(ipc.APP_CLOSE, () => app.quit())
+ipcMain.handle(ipc.APP_MAXIMIZE_MINIMIZE, handleAppMaximizeMinimize)
+ipcMain.handle(ipc.APP_COLLAPSE, () => BrowserWindow.getFocusedWindow().minimize())
 ipcMain.handle(ipc.PREVENT_SLEEP, () => preventDisplaySleep())
+ipcMain.handle(ipc.API, handleAPI)
 
 app.on('web-contents-created', (event, webContents) => {
   webContents.on('will-navigate', (event, url) => {

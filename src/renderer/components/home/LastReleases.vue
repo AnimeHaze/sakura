@@ -9,54 +9,39 @@
         clickable: true,
       }"
       :grab-cursor="true"
+      @reachEnd="loading(loadMore)"
       @swiper="onSwiper"
     >
       <swiper-slide
-        v-for="slide in (loadingSwiper ? Array.from(Array(20).keys()) : Array.from(Array(images.length).keys()))"
-        :key="slide"
+        v-for="slide in releasesList"
+        :id="slide.id"
+        :key="slide.id"
       >
-        <n-tooltip
-          :delay="1200"
-          placement="bottom"
-          trigger="hover"
-        >
-          <template #trigger>
-            <div>
-              <div v-if="loadingSwiper">
-                <n-skeleton
-                  v-if="1"
-                  :height="180"
-                  :width="120"
-                  :sharp="false"
-                  size="medium"
-                />
-                <n-skeleton
-                  text
-                  :width="120"
-                  :sharp="false"
-                />
-              </div>
+        <release-slide
+          :id="slide.id"
+          :names="slide.names"
+          :posters="slide.posters"
+          @open-release="openRelease"
+        />
+      </swiper-slide>
 
-              <div
-                v-if="!loadingSwiper"
-                class="poster"
-                @click="openRelease"
-              >
-                <img
-                  :alt="titles[slide]"
-                  :src="images[slide]"
-                >
-                <div
-                  class="poster-title"
-                  style="color: #666666"
-                >
-                  {{ titles[slide] }}
-                </div>
-              </div>
-            </div>
-          </template>
-          <span>{{ titles[slide] }}</span>
-        </n-tooltip>
+      <swiper-slide
+        v-for="(_, index) in new Array(releasesLimit)"
+        v-show="loadingSwiper"
+        :key="index"
+      >
+        <n-skeleton
+          v-if="1"
+          :height="180"
+          :width="120"
+          :sharp="false"
+          size="medium"
+        />
+        <n-skeleton
+          text
+          :width="120"
+          :sharp="false"
+        />
       </swiper-slide>
     </swiper>
   </div>
@@ -68,12 +53,14 @@ import { useRouter } from 'vue-router'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
 import { useConfigStore } from '../../store'
+import ReleaseSlide from './ReleaseSlide.vue'
 
 const router = useRouter()
 const store = useConfigStore()
 
 const loadingSwiper = ref(true)
 const breakpoints = ref()
+const releasesList = ref([])
 
 const SidebarCollapsedBreakpoints = {
   860: { slidesPerView: 6, spaceBetween: 60 },
@@ -94,8 +81,16 @@ const SidebarExpandedBreakpoints = {
   2160: { slidesPerView: 15, spaceBetween: 100 }
 }
 
+async function loading (callback) {
+  loadingSwiper.value = true
+  const result = await callback()
+  loadingSwiper.value = false
+  return result
+}
+
 onBeforeMount(function () {
   breakpoints.value = store.sidebarCollapsed ? SidebarCollapsedBreakpoints : SidebarExpandedBreakpoints
+  loading(() => getLastReleases(releasesLimit))
 })
 
 function onSwiper (swiper) {
@@ -103,7 +98,7 @@ function onSwiper (swiper) {
     swiper.params.breakpoints = state.sidebarCollapsed ? SidebarCollapsedBreakpoints : SidebarExpandedBreakpoints
 
     // TODO: Maybe we should find more the best way in future to make swiper breakpoints recalculate when app sidebar open / close
-    // currentBreakpoint - interval swiper private API, see https://github.com/nolimits4web/swiper/issues/3539
+    // currentBreakpoint - internal swiper private API, see https://github.com/nolimits4web/swiper/issues/3539
     swiper.currentBreakpoint = false
     swiper.update()
   })
@@ -113,66 +108,17 @@ function openRelease () {
   router.push({ name: 'Release' })
 }
 
-const titles = [
-  'Невероятные приключения ДжоДжо: каменный океан',
-  'Явись Ирума 3',
-  'Сага о винланде 2',
-  'Может, я встречу тебя в подземелье? IV. Часть 2',
-  'Непризнанный школой владыка демонов 2!',
-  'Боруто: Новое поколение Наруто',
-  'Токийские мстители: Рождественская битва',
-  'Токийские мстители: Рождественская битва',
-  'Моя геройская академия 6'
-]
+const releasesLimit = 20
+let releasesOffset = releasesLimit
 
-const images = [
-  'https://www.anilibria.tv/storage/releases/posters/9097/PEFjpxCXaLMFATFJ__e2dec6218fdd4fb51d6b981611a98ee8.jpg',
-  'https://www.anilibria.tv/storage/releases/posters/9266/edk2kCItHOx6fUNu__01efc0a63761fddf43db766f5b1522d9.jpg',
-  'https://www.anilibria.tv/storage/releases/posters/9327/MmsRDWtqNaf4O865__4fc73dcc5520b79569232a4f0e7d4b8c.jpg',
-  'https://www.anilibria.tv/storage/releases/posters/9333/vR71EBPQHC4iG2B9__53c7ccdf7f04fefcf7e25080c0270a04.jpg',
-  'https://www.anilibria.tv/storage/releases/posters/9325/REom0UxgVviCWHW7__77b5e99dbfbfa58ac8185728c956a1bf.jpg',
-  'https://www.anilibria.tv/storage/releases/posters/3996/EYY4BbyYQ8AfZKIj__6467adcb67dc2e5f7078c7f645ccb9e5.jpg',
-  'https://www.anilibria.tv/storage/releases/posters/9331/gTIANFa3uqdhk1yE__b6009168990d1c7ac1880f7eae0f073c.jpg',
-  'https://www.anilibria.tv/storage/releases/posters/9337/2YhbpJ4vV6PRijFO__15feab82deffdbdf2abcc3bf0dccf27d.jpg',
-  'https://www.anilibria.tv/storage/releases/posters/9260/7iezY4NrImAx6eWb__da55cdb7655d58464fe7c08bd70d6812.jpg'
-]
+async function loadMore () {
+  const { result } = await window.api.callApi('getLastReleases', { limit: releasesLimit, offset: releasesOffset })
+  releasesList.value.push(...result)
+  releasesOffset += releasesLimit
+}
 
-setTimeout(() => (loadingSwiper.value = false), Math.floor(Math.random() * (2000 - 500) + 500))
+async function getLastReleases (limit) {
+  const { result } = await window.api.callApi('getLastReleases', { limit })
+  releasesList.value = result
+}
 </script>
-
-<style scoped>
-.poster {
-  text-align: center;
-  width: 120px;
-}
-
-.poster > img {
-  border: 1px solid rgb(108 108 108 / 36%);
-  pointer-events: auto;
-  object-fit: cover;
-  border-radius: 6px;
-  width: 120px;
-  height: 180px;
-  opacity: 0.7;
-  transition: opacity 125ms ease-in-out;
-}
-
-.poster > img:hover {
-  opacity: 1;
-}
-
-.poster-title {
-  margin: 0;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-  font-weight: 400;
-  font-size: 0.75rem;
-  line-height: 1.66;
-  letter-spacing: 0.03333em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: rgba(255, 255, 255, 0.7);
-  align-self: center;
-  max-width: 120px;
-}
-</style>

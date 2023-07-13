@@ -31,7 +31,7 @@
         </n-button>
       </div>
       <div class="flex inline">
-        <div class="mr-2">
+        <div class="mr-2 w-full">
           <n-input placeholder="Создать папку" />
         </div>
         <div>

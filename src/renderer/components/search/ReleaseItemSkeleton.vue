@@ -1,14 +1,13 @@
 <template>
-  <div class="ml-2 mt-4 flex inline-flex">
+  <div class="flex inline-flex cursor-pointer">
     <div
       class="relative"
     >
       <n-skeleton
-        :height="226"
-        :width="160"
+        :height="207"
+        :width="138"
         :sharp="false"
         size="medium"
-        src="https://nyaa.shikimori.one/uploads/poster/animes/50330/main_alt-c852c516868fd058c1284abac0d4f214.jpeg"
       />
     </div>
     <div class="ml-2 max-h-262px">
@@ -43,8 +42,11 @@
       </div>
       <n-skeleton
         text
-        class="mt-1 w-200 h-34.7"
+        :sharp="false"
+        class="mt-1 h-29"
       />
     </div>
   </div>
 </template>
+<script setup>
+</script>
