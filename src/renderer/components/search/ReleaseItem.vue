@@ -1,5 +1,5 @@
 <template>
-  <div class="flex inline-flex cursor-pointer">
+  <div class="flex cursor-pointer">
     <div
       class="relative"
     >
