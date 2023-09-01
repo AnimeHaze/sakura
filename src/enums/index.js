@@ -16,6 +16,7 @@ export const ipc = {
 
 export const appSidebar = {
   BACK: 'back',
+  RANDOM_ANIME: 'random-anime',
   CATALOG: 'catalog',
   PROFILE: 'profile',
   FAVORITE: 'favorite',

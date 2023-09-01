@@ -29,8 +29,9 @@ import { NAvatar, NIcon, useDialog } from 'naive-ui'
 import {
   AppsOutline, BookmarkOutline, BugOutline, CaretDownOutline,
   InformationCircleOutline, SearchOutline, SettingsOutline,
-  TerminalOutline, LogOutOutline, ArrowBackOutline
+  TerminalOutline, LogOutOutline, ArrowBackOutline, DiceOutline
 } from '@vicons/ionicons5'
+
 import { useRoute, useRouter } from 'vue-router'
 import { useConfigStore, useUserStore } from '../../store'
 import ThemeIcon from './ThemeIcon.vue'
@@ -65,6 +66,7 @@ const menuOptions = computed(() => [
   generateOption('AniCoder', appSidebar.PROFILE, '/profile'),
   generateOption('Избранное', appSidebar.FAVORITE),
   generateOption('Поиск', appSidebar.SEARCH, '/search'),
+  generateOption('Случайное аниме', appSidebar.RANDOM_ANIME, '/random-anime'),
   generateOption('Тема', appSidebar.THEME),
   generateOption('Настройки', appSidebar.SETTINGS, '/settings'),
   generateOption('О приложении', appSidebar.ABOUT, '/about'),
@@ -146,6 +148,7 @@ const iconMap = {
   [appSidebar.BACK]: ArrowBackOutline,
   [appSidebar.CATALOG]: AppsOutline,
   [appSidebar.SETTINGS]: SettingsOutline,
+  [appSidebar.RANDOM_ANIME]: DiceOutline,
   [appSidebar.SEARCH]: SearchOutline,
   [appSidebar.DEVTOOLS]: BugOutline,
   [appSidebar.THEME]: ThemeIcon,
