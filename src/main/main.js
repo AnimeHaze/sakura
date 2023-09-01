@@ -6,7 +6,7 @@ const { API } = require('./api')
 
 const api = new API()
 
-const handleToggleDevTools = () => {
+const handleToggleDevelopmentTools = () => {
   const { webContents } = BrowserWindow.getFocusedWindow()
 
   if (webContents.isDevToolsOpened()) {
@@ -43,7 +43,7 @@ if (require('electron-squirrel-startup')) {
   app.quit()
 }
 
-ipcMain.handle(ipc.TOGGLE_DEVTOOLS, handleToggleDevTools)
+ipcMain.handle(ipc.TOGGLE_DEVTOOLS, handleToggleDevelopmentTools)
 ipcMain.handle(ipc.INSPECT_ELEMENT, handleInspectElement)
 ipcMain.handle(ipc.APP_CLOSE, () => app.quit())
 ipcMain.handle(ipc.APP_MAXIMIZE_MINIMIZE, handleAppMaximizeMinimize)

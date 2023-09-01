@@ -41,7 +41,6 @@
           <span class="DocSearch-Label">to close</span>
         </li>
       </ul>
-
       <span class="mdi mdi-arrow-down" />
       <span class="mdi mdi-arrow-up" />
     </template>
