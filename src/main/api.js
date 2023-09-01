@@ -1,3 +1,5 @@
+require('axios-debug-log/enable')
+
 const axios = require('axios')
 
 class API {
