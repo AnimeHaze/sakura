@@ -30,7 +30,10 @@ const handleAppMaximizeMinimize = () => {
 }
 
 const handleAPI = (event, method, options) => {
-  if (api[method] === undefined) throw TypeError('Unknown APi method')
+  const allowedMethods = new Set(['getLastReleases', 'getNews', 'searchReleases', 'getRelease'])
+  if (!allowedMethods.has(method) || api[method] === undefined) {
+    throw TypeError('Unknown API method')
+  }
 
   return api[method](options)
 }
