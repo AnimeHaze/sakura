@@ -4,7 +4,47 @@
   >
     Новости
   </h5>
+
   <swiper
+    v-show="!loadingSwiper"
+    :breakpoints="breakpoints"
+    :pagination="{
+      clickable: true,
+    }"
+    :grab-cursor="true"
+    @reach-end="loading(load)"
+  >
+    <swiper-slide
+      v-for="slide of news"
+      :id="slide.id"
+      :key="slide.id"
+    >
+      <div
+        @click="showPreview(slide.url, slide.title)"
+      >
+        <n-image
+          class="news-poster"
+          round
+          preview-disabled
+          lazy
+          :src="slide.preview"
+          :alt="slide.title"
+        >
+          <template #placeholder>
+            <n-skeleton
+              :height="170"
+              :width="300"
+              :sharp="false"
+              size="medium"
+            />
+          </template>
+        </n-image>
+      </div>
+    </swiper-slide>
+  </swiper>
+
+  <swiper
+    v-show="loadingSwiper"
     :breakpoints="breakpoints"
     :pagination="{
       clickable: true,
@@ -12,35 +52,50 @@
     :grab-cursor="true"
   >
     <swiper-slide
-      v-for="slide in (loadingSwiper ? Array.from(Array(20).keys()) : Array.from(Array(news.length).keys()))"
-      :key="slide"
+      v-for="(_, index) in new Array(20)"
+      :key="index"
     >
-      <div v-if="loadingSwiper">
-        <n-skeleton
-          v-if="1"
-          :height="180"
-          :width="300"
-          :sharp="false"
-          size="medium"
-        />
-      </div>
-
-      <div v-if="!loadingSwiper">
-        <img
-          class="news-poster"
-          :src="news[slide]"
-          alt=""
-        >
-      </div>
+      <n-skeleton
+        :height="170"
+        :width="300"
+        :sharp="false"
+        size="medium"
+      />
     </swiper-slide>
   </swiper>
+
+  <n-modal
+    v-model:show="showModal"
+    preset="card"
+    :style="{ width: '800px' }"
+    :title="ytInfo.title"
+    :bordered="false"
+    size="medium"
+    :segmented="{
+      content: 'soft',
+      footer: 'soft'
+    }"
+  >
+    <YoutubeIframe
+      :video-id="ytInfo.id"
+      width="100%"
+      @ready="event => event.target.playVideo()"
+    />
+  </n-modal>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { YoutubeIframe } from '@vue-youtube/component'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
+
+const showModal = ref(false)
+const ytInfo = ref({})
+
 const loadingSwiper = ref(true)
+const page = ref(1)
+const news = ref([])
 
 const breakpoints = {
   860: { slidesPerView: 2, spaceBetween: 50 },
@@ -51,21 +106,26 @@ const breakpoints = {
   2160: { slidesPerView: 6, spaceBetween: 60 }
 }
 
-const news = [
-  'https://www.anilibria.tv/storage/media/videos/previews/502/b9RO7UiMtHMKaRpE__361fb1a0ea18c8855ed9081411da0e9d.jpg',
-  'https://www.anilibria.tv/storage/media/videos/previews/529/EkyFeY8bWyn7Ua4p__964da049dab94a4e1a5b10b2a8322ceb.jpg',
-  'https://www.anilibria.tv/storage/media/videos/previews/476/50VKeX3Lbk8OInVm__d311fbb6a9df7201ecbf9abc9f06a86c.jpg',
-  'https://www.anilibria.tv/storage/media/videos/previews/527/KEnw2V8oL21hUoOw__4d10cf311d78591be8040d057b7fc488.jpg',
-  'https://www.anilibria.tv/storage/media/videos/previews/436/dTa8hcfKkjH32fQC__cde385f61288910c4efb892ec8db4780.jpg',
-  'https://www.anilibria.tv/storage/media/videos/previews/528/OplgIzu955bUZxyw__3530664dbbe629fa41f7791c9fa23978.jpg',
-  'https://www.anilibria.tv/storage/media/videos/previews/400/FIaYWCYOx9NGLOOR__f10306ed7d404e7e40ef9d595d1288fc.jpg',
-  'https://www.anilibria.tv/storage/media/videos/previews/526/7Sm17ZuzMrhmr16E__2b2729787c202566bd888cc1895ff492.jpg',
-  'https://www.anilibria.tv/storage/media/videos/previews/525/Jje8XoIFerhG78N4__3fcc93cd365a86b027f995ba19d79934.jpg',
-  'https://www.anilibria.tv/storage/media/videos/previews/335/ys9dzX3CPZ0BnabD__0da1c26622e6f7fda2e5b437082a318d.jpg',
-  'https://www.anilibria.tv/storage/media/videos/previews/524/lNuP85eCehXGtWgb__0161889acd57fc2d9ecb392570cdeabf.jpg'
-]
+function showPreview (url, title) {
+  ytInfo.value.id = url.split('/').pop().split('=').pop()
+  ytInfo.value.title = title
+  showModal.value = true
+}
 
-setTimeout(() => (loadingSwiper.value = false), Math.floor(Math.random() * (2000 - 500) + 500))
+async function loading (callback) {
+  loadingSwiper.value = true
+  const result = await callback()
+  loadingSwiper.value = false
+  return result
+}
+
+async function load () {
+  const { result } = await window.api.callApi('getNews', { page: page.value, limit: 20 })
+  news.value.push(...result)
+  page.value++
+}
+
+onMounted(() => loading(load))
 </script>
 
 <style scoped>

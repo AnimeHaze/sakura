@@ -3,13 +3,15 @@
     <h5 class="header-five">
       Последние релизы
     </h5>
+
     <swiper
+      v-show="!loadingSwiper"
       :breakpoints="breakpoints"
       :pagination="{
         clickable: true,
       }"
       :grab-cursor="true"
-      @reachEnd="loading(loadMore)"
+      @reach-end="loading(loadMore)"
       @swiper="onSwiper"
     >
       <swiper-slide
@@ -24,7 +26,16 @@
           @open-release="openRelease"
         />
       </swiper-slide>
+    </swiper>
 
+    <swiper
+      :breakpoints="breakpoints"
+      :pagination="{
+        clickable: true,
+      }"
+      :grab-cursor="true"
+      @swiper="onSwiper"
+    >
       <swiper-slide
         v-for="(_, index) in new Array(releasesLimit)"
         v-show="loadingSwiper"
@@ -48,7 +59,7 @@
 </template>
 
 <script setup>
-import { onBeforeMount, ref } from 'vue'
+import { onMounted, onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
@@ -88,8 +99,11 @@ async function loading (callback) {
   return result
 }
 
-onBeforeMount(function () {
+onBeforeMount(() => {
   breakpoints.value = store.sidebarCollapsed ? SidebarCollapsedBreakpoints : SidebarExpandedBreakpoints
+})
+
+onMounted(function () {
   loading(() => getLastReleases(releasesLimit))
 })
 
@@ -104,8 +118,9 @@ function onSwiper (swiper) {
   })
 }
 
-function openRelease () {
-  router.push({ name: 'Release' })
+function openRelease (id) {
+  console.log(id)
+  router.push({ name: 'Release', params: { id } })
 }
 
 const releasesLimit = 20

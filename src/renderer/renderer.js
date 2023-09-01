@@ -13,6 +13,7 @@ import '@mdi/font/css/materialdesignicons.min.css'
 // import devtools from '@vue/devtools'
 
 import { createApp } from 'vue'
+import { createManager } from '@vue-youtube/core'
 import naive from 'naive-ui'
 import App from '../renderer/components/App.vue'
 import { router } from './router'
@@ -26,6 +27,7 @@ const app = createApp({
   template: '<App/>'
 })
 
+app.use(createManager())
 app.use(naive)
 app.use(pinia)
 app.use(router)
