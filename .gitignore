@@ -1,6 +1,6 @@
 # IDEA
 .idea
-
+.yarn
 # Logs
 logs
 *.log
