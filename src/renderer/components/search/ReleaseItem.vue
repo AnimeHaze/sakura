@@ -1,5 +1,8 @@
 <template>
-  <div class="flex cursor-pointer">
+  <div
+    class="flex cursor-pointer"
+    @click="openRelease(releaseInfo.id)"
+  >
     <div
       class="relative"
     >
@@ -14,7 +17,7 @@
             round
             lazy
             preview-disabled
-            :src="releaseInfo.poster"
+            :src="poster"
           >
             <template #placeholder>
               <n-skeleton
@@ -33,7 +36,7 @@
             depth="1"
           >
             <div class="break-words">
-              {{ releaseInfo.title }}
+              {{ releaseInfo.names.ru }}
             </div>
           </n-text>
         </template>
@@ -52,7 +55,6 @@
 
         <template #footer>
           <n-select
-            v-model:value="value"
             placeholder="Добавить в папку"
             :options="foolders"
           >
@@ -62,7 +64,7 @@
                   Удалить из папки
                 </n-button>
               </div>
-              <div class="flex inline">
+              <div class="flex">
                 <div class="mr-2 w-full">
                   <n-input placeholder="Создать папку" />
                 </div>
@@ -98,10 +100,10 @@
     </div>
     <div class="ml-2 max-h-262px">
       <div class="break-words font-600 text-xl">
-        {{ releaseInfo.title }}
+        {{ releaseInfo.names.ru }}
       </div>
       <div class="break-words text-gray-500 font-medium text-l">
-        {{ releaseInfo.altNames[0] }}
+        {{ releaseInfo.names.en }}
       </div>
       <div class="mb-1 flex flex-row mt-2 overflow-ellipsis">
         <n-tag
@@ -122,14 +124,19 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { Star, CheckmarkOutline } from '@vicons/ionicons5'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
-defineProps({
+const properties = defineProps({
   releaseInfo: {
     type: Object,
     required: true
   }
 })
+
+const poster = computed(x => properties.releaseInfo.posters.medium ?? properties.releaseInfo.posters.small)
 
 const foolders = [
   {
@@ -153,6 +160,10 @@ const foolders = [
     value: '5'
   }
 ]
+
+function openRelease (id) {
+  router.push({ name: 'Release', params: { id } })
+}
 
 </script>
 

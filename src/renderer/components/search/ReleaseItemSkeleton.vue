@@ -1,5 +1,5 @@
 <template>
-  <div class="flex inline-flex cursor-pointer">
+  <div class="flex cursor-pointer">
     <div
       class="relative"
     >
@@ -10,7 +10,7 @@
         size="medium"
       />
     </div>
-    <div class="ml-2 max-h-262px">
+    <div class="ml-2 mb-3 max-h-262px w-full">
       <div>
         <n-skeleton
           text
@@ -43,7 +43,7 @@
       <n-skeleton
         text
         :sharp="false"
-        class="mt-1 h-29"
+        class="mt-1 h-29 w-full"
       />
     </div>
   </div>
