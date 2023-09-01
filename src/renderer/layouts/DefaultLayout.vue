@@ -4,10 +4,14 @@
     has-sider
   >
     <Sidebar />
-    <n-layout>
-      <transition name="fade">
-        <router-view />
-      </transition>
+    <n-layout :native-scrollbar="false">
+      <router-view v-slot="{ Component }">
+        <transition name="fade">
+          <transition>
+            <component :is="Component" />
+          </transition>
+        </transition>
+      </router-view>
     </n-layout>
   </n-layout>
 </template>
