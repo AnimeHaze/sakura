@@ -13,7 +13,7 @@ const routes = [
   { path: '/profile', component: Profile, name: 'Profile' },
   { path: '/about', component: About, name: 'About' },
   { path: '/login', component: Login, name: 'Login' },
-  { path: '/release', component: Release, name: 'Release' },
+  { path: '/release/:id', component: Release, name: 'Release' },
   { path: '/search', component: Search, name: 'Search' },
   { path: '/settings', component: Settings, name: 'Settings' },
   { path: '/', component: Home, name: 'Home' }

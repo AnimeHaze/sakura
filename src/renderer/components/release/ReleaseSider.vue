@@ -1,49 +1,52 @@
 <template>
-  <n-image
-    class="poster mb-3"
-    round
-    lazy
-    :src="posterImage"
-  >
-    <template #placeholder>
-      <n-skeleton
-        :height="321"
-        :width="224"
-        :sharp="false"
-        size="medium"
-      />
-    </template>
-  </n-image>
+  <div>
+    <n-image
+      class="poster mb-3"
+      round
+      lazy
+      :src="posterImage"
+      :preview-src="posterImageFull ?? posterImage"
+      :show-toolbar="false"
+    >
+      <template #placeholder>
+        <n-skeleton
+          :height="321"
+          :width="224"
+          :sharp="false"
+          size="medium"
+        />
+      </template>
+    </n-image>
 
-  <n-button class="w-full mb-3">
-    Смотреть
-  </n-button>
+    <n-button class="w-full mb-3">
+      Смотреть
+    </n-button>
 
-  <n-select
-    v-model:value="value"
-    placeholder="Добавить в папку"
-    :options="foolders"
-  >
-    <template #action>
-      <div>
-        <n-button class="w-full mb-2">
-          Удалить из папки
-        </n-button>
-      </div>
-      <div class="flex inline">
-        <div class="mr-2 w-full">
-          <n-input placeholder="Создать папку" />
-        </div>
+    <n-select
+      placeholder="Добавить в папку"
+      :options="foolders"
+    >
+      <template #action>
         <div>
-          <n-button>
-            <n-icon size="24">
-              <checkmark-outline />
-            </n-icon>
+          <n-button class="w-full mb-2">
+            Удалить из папки
           </n-button>
         </div>
-      </div>
-    </template>
-  </n-select>
+        <div class="flex inline">
+          <div class="mr-2 w-full">
+            <n-input placeholder="Создать папку" />
+          </div>
+          <div>
+            <n-button>
+              <n-icon size="24">
+                <checkmark-outline />
+              </n-icon>
+            </n-button>
+          </div>
+        </div>
+      </template>
+    </n-select>
+  </div>
 </template>
 
 <script setup>
@@ -53,6 +56,11 @@ defineProps({
   posterImage: {
     type: String,
     required: true
+  },
+  posterImageFull: {
+    type: String,
+    required: false,
+    default: null
   }
 })
 
