@@ -67,6 +67,80 @@ class API {
       total: pagination.total_items
     }
   }
+
+  async searchReleases (options) {
+    // eslint-disable-next-line no-unused-vars
+    const { limit, page, filters, search } = options
+
+    const { data: { list, pagination } } = await this.client.get('/title/search', { params: { limit, page, search } })
+
+    const result = list.map(({ names, id, code, posters, description, genres }) => ({
+      names: {
+        ru: names.ru,
+        en: names.en
+      },
+      id,
+      code,
+      posters: {
+        small: this.staticURL + posters.small?.url,
+        medium: this.staticURL + posters.medium?.url,
+        original: this.staticURL + posters.original?.url
+      },
+      description,
+      genres: genres.map(x => ({ id: x, label: x }))
+    }))
+
+    return {
+      result,
+      total: pagination.total_items,
+      pages: pagination.pages
+    }
+  }
+
+  async getNews (options) {
+    const { limit, page } = options
+    const { data: { list, pagination } } = await this.client.get('/youtube', { params: { items_per_page: limit, page } })
+
+    const result = list.map(({ title, id, preview, youtube_id: youtubeId }) => ({
+      title,
+      id,
+      url: 'https://www.youtube.com/watch?v=' + youtubeId,
+      // Directly from YouTube, because I don't now why Anilibria server sometimes returns "null" in preview link
+      preview: preview.src ? this.staticURL + preview.src : 'https://i3.ytimg.com/vi/' + youtubeId + '/hqdefault.jpg'
+    }))
+
+    return {
+      result,
+      total: pagination.total_items
+    }
+  }
+
+  /**
+   * @param {{ id: number }} options
+   * @return {Promise<{names: {ru, en}, code: undefined, genres: *, posters: {small: string, original: string, medium: string}, description: undefined, id: undefined}>}
+   */
+  async getRelease (options) {
+    console.log(options)
+    const { data: { names, id, code, posters, description, genres } } = await this.client.get('/title', { params: { id: options.id } })
+
+    return {
+      result: {
+        names: {
+          ru: names.ru,
+          en: names.en
+        },
+        id,
+        code,
+        posters: {
+          small: this.staticURL + posters.small?.url,
+          medium: this.staticURL + posters.medium?.url,
+          original: this.staticURL + posters.original?.url
+        },
+        description,
+        genres: genres.map(x => ({ id: x, label: x }))
+      }
+    }
+  }
 }
 
 module.exports = { API }
