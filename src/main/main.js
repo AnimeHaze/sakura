@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain, shell } = require('electron')
 const { createMainWindow } = require('./utils/windows')
-const { preventDisplaySleep } = require('./utils/powerSaveBlocker')
+const { preventDisplaySleep } = require('./utils/power-save-blocker')
 const { ipc } = require('../enums')
 const { API } = require('./api')
 
