@@ -32,14 +32,14 @@
 
 <script setup>
 import { computed, onBeforeUnmount, ref } from 'vue'
-import { darkTheme } from 'naive-ui'
+import { darkTheme, lightTheme } from 'naive-ui'
 import DefaultLayout from '../layouts/DefaultLayout.vue'
 import { useConfigStore } from '../store'
 import { appTheme } from '../../enums'
 
 const config = useConfigStore()
 
-const theme = computed(() => config.theme === appTheme.DARK ? darkTheme : null)
+const theme = computed(() => config.theme === appTheme.DARK ? darkTheme : lightTheme)
 
 function themeChange (event) {
   config.systemThemeColor = event.matches ? appTheme.DARK : appTheme.LIGHT
