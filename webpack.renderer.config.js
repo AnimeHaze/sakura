@@ -1,13 +1,27 @@
 const rules = require('./webpack.rules')
 const { VueLoaderPlugin } = require('vue-loader')
 const WindiCSSWebpackPlugin = require('windicss-webpack-plugin')
-const path = require('path')
+const path = require('node:path')
 
 module.exports = {
   // Put your normal webpack config below here
   module: {
     rules: [
-      { test: /\.vue$/, loader: 'vue-loader' },
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+        options: {
+          compilerOptions: {
+            isCustomElement: tag => {
+              return [
+                'media-player', 'track',
+                'media-outlet', 'media-poster',
+                'media-community-skin'
+              ].includes(tag)
+            }
+          }
+        }
+      },
       {
         test: /\.js$/,
         loader: 'babel-loader'
