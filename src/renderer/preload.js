@@ -22,6 +22,7 @@ contextBridge.exposeInMainWorld(
     preventSleep: () => invokeIpcRenderer(ipc.PREVENT_SLEEP),
     isDev: () => process.env.NODE_ENV === 'development',
     inspectElement: (x, y) => invokeIpcRenderer(ipc.INSPECT_ELEMENT, { x, y }),
+    memoryUsage: () => invokeIpcRenderer(ipc.MEMORY_USAGE),
     callApi: (method, options) => invokeIpcRenderer(ipc.API, method, options)
   }
 )

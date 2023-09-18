@@ -52,6 +52,10 @@ ipcMain.handle(ipc.PREVENT_SLEEP, () => preventDisplaySleep())
 ipcMain.handle(ipc.API, handleAPI)
 
 app.on('web-contents-created', (event, webContents) => {
+ipcMain.handle(ipc.MEMORY_USAGE, () => {
+  return process.memoryUsage()
+})
+
   webContents.on('will-navigate', (event, url) => {
     // eslint-disable-next-line no-undef
     if (!url.startsWith(MAIN_WINDOW_WEBPACK_ENTRY)) {

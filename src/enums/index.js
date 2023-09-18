@@ -11,7 +11,8 @@ export const ipc = {
   APP_COLLAPSE: 'app:collapse',
   PREVENT_SLEEP: 'prevent-sleep',
   INSPECT_ELEMENT: 'inspect-element',
-  API: 'api:call'
+  API: 'api:call',
+  MEMORY_USAGE: 'memory-usage'
 }
 
 export const appSidebar = {
