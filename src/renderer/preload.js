@@ -1,7 +1,16 @@
 import { ipc } from '../enums'
 import { ipcRenderer, contextBridge } from 'electron'
 
-const invokeIpcRenderer = (command, ...args) => ipcRenderer.invoke(command, ...args)
+window.addEventListener('error', error => {
+  if (error.message === 'ResizeObserver loop limit exceeded') {
+    setTimeout(() => {
+      document.querySelector('#webpack-dev-server-client-overlay')?.remove()
+    }, 0)
+    console.warn(error.message)
+  }
+})
+
+const invokeIpcRenderer = (command, ...arguments_) => ipcRenderer.invoke(command, ...arguments_)
 
 contextBridge.exposeInMainWorld(
   'api',
