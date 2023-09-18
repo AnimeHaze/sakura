@@ -3,8 +3,14 @@ const { createMainWindow } = require('./utils/windows')
 const { preventDisplaySleep } = require('./utils/power-save-blocker')
 const { ipc } = require('../enums')
 const { API } = require('./api')
+const { OperaProxy } = require('./utils/opera-proxy')
+const path = require('node:path')
 
 const api = new API()
+
+const op = new OperaProxy(path.resolve('./src/opera-proxy'))
+
+const proxyPromise = op.start()
 
 const handleToggleDevelopmentTools = () => {
   const { webContents } = BrowserWindow.getFocusedWindow()
@@ -51,10 +57,15 @@ ipcMain.handle(ipc.APP_COLLAPSE, () => BrowserWindow.getFocusedWindow().minimize
 ipcMain.handle(ipc.PREVENT_SLEEP, () => preventDisplaySleep())
 ipcMain.handle(ipc.API, handleAPI)
 
-app.on('web-contents-created', (event, webContents) => {
 ipcMain.handle(ipc.MEMORY_USAGE, () => {
   return process.memoryUsage()
 })
+
+app.on('web-contents-created', async (event, webContents) => {
+  const port = await proxyPromise
+
+  webContents.session
+    .setProxy({ proxyRules: 'http://localhost:' + port })
 
   webContents.on('will-navigate', (event, url) => {
     // eslint-disable-next-line no-undef
