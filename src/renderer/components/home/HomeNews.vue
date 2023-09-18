@@ -136,6 +136,7 @@ onMounted(() => loading(load))
   opacity: 0.8;
   object-fit: cover;
   border-radius: 4px;
+  width: 300px;
   max-width: 300px;
   transition: opacity 125ms ease-in-out;
 }
