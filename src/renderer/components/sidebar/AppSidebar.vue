@@ -124,12 +124,12 @@ const actionMap = {
 
 function handleClick (key, option) {
   if (option.href) { router.push(option.href) }
-  if (actionMap[key]) {
-    actionMap[key]()
-  }
+  // eslint-disable-next-line security/detect-object-injection
+  if (actionMap[key]) actionMap[key]()
 }
 
 function renderIcon (key) {
+  // eslint-disable-next-line security/detect-object-injection
   return h(NIcon, null, { default: () => h(iconMap[key]) })
 }
 

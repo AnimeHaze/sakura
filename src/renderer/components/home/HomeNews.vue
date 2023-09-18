@@ -125,7 +125,9 @@ async function load () {
   page.value++
 }
 
-onMounted(() => loading(load))
+onMounted(() => {
+  return loading(load)
+})
 </script>
 
 <style scoped>

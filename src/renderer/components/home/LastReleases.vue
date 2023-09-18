@@ -119,7 +119,6 @@ function onSwiper (swiper) {
 }
 
 function openRelease (id) {
-  console.log(id)
   router.push({ name: 'Release', params: { id } })
 }
 

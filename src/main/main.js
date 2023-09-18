@@ -37,10 +37,12 @@ const handleAppMaximizeMinimize = () => {
 
 const handleAPI = (event, method, options) => {
   const allowedMethods = new Set(['getLastReleases', 'getNews', 'searchReleases', 'getRelease'])
+  // eslint-disable-next-line security/detect-object-injection
   if (!allowedMethods.has(method) || api[method] === undefined) {
     throw TypeError('Unknown API method')
   }
 
+  // eslint-disable-next-line security/detect-object-injection
   return api[method](options)
 }
 
@@ -86,6 +88,9 @@ app.on('web-contents-created', async (event, webContents) => {
   })
 })
 
-app.on('ready', () => createMainWindow())
+app.on('ready', () => {
+  return createMainWindow()
+})
+
 app.on('window-all-closed', () => process.platform !== 'darwin' && app.quit())
 app.on('activate', () => BrowserWindow.getAllWindows().length === 0 && createMainWindow())

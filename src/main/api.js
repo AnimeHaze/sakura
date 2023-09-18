@@ -120,7 +120,6 @@ class API {
    * @return {Promise<{names: {ru, en}, code: undefined, genres: *, posters: {small: string, original: string, medium: string}, description: undefined, id: undefined}>}
    */
   async getRelease (options) {
-    console.log(options)
     const { data: { names, id, code, posters, description, genres } } = await this.client.get('/title', { params: { id: options.id } })
 
     return {
