@@ -141,7 +141,8 @@ class API {
           original: this.staticURL + posters.original?.url
         },
         description,
-        genres: genres.map(x => ({ id: x, label: x }))
+        genres: genres.map(x => ({ id: x, label: x })),
+        episodes: episodes.map(x => ({ id: x.uuid, number: x.episode, name: x.name, createdAt: x.created_timestamp, watched: true }))
       }
     }
   }
