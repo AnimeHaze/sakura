@@ -6,6 +6,7 @@ import Login from '../views/LoginView.vue'
 import Release from '../views/ReleaseView.vue'
 import Settings from '../views/SettingsView.vue'
 import Search from '../views/SearchView.vue'
+import Player from '../views/PlayerView.vue'
 
 import { useUserStore } from '../store'
 
@@ -14,6 +15,7 @@ const routes = [
   { path: '/about', component: About, name: 'About' },
   { path: '/login', component: Login, name: 'Login' },
   { path: '/release/:id', component: Release, name: 'Release' },
+  { path: '/release/:id/:episode', component: Player, name: 'Player' },
   { path: '/search', component: Search, name: 'Search' },
   { path: '/settings', component: Settings, name: 'Settings' },
   { path: '/', component: Home, name: 'Home' }
