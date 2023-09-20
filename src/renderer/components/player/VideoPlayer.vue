@@ -1,7 +1,5 @@
 <template>
   <media-player
-    stream-type=""
-    autoplay
     :title="title"
     :src="src"
     :poster="poster"
@@ -77,7 +75,8 @@ defineProps({
   },
   streamType: {
     type: String,
-    required: false
+    required: false,
+    default: null
   }
 })
 

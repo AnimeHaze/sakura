@@ -103,7 +103,7 @@ const router = useRouter()
 const message = useMessage()
 
 const loginLoading = ref(false)
-// eslint-disable-next-line unicorn/prevent-abbreviations
+
 const formRef = ref(null)
 const formData = ref({
   login: '',
