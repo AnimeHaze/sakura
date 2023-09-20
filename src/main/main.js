@@ -4,9 +4,11 @@ const { preventDisplaySleep } = require('./utils/power-save-blocker')
 const { ipc } = require('../enums')
 const { API } = require('./api')
 const { OperaProxy } = require('./utils/opera-proxy')
+const { APIServer } = require('./utils/api-server')
 const path = require('node:path')
 
 const api = new API()
+const apiServer = new APIServer()
 
 const op = new OperaProxy(path.resolve('./src/opera-proxy'))
 
@@ -88,7 +90,8 @@ app.on('web-contents-created', async (event, webContents) => {
   })
 })
 
-app.on('ready', () => {
+app.on('ready', async () => {
+  await apiServer.start()
   return createMainWindow()
 })
 
