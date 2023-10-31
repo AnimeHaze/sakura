@@ -1,7 +1,5 @@
 const rules = require('./webpack.rules')
 const { VueLoaderPlugin } = require('vue-loader')
-const WindiCSSWebpackPlugin = require('windicss-webpack-plugin')
-const path = require('node:path')
 
 module.exports = {
   // Put your normal webpack config below here
@@ -59,7 +57,6 @@ module.exports = {
     }
   },
   plugins: [
-    new VueLoaderPlugin(),
-    new WindiCSSWebpackPlugin()
+    new VueLoaderPlugin()
   ]
 }
