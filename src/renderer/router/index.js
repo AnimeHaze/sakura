@@ -10,8 +10,16 @@ import Player from '../views/PlayerView.vue'
 
 import { useUserStore } from '../store'
 import DefaultLayout from '../layouts/DefaultLayout.vue'
+import PlayerLayout from '../layouts/PlayerLayout.vue'
 
 const routes = [
+  {
+    path: '/player/',
+    component: PlayerLayout,
+    children: [
+      { path: '/:id/:episode', component: Player, name: 'Player' }
+    ]
+  },
   {
     path: '/',
     component: DefaultLayout,

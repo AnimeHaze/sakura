@@ -1,22 +1,83 @@
 <script setup>
 import VideoPlayer from '../components/player/VideoPlayer.vue'
+import { ref, computed, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+
+const showEpisodesDrawer = ref(false)
+const release = ref({})
+const router = useRouter()
+const route = useRoute()
+
+const poster = computed(() => release.value.posters?.medium || release.value.posters?.original)
+
+onMounted(async () => {
+  const { result } = await window.api.getRelease({ id: route.params.id })
+  release.value = result
+})
 </script>
 
 <template>
-  <video-player
-    title="123"
-    aspect-ratio="16/9"
-    :cross-origin="true"
-    poster="https://image.mux.com/VZtzUzGRv02OhRnZCxcNg49OilvolTqdnFLEqBsTwaxU/thumbnail.webp?time=268&width=980"
-    poster-alt="Girl walks into sprite gnomes around her friend on a campfire in danger!"
-    src="https://cache.libria.fun/videos/media/ts/9477/1/1080/cb7a6abb65ddc10387257652454c65d2.m3u8"
-    :tracks="[
-      { src: 'https://media-files.vidstack.io/sprite-fight/subs/english.vtt', label: 'English', srcLang: 'en-US', kind: 'subtitles', default: true },
-      { src: 'http://127.0.0.1:8000/chapters', dataType: 'json', kind: 'chapters', default: true }
-    ]"
-  />
+  <div>
+    <n-drawer
+      v-model:show="showEpisodesDrawer"
+      resizable
+      :min-width="300"
+      placement="left"
+    >
+      <n-drawer-content
+        body-content-style="padding: 0px"
+        title="Эпизоды"
+      >
+        <n-list
+          hoverable
+          clickable
+        >
+          <n-list-item>
+            <n-thing
+              title="Better Late Than Never"
+              content-style="margin-top: 10px;"
+            >
+              Lorem ipsum dolor sit amet,<br>
+            </n-thing>
+          </n-list-item>
+          <n-list-item>
+            <n-thing
+              title="Lorem Ipsum"
+              content-style="margin-top: 10px;"
+            >
+              Lorem ipsum dolor sit amet
+            </n-thing>
+          </n-list-item>
+        </n-list>
+      </n-drawer-content>
+    </n-drawer>
+    <div>
+      <video-player
+        :poster="poster"
+        @open-episodes="showEpisodesDrawer = true"
+        @open-release="router.push({ name: 'Release', params: { id: route.params.id } })"
+      />
+    </div>
+  </div>
 </template>
 
 <style scoped>
+.episodes-button {
+  z-index: 1;
+  padding: 6px;
+  height: 36px;
+  width: 36px;
+  left: 10px;
+  top: 10px;
+}
 
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
 </style>

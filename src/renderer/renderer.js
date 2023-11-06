@@ -1,5 +1,5 @@
-import './style/index.css'
-import 'windi.css'
+import './assets/index.css'
+import 'vidstack/icons'
 import '@mdi/font/css/materialdesignicons.min.css'
 // import Vue from '../node_modules/vue/dist/vue.esm.browser.min.js';
 //

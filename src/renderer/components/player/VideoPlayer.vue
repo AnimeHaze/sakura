@@ -1,91 +1,81 @@
-<template>
-  <media-player
-    :title="title"
-    :src="src"
-    :poster="poster"
-    :thumbnails="thumbnails"
-    :aspect-ratio="aspectRatio"
-    :crossorigin="crossOrigin"
-  >
-    <media-outlet>
-      <media-poster
-        :alt="posterAlt"
-      />
-      <track
-        v-for="track in tracks"
-        :key="track.label+track.kind+track.srcLang"
-        :src="track.src"
-        :label="track.label"
-        :srclang="track.srcLang"
-        :kind="track.kind"
-        :default="track.default"
-        :data-type="track.dataType"
-      >
-    </media-outlet>
-    <media-community-skin />
-  </media-player>
-</template>
-
 <script setup>
-import { onMounted } from 'vue'
-import { defineCustomElements } from 'vidstack/elements'
+import './assets/base.css'
+import 'vidstack/player/styles/base.css'
 
-defineProps({
-  autoplay: {
-    type: Boolean,
-    required: false,
-    default: false
-  },
-  title: {
-    type: String,
-    required: true
-  },
-  src: {
-    type: String,
-    required: true
-  },
+import 'vidstack/player'
+import 'vidstack/player/ui'
+import 'vidstack/icons'
+
+import { isHLSProvider } from 'vidstack'
+import { onMounted, ref } from 'vue'
+
+import VideoLayout from './components/layouts/VideoLayout.vue'
+import { textTracks } from './track'
+
+/** @type {Ref<MediaPlayerElement>} */
+const $player = ref()
+
+onMounted(() => {
+  for (const track of textTracks) $player.value.textTracks.add(track)
+
+  return $player.value.subscribe(({ paused, viewType }) => {
+    console.log('is paused?', '->', paused)
+    console.log('is audio view?', '->', viewType === 'audio')
+  })
+})
+
+/**
+ * @param {MediaProviderChangeEvent} event
+ */
+function onProviderChange (event) {
+  const provider = event.detail
+  if (isHLSProvider(provider)) {
+    provider.config = {}
+  }
+}
+
+/**
+ * @param {MediaCanPlayEvent} event
+ */
+function onCanPlay (event) {
+  event.target.play()
+}
+
+const { poster } = defineProps({
   poster: {
-    type: String,
-    required: false,
-    default: null
-  },
-  posterAlt: {
-    type: String,
-    required: false,
-    default: null
-  },
-  thumbnails: {
-    type: String,
-    required: false,
-    default: null
-  },
-  aspectRatio: {
-    type: String,
-    required: false,
-    default: '16/9'
-  },
-  crossOrigin: {
-    type: Boolean,
-    required: false,
-    default: false
-  },
-  tracks: {
-    type: Array,
-    default: () => []
-  },
-  streamType: {
-    type: String,
-    required: false,
-    default: null
+    required: true,
+    type: String
   }
 })
 
-onMounted(() => {
-  defineCustomElements()
-})
+defineEmits(['openEpisodes', 'openRelease'])
 </script>
 
-<style scoped>
-@import "vidstack/styles/defaults.css";
-@import "vidstack/styles/community-skin/video.css";
-</style>
+<template>
+  <div>
+    <media-player
+      ref="$player"
+      class="w-full aspect-video text-white font-sans overflow-hidden rounded-md ring-media-focus data-[focus]:ring-4"
+      title="Sprite Fight"
+      src="https://stream.mux.com/VZtzUzGRv02OhRnZCxcNg49OilvolTqdnFLEqBsTwaxU/high.mp4"
+      crossorigin
+      @provider-change="onProviderChange"
+      @can-play="onCanPlay"
+    >
+      <media-provider>
+        <media-poster
+          class="absolute inset-0 block h-full w-full rounded-md opacity-0 transition-opacity data-[visible]:opacity-100 [&>img]:h-full [&>img]:w-full [&>img]:object-cover"
+          src="https://image.mux.com/VZtzUzGRv02OhRnZCxcNg49OilvolTqdnFLEqBsTwaxU/thumbnail.webp?time=268&width=1200"
+          alt="Girl walks into campfire with gnomes surrounding her friend ready for their next meal!"
+        />
+      </media-provider>
+
+      <VideoLayout
+        :poster="poster"
+        @open-release="$emit('openRelease')"
+        @open-episodes="$emit('openEpisodes')"
+        thumbnails="https://image.mux.com/VZtzUzGRv02OhRnZCxcNg49OilvolTqdnFLEqBsTwaxU/storyboard.vtt"
+      />
+    </media-player>
+  </div>
+</template>

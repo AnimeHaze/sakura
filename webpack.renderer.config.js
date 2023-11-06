@@ -11,11 +11,9 @@ module.exports = {
         options: {
           compilerOptions: {
             isCustomElement: tag => {
-              return [
-                'media-player', 'track',
-                'media-outlet', 'media-poster',
-                'media-community-skin'
-              ].includes(tag)
+              if (tag.startsWith('media-')) return true
+
+              return ['track'].includes(tag)
             }
           }
         }
