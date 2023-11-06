@@ -17,6 +17,10 @@
     "update-lock": "yarn install --mode update-lockfile && npm i --package-lock-only && pnpm i --lockfile-only"
   },
   "keywords": [],
+  "homepage": "https://github.com/AnimeHaze/sakura",
+  "bugs": {
+    "url": "https://github.com/AnimeHaze/sakura/issues"
+  },
   "author": {
     "name": "viiprogrammer",
     "email": "m_telega@mail.ru"
