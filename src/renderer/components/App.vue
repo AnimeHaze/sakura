@@ -14,7 +14,7 @@
           @contextmenu="handleContextMenu"
           @click="showPopover = false"
         >
-          <default-layout />
+          <router-view />
         </div>
         <!--        <search-modal />-->
         <n-popover
@@ -41,7 +41,6 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { darkTheme, lightTheme } from 'naive-ui'
-import DefaultLayout from '../layouts/DefaultLayout.vue'
 import { useConfigStore } from '../store'
 import { appTheme } from '../../enums'
 

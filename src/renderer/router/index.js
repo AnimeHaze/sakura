@@ -9,16 +9,22 @@ import Search from '../views/SearchView.vue'
 import Player from '../views/PlayerView.vue'
 
 import { useUserStore } from '../store'
+import DefaultLayout from '../layouts/DefaultLayout.vue'
 
 const routes = [
-  { path: '/profile', component: Profile, name: 'Profile' },
-  { path: '/about', component: About, name: 'About' },
-  { path: '/login', component: Login, name: 'Login' },
-  { path: '/release/:id', component: Release, name: 'Release' },
-  { path: '/release/:id/:episode', component: Player, name: 'Player' },
-  { path: '/search', component: Search, name: 'Search' },
-  { path: '/settings', component: Settings, name: 'Settings' },
-  { path: '/', component: Home, name: 'Home' }
+  {
+    path: '/',
+    component: DefaultLayout,
+    children: [
+      { path: '/profile', component: Profile, name: 'Profile' },
+      { path: '/about', component: About, name: 'About' },
+      { path: '/login', component: Login, name: 'Login' },
+      { path: '/release/:id', component: Release, name: 'Release' },
+      { path: '/search', component: Search, name: 'Search' },
+      { path: '/settings', component: Settings, name: 'Settings' },
+      { path: '/', component: Home, name: 'Home' }
+    ]
+  }
 ]
 
 export const router = createRouter({
