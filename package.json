@@ -73,6 +73,7 @@
     "autoprefixer": "^10.4.16",
     "axios": "^1.5.1",
     "axios-debug-log": "^1.0.0",
+    "electron-window-state": "^5.0.3",
     "eslint-plugin-n": "^16.2.0",
     "eslint-plugin-promise": "^6.1.1",
     "fastify": "^4.24.2",

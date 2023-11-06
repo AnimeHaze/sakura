@@ -1,11 +1,19 @@
 import { BrowserWindow } from 'electron'
+import windowStateKeeper from 'electron-window-state'
 
 export function createMainWindow () {
+  const mainWindowState = windowStateKeeper({
+    defaultWidth: 1200,
+    defaultHeight: 680
+  })
+
   const mainWindow = new BrowserWindow({
+    x: mainWindowState.x,
+    y: mainWindowState.y,
     minWidth: 860,
     minHeight: 516,
-    width: 1200,
-    height: 680,
+    width: mainWindowState.width,
+    height: mainWindowState.height,
     // frame: false,
     show: false,
     webPreferences: {
@@ -14,6 +22,8 @@ export function createMainWindow () {
     },
     autoHideMenuBar: true
   })
+
+  mainWindowState.manage(mainWindow)
 
   // and load the index.html of the app.
   // eslint-disable-next-line no-undef
