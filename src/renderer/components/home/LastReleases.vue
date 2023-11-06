@@ -126,13 +126,13 @@ const releasesLimit = 20
 let releasesOffset = releasesLimit
 
 async function loadMore () {
-  const { result } = await window.api.callApi('getLastReleases', { limit: releasesLimit, offset: releasesOffset })
+  const { result } = await window.api.getLastReleases({ limit: releasesLimit, offset: releasesOffset })
   releasesList.value.push(...result)
   releasesOffset += releasesLimit
 }
 
 async function getLastReleases (limit) {
-  const { result } = await window.api.callApi('getLastReleases', { limit })
+  const { result } = await window.api.getLastReleases({ limit })
   releasesList.value = result
 }
 </script>

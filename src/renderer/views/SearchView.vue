@@ -83,7 +83,7 @@ async function load (query) {
   // lastQuery.value = query
   loading.value = true
 
-  const { result, pages } = await window.api.callApi('searchReleases', { filters: { year: 2023 }, search: query, page: page.value, limit: 20 })
+  const { result, pages } = await window.api.searchReleases({ filters: { year: 2023 }, search: query, page: page.value, limit: 20 })
 
   // releases.value = await fetch('http://localhost:1337/sakura/search?')
   //   .then(data => data.json())

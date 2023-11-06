@@ -27,6 +27,36 @@ const app = createApp({
   template: '<App/>'
 })
 
+let request = 0
+
+window.api = new Proxy(window._api, {
+  get: (target, property, receiver) => {
+    const prop = Reflect.get(target, property, receiver)
+
+    if (prop) {
+      return prop
+    }
+
+    return function (options) {
+      const reqId = ++request
+      console.log(
+        '[%d] Call API: %c%s:',
+        reqId,
+        'color: #FFFFFF;font-size: 12px;background: #174919;padding: 2px;',
+        property
+      )
+      console.table(options)
+
+      const response = window._api.callApi(property, options)
+
+      Promise.resolve(response)
+        .then(x => console.log('[%d] Response: %o', reqId, x))
+
+      return response
+    }
+  }
+})
+
 app.use(createManager())
 app.use(naive)
 app.use(pinia)

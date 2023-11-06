@@ -120,7 +120,7 @@ async function loading (callback) {
 }
 
 async function load () {
-  const { result } = await window.api.callApi('getNews', { page: page.value, limit: 20 })
+  const { result } = await window.api.getNews({ page: page.value, limit: 20 })
   news.value.push(...result)
   page.value++
 }

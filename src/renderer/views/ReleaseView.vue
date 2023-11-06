@@ -30,7 +30,7 @@ onMounted(async () => loadRelease(route.params.id))
 
 async function loadRelease (id) {
   loading.value = true
-  const { result } = await window.api.callApi('getRelease', { id })
+  const { result } = await window.api.getRelease({ id })
   releaseData.value = result
   loading.value = false
 }
