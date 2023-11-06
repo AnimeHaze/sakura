@@ -21,7 +21,7 @@
             <template #trigger>
               <n-icon
                 size="20"
-                @click="$emit('change-watch-status')"
+                @click.stop="$emit('change-watch-status')"
               >
                 <component :is="watchedIcon" />
               </n-icon>
