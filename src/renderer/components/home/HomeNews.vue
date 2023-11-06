@@ -1,9 +1,7 @@
 <template>
-  <h5
-    class="header-five mt-2"
-  >
-    Новости
-  </h5>
+  <div class="mt-2 mb-2">
+    <span class="text-xl">Новости</span>
+  </div>
 
   <swiper
     v-show="!loadingSwiper"

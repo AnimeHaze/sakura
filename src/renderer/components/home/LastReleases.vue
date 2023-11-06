@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h5 class="header-five">
-      Последние релизы
-    </h5>
+    <div class="mb-3">
+      <span class="text-xl">Последние релизы</span>
+    </div>
 
     <swiper
       v-show="!loadingSwiper"
