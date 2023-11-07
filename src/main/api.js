@@ -116,34 +116,98 @@ class API {
   }
 
   /**
+   * Posters object
+   * @typedef {object} Posters
+   * @property {string} small
+   * @property {string} original
+   * @property {string} medium
+   */
+  /**
+   * Genre object
+   * @typedef {object} Genre
+   * @property {string} id
+   * @property {string} label
+   */
+
+  /**
+   * Transformed release object
+   * @typedef {object} TransformedRelease
+   * @property {string} description
+   * @property {string} id
+   * @property {Release[]} [franchises]
+   * @property {{ru: string, en: string}} names
+   * @property {string} code
+   * @property {Genre[]} genres
+   * @property {Posters} posters
+   */
+
+  /**
+   * Transforms release object
+   * @param release
+   * @param franchises
+   * @return {TransformedRelease}
+   */
+  transformRelease (release, franchises) {
+    const { names, id, code, posters, description, genres, player: { list: episodes }, team } = release
+
+    return {
+      names: {
+        ru: names.ru,
+        en: names.en
+      },
+      id,
+      code,
+      team: {
+        voice: team.voice ?? [],
+        translator: team.translator ?? [],
+        editing: team.editing ?? [],
+        decor: team.decor ?? [],
+        timing: team.timing ?? []
+      },
+      franchises,
+      posters: {
+        small: this.staticURL + posters.small?.url,
+        medium: this.staticURL + posters.medium?.url,
+        original: this.staticURL + posters.original?.url
+      },
+      description,
+      genres: genres.map(x => ({ id: x, label: x })),
+      episodes: episodes.map(x => ({ id: x.uuid, number: x.episode, name: x.name, createdAt: x.created_timestamp, watched: true }))
+    }
+  }
+
+  /**
+   * Returns release info
+   *
    * @param {{ id: number }} options
-   * @return {Promise<{names: {ru, en}, code: undefined, genres: *, posters: {small: string, original: string, medium: string}, description: undefined, id: undefined}>}
+   * @return {Promise<{ result: TransformedRelease }>}
    */
   async getRelease (options) {
-    const { data: { names, id, code, posters, description, genres, player: { list: episodes } } } = await this.client.get('/title', {
+    const { data } = await this.client.get('/title', {
       params: {
         id: options.id,
         playlist_type: 'array'
       }
     })
 
+    const franchisesResult = []
+
+    for (const franchise of Object.values(data.franchises)) {
+      const releases = Object.values(franchise.releases).sort((a, b) => a.ordinal - b.ordinal)
+      const ids = releases.map(x => x.id)
+
+      const { data: fetchedReleases } = await this.client.get('/title/list', {
+        params: {
+          id_list: ids.join(','),
+          playlist_type: 'array'
+        }
+      })
+
+      franchisesResult.push(...fetchedReleases.map(x => this.transformRelease(x)))
+    }
+
     return {
-      result: {
-        names: {
-          ru: names.ru,
-          en: names.en
-        },
-        id,
-        code,
-        posters: {
-          small: this.staticURL + posters.small?.url,
-          medium: this.staticURL + posters.medium?.url,
-          original: this.staticURL + posters.original?.url
-        },
-        description,
-        genres: genres.map(x => ({ id: x, label: x })),
-        episodes: episodes.map(x => ({ id: x.uuid, number: x.episode, name: x.name, createdAt: x.created_timestamp, watched: true }))
-      }
+      result: this.transformRelease(data, franchisesResult)
     }
   }
 }
