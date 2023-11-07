@@ -31,7 +31,6 @@ const team = computed(() => {
 </script>
 
 <template>
-  {{ release }}
   <div>
     <n-space
       size="large"
