@@ -37,7 +37,6 @@ const sortedEpisodes = computed(() => {
 
 function changeWatched (id) {
   const episode = properties.episodes.find(x => x.id === id)
-  console.log(id)
   episode.watched = !episode.watched
 }
 
@@ -73,6 +72,8 @@ function swapSort () {
     />
   </div>
 
+  <n-divider class="n-divider" />
+
   <ReleaseEpisode
     v-for="episode in sortedEpisodes"
     :key="episode.id"
@@ -83,7 +84,7 @@ function swapSort () {
     :date="new Date(episode.createdAt * 1000).toLocaleString()"
     :name="episode.name"
     @change-watch-status="changeWatched(episode.id)"
-    @open="() => {}"
+    @open="$router.push({ name: 'Player', params: { episode: '123' } })"
   />
 </template>
 
@@ -98,5 +99,10 @@ function swapSort () {
 
 .transition {
   transition: transform 0.5s ease-in-out;
+}
+
+.n-divider:not(.n-divider--vertical) {
+  margin-top: 8px;
+  margin-bottom: 13px;
 }
 </style>

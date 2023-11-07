@@ -1,6 +1,7 @@
 <script setup>
 import { Bookmarks, Eye, Heart, Star } from '@vicons/ionicons5'
 import ReleaseSiderSkeleton from './ReleaseSiderSkeleton.vue'
+import ReleaseEpisodesSkeleton from './ReleaseEpisodesSkeleton.vue'
 </script>
 
 <template>
@@ -10,7 +11,7 @@ import ReleaseSiderSkeleton from './ReleaseSiderSkeleton.vue'
       vertical
     >
       <n-layout
-        class="p-6 h-screen"
+        class="h-screen"
         has-sider
       >
         <n-layout-sider
@@ -21,7 +22,7 @@ import ReleaseSiderSkeleton from './ReleaseSiderSkeleton.vue'
         </n-layout-sider>
         <n-layout-content
           :native-scrollbar="false"
-          class="p-4 py-2"
+          style="padding: 24px;"
         >
           <n-space
             vertical
@@ -123,10 +124,18 @@ import ReleaseSiderSkeleton from './ReleaseSiderSkeleton.vue'
             >
               <n-skeleton
                 :height="120"
-                :width="800"
+                width="100%"
                 :sharp="false"
                 size="medium"
               />
+
+              <div class="py-1">
+                <div>
+                  <n-divider class="n-divider" />
+
+                  <release-episodes-skeleton />
+                </div>
+              </div>
             </n-tab-pane>
           </n-tabs>
         </n-layout-content>
@@ -136,5 +145,8 @@ import ReleaseSiderSkeleton from './ReleaseSiderSkeleton.vue'
 </template>
 
 <style scoped>
-
+.n-divider:not(.n-divider--vertical) {
+  margin-top: 8px;
+  margin-bottom: 13px;
+}
 </style>

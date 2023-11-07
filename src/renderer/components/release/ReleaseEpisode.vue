@@ -29,13 +29,15 @@
             {{ watchedText }}
           </n-tooltip>
 
-          <div class="font-bold">
-            Серия {{ episodeNumber }}
-          </div>
+          <n-space>
+            <div class="font-bold">
+              Серия {{ episodeNumber }}
+            </div>
 
-          <div>
-            {{ name }}
-          </div>
+            <div>
+              {{ name }}
+            </div>
+          </n-space>
         </n-space>
       </div>
 
