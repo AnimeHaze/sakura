@@ -32,7 +32,7 @@ export function createMainWindow () {
   // Open the DevTools.
   mainWindow.webContents.openDevTools({ mode: 'detach' })
 
-  mainWindow.webContents.once('did-finish-load', () => {
+  mainWindow.webContents.once('ready-to-show', () => {
     mainWindow.show()
   })
 
