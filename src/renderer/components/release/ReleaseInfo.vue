@@ -14,6 +14,8 @@ const props = defineProps({
   }
 })
 
+const cover = computed(() => `url(${props.release.cover})`)
+
 const teamTitles = {
   voice: 'Озвучка',
   translator: 'Перевод',
@@ -214,7 +216,7 @@ const team = computed(() => {
   opacity: 0.2;
   right: 0;
   height: 350px;
-  background: url(https://s4.anilist.co/file/anilistcdn/media/anime/banner/151807-37yfQA3ym8PA.jpg) no-repeat 50%;
+  background: v-bind(cover) no-repeat 50%;
 }
 
 .media-cover:after {

@@ -172,7 +172,8 @@ class API {
       },
       description,
       genres: genres.map(x => ({ id: x, label: x })),
-      episodes: episodes.map(x => ({ id: x.uuid, number: x.episode, name: x.name, createdAt: x.created_timestamp, watched: true }))
+      episodes: episodes.map(x => ({ id: x.uuid, number: x.episode, name: x.name, createdAt: x.created_timestamp, watched: true })),
+      cover: 'https://s4.anilist.co/file/anilistcdn/media/anime/banner/151807-37yfQA3ym8PA.jpg'
     }
   }
 
