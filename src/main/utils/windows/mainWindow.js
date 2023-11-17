@@ -1,11 +1,19 @@
-import { BrowserWindow } from 'electron'
+import { BrowserWindow, nativeImage } from 'electron'
 import windowStateKeeper from 'electron-window-state'
+import path from 'node:path'
 
 export function createMainWindow () {
   const mainWindowState = windowStateKeeper({
     defaultWidth: 1200,
     defaultHeight: 680
   })
+
+  const logoPath = path.resolve(__dirname, 'assets', 'logo')
+  const icons = {
+    darwin: path.join(logoPath, 'logo.icns'),
+    linux: path.join(logoPath, 'logo.png'),
+    win32: path.join(logoPath, 'logo.ico')
+  }
 
   const mainWindow = new BrowserWindow({
     x: mainWindowState.x,
@@ -20,6 +28,7 @@ export function createMainWindow () {
       // eslint-disable-next-line no-undef
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY
     },
+    icon: nativeImage.createFromPath(icons[process.platform]),
     autoHideMenuBar: true
   })
 
