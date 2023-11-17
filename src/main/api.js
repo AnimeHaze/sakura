@@ -178,6 +178,15 @@ class API {
   }
 
   /**
+   * Returns random release id
+   * @return {Promise<number|string>}
+   */
+  async getRandomRelease () {
+    const { data } = await this.client.get('/title/random')
+    return { result: data.id }
+  }
+
+  /**
    * Returns release info
    *
    * @param {{ id: number }} options

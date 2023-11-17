@@ -25,12 +25,13 @@
 
 <script setup>
 import { computed, h, ref, watch } from 'vue'
-import { NAvatar, NIcon, useDialog } from 'naive-ui'
+import { NAvatar, NIcon, NSpin, useDialog } from 'naive-ui'
 import {
   AppsOutline, BookmarkOutline, BugOutline, CaretDownOutline,
   InformationCircleOutline, SearchOutline, SettingsOutline,
   TerminalOutline, LogOutOutline, ArrowBackOutline, DiceOutline
 } from '@vicons/ionicons5'
+import DiceIcon from './DiceIcon.vue'
 
 import { useRoute, useRouter } from 'vue-router'
 import { useConfigStore, useUserStore } from '../../store'
@@ -66,7 +67,7 @@ const menuOptions = computed(() => [
   generateOption('AniCoder', appSidebar.PROFILE, '/profile'),
   generateOption('Избранное', appSidebar.FAVORITE),
   generateOption('Поиск', appSidebar.SEARCH, '/search'),
-  generateOption('Случайное аниме', appSidebar.RANDOM_ANIME, '/random-anime'),
+  generateOption('Случайное аниме', appSidebar.RANDOM_ANIME, null),
   generateOption('Тема', appSidebar.THEME),
   generateOption('Настройки', appSidebar.SETTINGS, '/settings'),
   generateOption('О приложении', appSidebar.ABOUT, '/about'),
@@ -114,12 +115,21 @@ function handleThemeChange () {
 const expandIcon = () => h(NIcon, null, { default: () => h(CaretDownOutline) })
 const handleDebug = () => window.api.toggleDevtools()
 const handleBack = () => router.back()
+const handleRandom = async () => {
+  if (config.sidebarDiceLoading) return
+
+  config.setDiceLoading(true)
+  const { result: id } = await window.api.getRandomRelease()
+  await router.replace({ name: 'Release', params: { id } })
+  config.setDiceLoading(false)
+}
 
 const actionMap = {
   [appSidebar.LOGOUT]: handleLogout,
   [appSidebar.THEME]: handleThemeChange,
   [appSidebar.DEBUG]: handleDebug,
-  [appSidebar.BACK]: handleBack
+  [appSidebar.BACK]: handleBack,
+  [appSidebar.RANDOM_ANIME]: handleRandom
 }
 
 function handleClick (key, option) {
@@ -129,8 +139,7 @@ function handleClick (key, option) {
 }
 
 function renderIcon (key) {
-  // eslint-disable-next-line security/detect-object-injection
-  return h(NIcon, null, { default: () => h(iconMap[key]) })
+  return iconMap[key]
 }
 
 function renderMenuIcon (option) {
@@ -144,17 +153,21 @@ function renderMenuIcon (option) {
   return renderIcon(option.key)
 }
 
+function wrapIcon (icon) {
+  return h(NIcon, null, { default: () => h(icon) })
+}
+
 const iconMap = {
-  [appSidebar.BACK]: ArrowBackOutline,
-  [appSidebar.CATALOG]: AppsOutline,
-  [appSidebar.SETTINGS]: SettingsOutline,
-  [appSidebar.RANDOM_ANIME]: DiceOutline,
-  [appSidebar.SEARCH]: SearchOutline,
-  [appSidebar.DEVTOOLS]: BugOutline,
-  [appSidebar.THEME]: ThemeIcon,
-  [appSidebar.ABOUT]: InformationCircleOutline,
-  [appSidebar.DEBUG]: TerminalOutline,
-  [appSidebar.LOGOUT]: LogOutOutline,
-  [appSidebar.FAVORITE]: BookmarkOutline
+  [appSidebar.BACK]: wrapIcon(ArrowBackOutline),
+  [appSidebar.CATALOG]: wrapIcon(AppsOutline),
+  [appSidebar.SETTINGS]: wrapIcon(SettingsOutline),
+  [appSidebar.RANDOM_ANIME]: wrapIcon(DiceIcon),
+  [appSidebar.SEARCH]: wrapIcon(SearchOutline),
+  [appSidebar.DEVTOOLS]: wrapIcon(BugOutline),
+  [appSidebar.THEME]: wrapIcon(ThemeIcon),
+  [appSidebar.ABOUT]: wrapIcon(InformationCircleOutline),
+  [appSidebar.DEBUG]: wrapIcon(TerminalOutline),
+  [appSidebar.LOGOUT]: wrapIcon(LogOutOutline),
+  [appSidebar.FAVORITE]: wrapIcon(BookmarkOutline)
 }
 </script>

@@ -11,7 +11,8 @@ export const useConfigStore = defineStore('config', () => {
   const sidebarCollapsed = ref(true)
   /** @type {Ref<'0'|'1'>} */
   const backButtonType = ref(backButton.REPLACE_CATALOG)
-
+  /** @type {Ref<boolean>} */
+  const sidebarDiceLoading = ref(false)
   /** @type {Ref<'light'|'dark'>} */
   const theme = computed(() => themeColor.value === appTheme.AUTO ? systemThemeColor.value : themeColor.value)
 
@@ -20,7 +21,10 @@ export const useConfigStore = defineStore('config', () => {
   const toggleTheme = () => (themeColor.value = themeColor.value === appTheme.DARK ? appTheme.LIGHT : appTheme.DARK)
   const setTheme = (theme) => (themeColor.value = theme)
 
+  const setDiceLoading = value => (sidebarDiceLoading.value = value)
+
   return {
+    sidebarDiceLoading,
     themeColor,
     systemThemeColor,
     sidebarCollapsed,
@@ -29,6 +33,7 @@ export const useConfigStore = defineStore('config', () => {
     collapseSidebar,
     expandSidebar,
     toggleTheme,
-    setTheme
+    setTheme,
+    setDiceLoading
   }
 })
