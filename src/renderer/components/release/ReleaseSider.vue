@@ -23,35 +23,12 @@
       Смотреть
     </n-button>
 
-    <n-select
-      placeholder="Добавить в папку"
-      :options="foolders"
-    >
-      <template #action>
-        <div>
-          <n-button class="w-full mb-2">
-            Удалить из папки
-          </n-button>
-        </div>
-        <div class="flex inline">
-          <div class="mr-2 w-full">
-            <n-input placeholder="Создать папку" />
-          </div>
-          <div>
-            <n-button>
-              <n-icon size="24">
-                <checkmark-outline />
-              </n-icon>
-            </n-button>
-          </div>
-        </div>
-      </template>
-    </n-select>
+    <user-list-select />
   </div>
 </template>
 
 <script setup>
-import { CheckmarkOutline } from '@vicons/ionicons5'
+import UserListSelect from '../user-list/popup/UserListSelect.vue'
 
 defineProps({
   posterImage: {
@@ -64,29 +41,6 @@ defineProps({
     default: null
   }
 })
-
-const foolders = [
-  {
-    label: 'Смотрю',
-    value: '1'
-  },
-  {
-    label: 'Запланировано',
-    value: '2'
-  },
-  {
-    label: 'Пересматриваю',
-    value: '3'
-  },
-  {
-    label: 'Любимое',
-    value: '4'
-  },
-  {
-    label: 'Брошено',
-    value: '5'
-  }
-]
 </script>
 
 <style scoped>

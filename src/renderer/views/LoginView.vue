@@ -131,9 +131,13 @@ async function handleLogin () {
       return
     }
 
-    setTimeout(() => {
+    setTimeout(async () => {
+      await user.login(
+        formData.value.login,
+        formData.value.password
+      )
+
       loginLoading.value = false
-      user.authToken = 'test'
       router.push({ name: 'Home' })
     }, 2500)
   }

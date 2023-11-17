@@ -2,6 +2,26 @@ require('axios-debug-log/enable')
 
 const axios = require('axios')
 
+/* Mock */
+const userLists = []
+userLists.push(
+  mockList('Смотрю'),
+  mockList('Запланировано'),
+  mockList('Пересматриваю'),
+  mockList('Любимое'),
+  mockList('Брошено')
+)
+
+function mockList (title) {
+  return {
+    id: Math.random().toString(),
+    title,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  }
+}
+/* Mock */
+
 class API {
   constructor () {
     this.staticURL = 'https://anilibria.tv/'
@@ -219,6 +239,20 @@ class API {
     return {
       result: this.transformRelease(data, franchisesResult)
     }
+  }
+
+  async getUserLists () {
+    return userLists
+  }
+
+  async createUserList (options) {
+    userLists.push(mockList(options.title))
+
+    return { result: true }
+  }
+
+  async patchUserList () {
+
   }
 }
 

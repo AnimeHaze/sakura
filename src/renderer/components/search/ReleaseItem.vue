@@ -54,30 +54,7 @@
         </div>
 
         <template #footer>
-          <n-select
-            placeholder="Добавить в папку"
-            :options="foolders"
-          >
-            <template #action>
-              <div>
-                <n-button class="w-full mb-2">
-                  Удалить из папки
-                </n-button>
-              </div>
-              <div class="flex">
-                <div class="mr-2 w-full">
-                  <n-input placeholder="Создать папку" />
-                </div>
-                <div>
-                  <n-button>
-                    <n-icon size="24">
-                      <checkmark-outline />
-                    </n-icon>
-                  </n-button>
-                </div>
-              </div>
-            </template>
-          </n-select>
+          <user-list-select />
         </template>
       </n-popover>
 
@@ -125,46 +102,27 @@
 
 <script setup>
 import { computed } from 'vue'
-import { Star, CheckmarkOutline } from '@vicons/ionicons5'
+import { Star } from '@vicons/ionicons5'
 import { useRouter } from 'vue-router'
+import UserListSelect from '../user-list/popup/UserListSelect.vue'
 const router = useRouter()
 
 const properties = defineProps({
   releaseInfo: {
     type: Object,
     required: true
+  },
+  userLists: {
+    type: Array,
+    required: true
   }
 })
 
 const poster = computed(x => properties.releaseInfo.posters.medium ?? properties.releaseInfo.posters.small)
 
-const foolders = [
-  {
-    label: 'Смотрю',
-    value: '1'
-  },
-  {
-    label: 'Запланировано',
-    value: '2'
-  },
-  {
-    label: 'Пересматриваю',
-    value: '3'
-  },
-  {
-    label: 'Любимое',
-    value: '4'
-  },
-  {
-    label: 'Брошено',
-    value: '5'
-  }
-]
-
 function openRelease (id) {
   router.push({ name: 'Release', params: { id } })
 }
-
 </script>
 
 <style scoped>

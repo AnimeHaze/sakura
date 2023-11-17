@@ -40,6 +40,7 @@ const handleAppMaximizeMinimize = () => {
 const handleAPI = (event, method, options) => {
   const allowedMethods = new Set([
     'getLastReleases', 'getNews', 'searchReleases', 'getRelease', 'getRandomRelease',
+    'getUserLists', 'createUserList'
   ])
   // eslint-disable-next-line security/detect-object-injection
   if (!allowedMethods.has(method) || api[method] === undefined) {
