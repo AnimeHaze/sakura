@@ -16,6 +16,7 @@
             class="mb-3 poster"
             round
             lazy
+            :alt="releaseInfo.names.ru"
             preview-disabled
             :src="poster"
           >
@@ -65,7 +66,15 @@
           style="border-radius: 0 0 0 9px"
           :color="{ color: 'rgba(99, 226, 183, 0.7)', textColor: '#ffffff' }"
         >
-          {{ releaseInfo.rating }}
+          <n-tooltip
+            trigger="hover"
+            placement="right"
+          >
+            {{ releaseInfo.rating }}
+            <template #trigger>
+              {{ releaseInfo.ratingFormated }}
+            </template>
+          </n-tooltip>
           <template #icon>
             <n-icon
               size="16"

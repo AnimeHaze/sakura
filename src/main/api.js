@@ -1,6 +1,7 @@
 require('axios-debug-log/enable')
 
 const axios = require('axios')
+const { nFormatter } = require('../utils')
 
 /* Mock */
 const userLists = []
@@ -107,7 +108,9 @@ class API {
         original: this.staticURL + posters.original?.url
       },
       description,
-      genres: genres.map(x => ({ id: x, label: x }))
+      genres: genres.map(x => ({ id: x, label: x })),
+      rating,
+      ratingFormated: nFormatter(rating)
     }))
 
     return {
