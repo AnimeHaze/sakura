@@ -2,7 +2,7 @@ import { ipc } from '../enums'
 import { ipcRenderer, contextBridge } from 'electron'
 
 window.addEventListener('error', error => {
-  if (error.message === 'ResizeObserver loop limit exceeded') {
+  if (error.message.startsWith('ResizeObserver loop')) {
     setTimeout(() => {
       document.querySelector('#webpack-dev-server-client-overlay')?.remove()
     }, 0)
