@@ -21,9 +21,9 @@
           >
             <template #placeholder>
               <n-skeleton
-                :height="321"
-                :width="224"
                 :sharp="false"
+                width="100%"
+                height="100%"
                 size="medium"
               />
             </template>

@@ -10,7 +10,7 @@
       />
       <n-scrollbar
         ref="searchResults"
-        class="p-5 pb-0 py-5 flex flex-col overflow-y-hidden"
+        class="p-5 pb-0 py-5 flex flex-col overflow-y-hidden w-auto"
         style="overflow-y: auto"
       >
         <n-space justify="center">

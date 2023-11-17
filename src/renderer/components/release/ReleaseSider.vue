@@ -1,12 +1,13 @@
 <template>
   <div>
     <n-image
-      class="poster mb-3"
+      class="poster mb-3 mt-4"
       round
       lazy
       :src="posterImage"
       :preview-src="posterImageFull ?? posterImage"
       :show-toolbar="false"
+      :img-props="{ style: 'max-width: 100%;' }"
     >
       <template #placeholder>
         <n-skeleton
@@ -90,7 +91,6 @@ const foolders = [
 
 <style scoped>
 .poster {
-  max-width: 240px;
   justify-content: center;
   opacity: 0.8;
   object-fit: cover;

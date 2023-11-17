@@ -2,7 +2,7 @@
   <div
     class="sticky px-5"
   >
-    <n-form>
+    <n-form :show-feedback="false">
       <n-form-item>
         <n-auto-complete
           v-model:value="query"

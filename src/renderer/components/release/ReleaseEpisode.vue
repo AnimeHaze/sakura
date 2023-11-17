@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full mb-2 rounded-md p-2 episode cursor-pointer"
+    class="mb-2 rounded-md p-2 episode cursor-pointer"
     @click="$emit('open')"
   >
     <n-space
@@ -53,7 +53,7 @@
           </n-tag>
         </n-space>
 
-        <div class="mt-2 mr-2 text-zinc-500">
+        <div class="mt-1 mr-2 text-zinc-500">
           {{ date }}
         </div>
       </n-space>

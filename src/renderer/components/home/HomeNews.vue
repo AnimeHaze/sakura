@@ -24,7 +24,10 @@
           class="news-poster"
           round
           preview-disabled
+          :width="300"
+          :height="168"
           lazy
+          object-fit="cover"
           :src="slide.preview"
           :alt="slide.title"
         >
