@@ -6,6 +6,8 @@ import { NIcon } from 'naive-ui'
 import ReleaseEpisodes from './ReleaseEpisodes.vue'
 import Characters from './Characters.vue'
 import Franchises from './franchises.vue'
+import { useConfigStore } from '../../store'
+import { appTheme } from '../../../enums'
 
 const props = defineProps({
   release: {
@@ -13,8 +15,10 @@ const props = defineProps({
     required: true
   }
 })
+const config = useConfigStore()
 
 const cover = computed(() => `url(${props.release.cover})`)
+const coverColor = computed(() => appTheme.DARK === config.theme ? '#000' : '#FFF')
 
 const teamTitles = {
   voice: 'Озвучка',
@@ -56,7 +60,7 @@ const team = computed(() => {
           :native-scrollbar="false"
           content-style="padding: 0 24px;"
         >
-          <div class="mt-2">
+          <div class="mt-4">
             <div class="media-cover" />
             <n-space
               vertical
@@ -222,7 +226,7 @@ const team = computed(() => {
 .media-cover:after {
   display: block;
   position: absolute;
-  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0, #000 100%);
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0, v-bind(coverColor) 100%);
   content: '';
   top:0;
   right:0;
