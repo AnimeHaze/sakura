@@ -1,4 +1,22 @@
 const { app, BrowserWindow, ipcMain, shell } = require('electron')
+
+let mainWindow = null
+
+if (!process.env.DISABLE_APP_INSTANCE_LOCK) {
+  const gotTheLock = app.requestSingleInstanceLock()
+
+  if (!gotTheLock) {
+    app.quit()
+  } else {
+    app.on('second-instance', (event, commandLine, workingDirectory, additionalData) => {
+      if (mainWindow) {
+        if (mainWindow.isMinimized()) mainWindow.restore()
+        mainWindow.focus()
+      }
+    })
+  }
+}
+
 const { createMainWindow } = require('./utils/windows')
 const { preventDisplaySleep } = require('./utils/power-save-blocker')
 const { ipc } = require('../enums')
@@ -95,8 +113,8 @@ app.on('web-contents-created', async (event, webContents) => {
 
 app.on('ready', async () => {
   await apiServer.start()
-  return createMainWindow()
+  mainWindow = createMainWindow()
 })
 
 app.on('window-all-closed', () => process.platform !== 'darwin' && app.quit())
-app.on('activate', () => BrowserWindow.getAllWindows().length === 0 && createMainWindow())
+app.on('activate', () => BrowserWindow.getAllWindows().length === 0 && (mainWindow = createMainWindow()))
