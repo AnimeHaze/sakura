@@ -133,9 +133,6 @@ function openRelease (id) {
 }
 
 .poster {
-  min-width: 138px;
-  width: 138px;
-  max-width: 138px;
   height: 207px;
   border-radius: 6px;
 }
