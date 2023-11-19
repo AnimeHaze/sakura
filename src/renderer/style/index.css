@@ -1,12 +1,3 @@
-.sakura-color {
-    color: #dfb6c4;
-}
-
-.sakura-logo {
-    transform: scale(5);
-    margin-bottom: 30px;
-}
-
 .header-five {
     margin: 0;
     font-family: "Roboto","Helvetica","Arial",sans-serif;
@@ -117,6 +108,4 @@
 .transparent-color {
   background-color: transparent
 }
-
-
 
