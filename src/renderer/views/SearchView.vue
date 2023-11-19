@@ -14,8 +14,11 @@
         class="p-5 pb-0 py-5 flex flex-col overflow-y-hidden w-auto"
         style="overflow-y: auto"
       >
-        <n-space justify="center">
+        <n-space
+          justify="center"
+        >
           <n-pagination
+            v-show="releases.length"
             v-model:page="search.filters.page"
             :page-count="pagesCount"
             class="mb-2"
@@ -29,7 +32,9 @@
           />
         </div>
 
-        <div v-show="!loading">
+        <div
+          v-show="!loading && releases.length"
+        >
           <release-item
             v-for="release in releases"
             :key="release.id"
@@ -38,10 +43,13 @@
           />
         </div>
 
+        <NotFound v-show="!loading && !releases.length" />
+
         <n-space
           justify="center"
         >
           <n-pagination
+            v-show="releases.length"
             v-model:page="search.filters.page"
             :page-count="pagesCount"
             class="mt-2 mb-5"
@@ -60,6 +68,7 @@ import FiltersDrawer from '../components/search/FiltersDrawer.vue'
 import ReleaseItemSkeleton from '../components/search/ReleaseItemSkeleton.vue'
 import { useSearchStore, useUserStore } from '../store'
 import { useRouter, useRoute } from 'vue-router'
+import NotFound from '../components/search/NotFound.vue'
 
 const router = useRouter()
 const route = useRoute()
