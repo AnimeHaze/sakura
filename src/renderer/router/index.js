@@ -7,8 +7,10 @@ import Release from '../views/ReleaseView.vue'
 import Settings from '../views/SettingsView.vue'
 import Search from '../views/SearchView.vue'
 import Player from '../views/PlayerView.vue'
+import NotFound from '../views/NotFoundView.vue'
 
 import { useUserStore } from '../store'
+
 import DefaultLayout from '../layouts/DefaultLayout.vue'
 import PlayerLayout from '../layouts/PlayerLayout.vue'
 
@@ -30,7 +32,8 @@ const routes = [
       { path: '/release/:id', component: Release, name: 'Release' },
       { path: '/search', component: Search, name: 'Search' },
       { path: '/settings', component: Settings, name: 'Settings' },
-      { path: '/', component: Home, name: 'Home' }
+      { path: '/', component: Home, name: 'Home' },
+      { path: '/:pathMatch(.*)', component: NotFound, name: 'NotFound' }
     ]
   }
 ]
