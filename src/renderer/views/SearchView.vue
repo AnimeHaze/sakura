@@ -1,21 +1,22 @@
 <template>
   <div>
-    <filters-drawer ref="filters" />
+    <filters-drawer v-model:show-filters="showFilters" />
     <div class="absolute h-full w-full flex flex-col overflow-y-hidden">
       <search-header
+        v-model:query="search.filters.text"
         class="mt-1"
         :loading="loading"
-        @search="load"
-        @open-filters="filters.openFilters()"
+        @open-filters="showFilters = true"
       />
+
       <n-scrollbar
-        ref="searchResults"
+        ref="searchResultsRef"
         class="p-5 pb-0 py-5 flex flex-col overflow-y-hidden w-auto"
         style="overflow-y: auto"
       >
         <n-space justify="center">
           <n-pagination
-            v-model:page="page"
+            v-model:page="search.filters.page"
             :page-count="pagesCount"
             class="mb-2"
           />
@@ -33,6 +34,7 @@
             v-for="release in releases"
             :key="release.id"
             :release-info="release"
+            :user-lists="user.userListsForSelect"
           />
         </div>
 
@@ -40,7 +42,7 @@
           justify="center"
         >
           <n-pagination
-            v-model:page="page"
+            v-model:page="search.filters.page"
             :page-count="pagesCount"
             class="mt-2 mb-5"
           />
@@ -56,41 +58,72 @@ import ReleaseItem from '../components/search/ReleaseItem.vue'
 import SearchHeader from '../components/search/SearchHeader.vue'
 import FiltersDrawer from '../components/search/FiltersDrawer.vue'
 import ReleaseItemSkeleton from '../components/search/ReleaseItemSkeleton.vue'
+import { useSearchStore, useUserStore } from '../store'
+import { useRouter, useRoute } from 'vue-router'
+
+const router = useRouter()
+const route = useRoute()
+const user = useUserStore()
+const search = useSearchStore()
 
 const releases = ref([])
 const loading = ref(true)
-// const lastQuery = ref('')
-const page = ref(1)
 const pagesCount = ref(1)
-const filters = ref(null)
 
-const currentQuery = ref('')
+const showFilters = ref(false)
+/** @type {Ref<HTMLElement|null>} */
+const searchResultsRef = ref(null)
 
-const searchResults = ref(null)
+watch([
+  () => search.filters.page,
+  () => search.filters.season,
+  () => search.filters.text,
+  () => search.filters.sort,
+  () => search.filters.years,
+  () => search.filters.genres,
+  () => search.filters.releaseFinished
+], () => {
+  loading.value = true
+  if (debounceTimeout) clearTimeout(debounceTimeout)
 
-watch(() => page.value, () => {
-  load(currentQuery.value)
-  searchResults.value.scrollTo({ top: 0, behavior: 'smooth' })
+  debounceTimeout = setTimeout(() => {
+    router.replace({
+      query: {
+        q: JSON.stringify(search.filters)
+      }
+    })
+
+    load()
+      .then(() => {
+        searchResultsRef.value?.scrollTo({ top: 0, behavior: 'smooth' })
+        loading.value = false
+      })
+
+    debounceTimeout = null
+  }, 1000)
+})
+
+let debounceTimeout = null
+
+watch(() => route.query, () => {
+  if (!route.query.q) search.clearFilters()
 })
 
 onMounted(async () => {
+  search.restoreFiltersState(route.query)
+  loading.value = true
   await load()
+  loading.value = false
 })
 
-async function load (query) {
-  currentQuery.value = query
-  // if (query === lastQuery.value && loading.value === false) return
-  // lastQuery.value = query
-  loading.value = true
+/**
+ * Load releases
+ * @return {Promise<void>}
+ */
+async function load () {
+  const { result, pages } = await window.api.searchReleases({ filters: { year: 2023 }, search: search.filters.text, page: search.filters.page, limit: 20 })
 
-  const { result, pages } = await window.api.searchReleases({ filters: { year: 2023 }, search: query, page: page.value, limit: 20 })
-
-  // releases.value = await fetch('http://localhost:1337/sakura/search?')
-  //   .then(data => data.json())
-  //   .then(({ data }) => data)
   releases.value = result
   pagesCount.value = pages
-
-  loading.value = false
 }
 </script>

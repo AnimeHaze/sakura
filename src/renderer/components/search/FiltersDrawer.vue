@@ -1,63 +1,28 @@
 <script setup>
-import { reactive, ref } from 'vue'
+import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useSearchStore } from '../../store'
 
-defineExpose({
-  openFilters
+const search = useSearchStore()
+const { sortList, genresList, seasonList, yearsList, filters } = storeToRefs(search)
+
+const props = defineProps({
+  showFilters: {
+    type: Boolean,
+    default: false
+  }
 })
 
-const showFilters = ref(false)
+const emit = defineEmits(['update:showFilters'])
 
-function openFilters () {
-  showFilters.value = true
-}
-
-const filters = reactive({
-  genres: [],
-  years: [],
-  season: [],
-  sort: [],
-  releaseFinished: false
+const showFilters = computed({
+  set (value) {
+    emit('update:showFilters', value)
+  },
+  get () {
+    return props.showFilters
+  }
 })
-
-const genresList = ref([{
-  label: 'Этти',
-  value: 'etti'
-}, {
-  label: 'Гарем',
-  value: 'harem'
-}])
-
-const yearsList = ref([{
-  label: 'Этти',
-  value: 'etti'
-}, {
-  label: 'Гарем',
-  value: 'harem'
-}])
-
-const seasonList = ref([{
-  label: 'Этти',
-  value: 'etti'
-}, {
-  label: 'Гарем',
-  value: 'harem'
-}])
-
-const sortList = ref([{
-  label: 'Этти',
-  value: 'etti'
-}, {
-  label: 'Гарем',
-  value: 'harem'
-}])
-
-function clearFilters () {
-  filters.genres = []
-  filters.years = []
-  filters.season = []
-  filters.sort = []
-  filters.releaseFinished = []
-}
 </script>
 
 <template>
@@ -74,6 +39,7 @@ function clearFilters () {
           placeholder="Выберите жанр"
           multiple
           :options="genresList"
+          @change="search.resetPage"
         />
 
         <n-select
@@ -82,6 +48,7 @@ function clearFilters () {
           placeholder="Выберите год"
           multiple
           :options="yearsList"
+          @change="search.resetPage"
         />
 
         <n-select
@@ -90,6 +57,7 @@ function clearFilters () {
           placeholder="Выберите сезон"
           multiple
           :options="seasonList"
+          @change="search.resetPage"
         />
 
         <n-select
@@ -97,43 +65,31 @@ function clearFilters () {
           class="mb-2"
           placeholder="Сортировка"
           :options="sortList"
+          @change="search.resetPage"
         />
 
-        <n-checkbox v-model:checked="filters.releaseFinished">
+        <n-checkbox
+          v-model:checked="filters.releaseFinished"
+          @change="search.resetPage"
+        >
           Релиз завершен
         </n-checkbox>
 
         <div class="mt-3">
-          <n-space vertical>
-            <n-button
-              class="w-full"
-              strong
-              secondary
-              type="error"
-              @click="clearFilters"
-            >
-              <template #icon>
-                <n-icon>
-                  <span class="mdi mdi-filter" />
-                </n-icon>
-              </template>
-              Очистить
-            </n-button>
-
-            <n-button
-              class="w-full"
-              strong
-              secondary
-              type="success"
-            >
-              <template #icon>
-                <n-icon>
-                  <span class="mdi mdi-filter" />
-                </n-icon>
-              </template>
-              Применить
-            </n-button>
-          </n-space>
+          <n-button
+            class="w-full"
+            strong
+            secondary
+            type="error"
+            @click="search.clearFilters"
+          >
+            <template #icon>
+              <n-icon>
+                <span class="mdi mdi-filter" />
+              </n-icon>
+            </template>
+            Очистить
+          </n-button>
         </div>
       </div>
     </n-drawer-content>

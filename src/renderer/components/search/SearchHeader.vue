@@ -16,8 +16,7 @@
           type="text"
           class="mr-2"
           placeholder="Введите запрос"
-          @keyup.enter="search"
-          @blur="search"
+          @change="search.resetPage"
         />
 
         <n-button
@@ -34,31 +33,41 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
+import { useSearchStore } from '../../store'
 
-const emit = defineEmits(['search', 'open-filters'])
-defineProps({
+const search = useSearchStore()
+const emit = defineEmits(['update:query', 'open-filters'])
+
+const props = defineProps({
   loading: {
     type: Boolean,
     required: false,
     default: false
+  },
+  query: {
+    type: String,
+    default: ''
   }
 })
 
-const query = ref('')
+const query = computed({
+  set: (value) => {
+    emit('update:query', value)
+  },
+  get: () => {
+    return props.query
+  }
+})
 
 const options = computed(() => {
-  return [query.value, 'Sword art online', 'Neko'].map((value) => {
+  return ['Sword art online', 'Neko'].map((value) => {
     return {
       label: value,
       value
     }
   })
 })
-
-function search () {
-  emit('search', query.value)
-}
 
 function openFilters () {
   emit('open-filters')
