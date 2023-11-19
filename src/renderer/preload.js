@@ -2,9 +2,9 @@ import { ipc } from '../enums'
 import { ipcRenderer, contextBridge } from 'electron'
 
 window.addEventListener('error', error => {
-  if (error.message.startsWith('ResizeObserver loop')) {
+  if (error.message.includes('ResizeObserver')) {
     setTimeout(() => {
-      document.querySelector('#webpack-dev-server-client-overlay')?.remove()
+      document.querySelector('#webpack-dev-server-client-overlay-div')?.remove()
     }, 0)
     console.warn(error.message)
   }
