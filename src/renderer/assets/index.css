@@ -13,3 +13,8 @@
 *:not(:defined) {
   opacity: 0;
 }
+
+/* Disable images drag */
+img {
+  pointer-events: none;
+}
