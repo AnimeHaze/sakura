@@ -3,17 +3,17 @@ import { computed, ref } from 'vue'
 import { appTheme, backButton } from '../../enums'
 
 export const useConfigStore = defineStore('config', () => {
-  /** @type {Ref<'light'|'dark'|'auto'>} */
+  /** @type {import('vue').Ref<'light'|'dark'|'auto'>} */
   const themeColor = ref(appTheme.AUTO)
-  /** @type {Ref<'light'|'dark'>} */
+  /** @type {import('vue').Ref<'light'|'dark'>} */
   const systemThemeColor = ref(appTheme.DARK)
-  /** @type {Ref<boolean>} */
+  /** @type {import('vue').Ref<boolean>} */
   const sidebarCollapsed = ref(true)
-  /** @type {Ref<'0'|'1'>} */
+  /** @type {import('vue').Ref<'0'|'1'>} */
   const backButtonType = ref(backButton.REPLACE_CATALOG)
-  /** @type {Ref<boolean>} */
+  /** @type {import('vue').Ref<boolean>} */
   const sidebarDiceLoading = ref(false)
-  /** @type {Ref<'light'|'dark'>} */
+  /** @type {import('vue').Ref<'light'|'dark'>} */
   const theme = computed(() => themeColor.value === appTheme.AUTO ? systemThemeColor.value : themeColor.value)
 
   const collapseSidebar = () => (sidebarCollapsed.value = true)

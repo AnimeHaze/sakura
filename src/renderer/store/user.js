@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
 /**
- @typedef Information {Ref<Object>}
+ @typedef Information {import('vue').Ref<Object>}
  @property {string} name
  @property {number} id
  @property {number} comments
@@ -13,7 +13,7 @@ import { computed, ref } from 'vue'
  */
 
 export const useUserStore = defineStore('user', () => {
-  /** @type {Ref<string|null>} **/
+  /** @type {import('vue').Ref<string|null>} **/
   const authToken = ref(null)
   const information = ref({
     id: 0,
@@ -26,7 +26,7 @@ export const useUserStore = defineStore('user', () => {
   })
 
   /**
-   * @type {Ref<Array<{ title: string, id: string }>>}
+   * @type {import('vue').Ref<Array<{ title: string, id: string }>>}
    */
   const userLists = ref([])
   const userListsForSelect = computed(() => userLists.value

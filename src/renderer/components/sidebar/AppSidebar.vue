@@ -25,11 +25,11 @@
 
 <script setup>
 import { computed, h, ref, watch } from 'vue'
-import { NAvatar, NIcon, NSpin, useDialog } from 'naive-ui'
+import { NAvatar, NIcon, useDialog } from 'naive-ui'
 import {
   AppsOutline, BookmarkOutline, BugOutline, CaretDownOutline,
   InformationCircleOutline, SearchOutline, SettingsOutline,
-  TerminalOutline, LogOutOutline, ArrowBackOutline, DiceOutline
+  TerminalOutline, LogOutOutline, ArrowBackOutline
 } from '@vicons/ionicons5'
 import DiceIcon from './DiceIcon.vue'
 
