@@ -1,6 +1,7 @@
 <template>
   <div
-    class="mb-2 rounded-md p-2 episode cursor-pointer"
+    class="mb-2 rounded-md p-2 episode cursor-pointer episode"
+    :class="{ 'episode-active': active }"
     @click="$emit('open')"
   >
     <n-space
@@ -68,7 +69,7 @@ import { computed } from 'vue'
 
 defineEmits(['change-watch-status', 'open'])
 
-const properties = defineProps({
+const props = defineProps({
   resolutions: {
     type: Array,
     required: true
@@ -93,13 +94,32 @@ const properties = defineProps({
     type: String,
     required: false,
     default: ''
+  },
+  active: {
+    type: Boolean,
+    default: true
   }
 })
 
-const watchedText = computed(() => properties.watched ? 'Просмотрено' : 'Не просмотрено')
-const watchedIcon = computed(() => properties.watched ? Eye : EyeOff)
+const watchedText = computed(() => props.watched ? 'Просмотрено' : 'Не просмотрено')
+const watchedIcon = computed(() => props.watched ? Eye : EyeOff)
 </script>
 
 <style scoped>
+.episode {
+  background: rgb(102 102 102 / 18%)
+}
+
+.episode:hover {
+  background: rgb(102 102 102 / 13%)
+}
+
+.episode-active {
+  background: rgba(99, 226, 183, 18%)
+}
+
+.episode-active:hover {
+  background: rgba(99, 226, 183, 13%)
+}
 
 </style>

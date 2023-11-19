@@ -19,7 +19,20 @@
       </template>
     </n-image>
 
-    <n-button class="w-full mb-3">
+    <n-button
+      v-if="!!activeEpisode"
+      strong
+      secondary
+      type="primary"
+      class="w-full mb-3"
+    >
+      Смотреть с {{ activeEpisode.number }} серии
+    </n-button>
+
+    <n-button
+      v-else
+      class="w-full mb-3"
+    >
       Смотреть
     </n-button>
 
@@ -39,6 +52,10 @@ defineProps({
     type: String,
     required: false,
     default: null
+  },
+  activeEpisode: {
+    type: Object,
+    required: false
   }
 })
 </script>

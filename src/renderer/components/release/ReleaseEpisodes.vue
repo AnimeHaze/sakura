@@ -9,6 +9,10 @@ const properties = defineProps({
   episodes: {
     type: Array,
     required: true
+  },
+  activeEpisode: {
+    type: Object,
+    required: false
   }
 })
 
@@ -78,6 +82,7 @@ function swapSort () {
     v-for="episode in sortedEpisodes"
     :key="episode.id"
     :episode-id="episode.id"
+    :active="activeEpisode?.id === episode.id"
     :episode-number="episode.number"
     :resolutions="[360, 720, 1080]"
     :watched="episode.watched"
@@ -89,14 +94,6 @@ function swapSort () {
 </template>
 
 <style scoped>
-.episode {
-  background: rgb(102 102 102 / 18%);
-}
-
-.episode:hover {
-  background: rgb(102 102 102 / 13%);
-}
-
 .transition {
   transition: transform 0.5s ease-in-out;
 }

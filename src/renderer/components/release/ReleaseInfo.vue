@@ -34,6 +34,10 @@ const team = computed(() => {
       .filter(([_, value]) => !!value.length)
   )
 })
+
+const activeEpisode = computed(
+  () => props.release.episodes.find(x => x.id === '95c36bc1-789e-11ec-ae92-0242ac120002')
+)
 </script>
 
 <template>
@@ -54,6 +58,7 @@ const team = computed(() => {
             class="mt-2"
             :poster-image="release.posters.medium"
             :poster-image-full="release.posters.original"
+            :active-episode="activeEpisode"
           />
         </n-layout-sider>
         <n-layout-content
@@ -189,7 +194,7 @@ const team = computed(() => {
 
                 <div class="py-1">
                   <div>
-                    <release-episodes :episodes="release.episodes" />
+                    <release-episodes :active-episode="activeEpisode" :episodes="release.episodes" />
                   </div>
                 </div>
               </n-tab-pane>
