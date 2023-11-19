@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { computed, h, ref } from 'vue'
+import { computed, h, ref, watch, onBeforeUnmount } from 'vue'
 
 import {
   mdiDice1Outline,
@@ -21,10 +21,19 @@ const diceNumber = ref(1)
 
 const config = useConfigStore()
 
-setInterval(() => {
-  diceNumber.value++
-  if (diceNumber.value === dices.length) diceNumber.value = 0
-}, 200)
+let interval = null
+watch(() => config.sidebarDiceLoading, (value) => {
+  if (value) {
+    interval = setInterval(() => {
+      diceNumber.value++
+      if (diceNumber.value === dices.length) diceNumber.value = 0
+    }, 200)
+  } else {
+    clearInterval(interval)
+  }
+})
 
 const dice = computed(() => config.sidebarDiceLoading ? h(SvgIcon, { path: dices[diceNumber.value], type: 'mdi' }) : h(DiceOutline))
+
+onBeforeUnmount(() => interval && clearInterval(interval))
 </script>
