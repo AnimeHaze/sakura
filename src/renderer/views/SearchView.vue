@@ -66,7 +66,7 @@ import ReleaseItem from '../components/search/ReleaseItem.vue'
 import SearchHeader from '../components/search/SearchHeader.vue'
 import FiltersDrawer from '../components/search/FiltersDrawer.vue'
 import ReleaseItemSkeleton from '../components/search/ReleaseItemSkeleton.vue'
-import { useSearchStore, useUserStore } from '../store'
+import { useSearchStore, useUserStore } from '@/store'
 import { useRouter, useRoute } from 'vue-router'
 import NotFound from '../components/search/NotFound.vue'
 

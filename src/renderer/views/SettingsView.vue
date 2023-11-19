@@ -54,6 +54,58 @@
           </n-grid>
         </n-form>
       </n-card>
+
+      <n-card
+        :bordered="false"
+        title="Сеть"
+        class="mt-3"
+      >
+        <n-form
+          size="medium"
+          label-placement="top"
+        >
+          <n-grid
+            :span="24"
+            :x-gap="24"
+          >
+            <n-form-item-gi
+              :span="12"
+              label="VPN"
+            >
+              <n-space vertical>
+                <n-checkbox
+                  v-model:checked="useVPN"
+                  label="Использовать VPN"
+                />
+              </n-space>
+            </n-form-item-gi>
+
+            <n-form-item-gi
+              :span="12"
+              label="Регион VPN"
+            >
+              <n-select
+                :options="vpnRegion"
+              />
+            </n-form-item-gi>
+
+            <n-form-item-gi
+              :span="12"
+              label="Конечная точка API"
+            >
+              <n-select :options="apiEndpoints" />
+            </n-form-item-gi>
+
+            <n-form-item-gi
+              :span="12"
+              label="Конечная точка статических ресурсов"
+            >
+              <n-select :options="apiStaticEndpoints" />
+            </n-form-item-gi>
+          </n-grid>
+        </n-form>
+      </n-card>
+
       <n-card
         :bordered="false"
         title="Прочее"
@@ -61,13 +113,11 @@
       >
         <n-space>
           <n-button
-            type="primary"
           >
             Очистить кеш приложения
           </n-button>
 
           <n-button
-            type="primary"
           >
             Установить настройки по умолчанию
           </n-button>
@@ -78,7 +128,58 @@
 </template>
 
 <script setup>
-import { useConfigStore } from '../store'
-import { appTheme, backButton } from '../../enums'
+import { useConfigStore } from '@/store'
+import { appTheme, backButton } from '@enums/index'
+import { ref } from 'vue'
 const config = useConfigStore()
+
+const useVPN = ref(true)
+const vpnRegion = [
+  {
+    label: 'Europe',
+    value: 'EU'
+  },
+  {
+    label: 'America',
+    value: 'AM'
+  }
+]
+
+const apiEndpoints = [
+  {
+    label: 'https://anilibria.tv/',
+    value: 'https://anilibria.tv/'
+  },
+  {
+    label: 'https://wwnd.space/',
+    value: 'https://wwnd.space/'
+  },
+  {
+    label: 'https://anilibriaqt.anilib.top/',
+    value: 'https://anilibriaqt.anilib.top/'
+  },
+  {
+    label: 'https://anilibrix.anilib.top/',
+    value: 'https://anilibrix.anilib.top/'
+  }
+]
+
+const apiStaticEndpoints = [
+  {
+    label: 'https://static.anilibria.tv/',
+    value: 'https://static.anilibria.tv/'
+  },
+  {
+    label: 'https://static.wwnd.space/',
+    value: 'https://static.wwnd.space/'
+  },
+  {
+    label: 'https://anilibriaqt.anilib.top/',
+    value: 'https://anilibriaqt.anilib.top/'
+  },
+  {
+    label: 'https://anilibrix.anilib.top/',
+    value: 'https://anilibrix.anilib.top/'
+  }
+]
 </script>

@@ -16,8 +16,8 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { darkTheme, lightTheme } from 'naive-ui'
-import { useConfigStore } from '../store'
-import { appTheme } from '../../enums'
+import { useConfigStore } from '@/store'
+import { appTheme } from '@enums/index'
 import ContextMenu from './app/ContextMenu.vue'
 import MemoryWidget from './app/MemoryWidget.vue'
 

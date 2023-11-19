@@ -34,7 +34,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { useSearchStore } from '../../store'
+import { useSearchStore } from '@/store'
 
 const search = useSearchStore()
 const emit = defineEmits(['update:query', 'open-filters'])

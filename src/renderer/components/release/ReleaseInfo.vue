@@ -6,8 +6,8 @@ import { NIcon } from 'naive-ui'
 import ReleaseEpisodes from './ReleaseEpisodes.vue'
 import Characters from './Characters.vue'
 import Franchises from './franchises.vue'
-import { useConfigStore } from '../../store'
-import { appTheme } from '../../../enums'
+import { useConfigStore } from '@/store'
+import { appTheme } from '@enums/index'
 
 const props = defineProps({
   release: {

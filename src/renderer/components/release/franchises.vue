@@ -33,7 +33,7 @@ import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
-import { useConfigStore } from '../../store'
+import { useConfigStore } from '@/store'
 import FranchiseSlide from './FranchiseSlide.vue'
 
 const router = useRouter()

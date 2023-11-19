@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useSearchStore } from '../../store'
+import { useSearchStore } from '@/store'
 
 const search = useSearchStore()
 const { sortList, genresList, seasonList, yearsList, filters } = storeToRefs(search)

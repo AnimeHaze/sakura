@@ -1,6 +1,6 @@
 <script setup>
 import { CheckmarkOutline } from '@vicons/ionicons5'
-import { useUserStore } from '../../../store'
+import { useUserStore } from '@/store'
 import { reactive, ref } from 'vue'
 
 const user = useUserStore()

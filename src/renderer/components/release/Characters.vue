@@ -63,7 +63,7 @@ import { onMounted, onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
-import { useConfigStore } from '../../store'
+import { useConfigStore } from '@/store'
 import CharacterSlide from './CharacterSlide.vue'
 
 const router = useRouter()
@@ -95,7 +95,7 @@ const SidebarExpandedBreakpoints = {
   2160: { slidesPerView: 13 },
   2560: { slidesPerView: 16 },
   3160: { slidesPerView: 18 },
-  3560: { slidesPerView: 20 },
+  3560: { slidesPerView: 20 }
 }
 
 async function loading (callback) {

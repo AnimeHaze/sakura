@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import { appTheme, backButton } from '../../enums'
+import { appTheme, backButton } from '@enums/index'
 
 export const useConfigStore = defineStore('config', () => {
   /** @type {import('vue').Ref<'light'|'dark'|'auto'>} */

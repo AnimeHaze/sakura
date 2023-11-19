@@ -1,5 +1,5 @@
 <script setup>
-import NotFound from '../../../../assets/SerachNotFound.png'
+import NotFound from '@assets/SerachNotFound.png'
 </script>
 
 <template>

@@ -34,9 +34,9 @@ import {
 import DiceIcon from './DiceIcon.vue'
 
 import { useRoute, useRouter } from 'vue-router'
-import { useConfigStore, useUserStore } from '../../store'
+import { useConfigStore, useUserStore } from '@/store'
 import ThemeIcon from './ThemeIcon.vue'
-import { appSidebar, appTheme, backButton } from '../../../enums'
+import { appSidebar, appTheme, backButton } from '@enums/index'
 
 const config = useConfigStore()
 const user = useUserStore()

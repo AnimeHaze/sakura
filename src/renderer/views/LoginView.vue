@@ -94,7 +94,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useThemeVars, useMessage } from 'naive-ui'
-import { useUserStore } from '../store'
+import { useUserStore } from '@/store'
 import { useRouter } from 'vue-router'
 
 const theme = useThemeVars()

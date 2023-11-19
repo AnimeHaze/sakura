@@ -30,7 +30,7 @@
 
 <script setup>
 import { NCard } from 'naive-ui'
-import { useUserStore } from '../store'
+import { useUserStore } from '@/store'
 import Statistics from '../components/profile/UserStatistics.vue'
 
 const user = useUserStore()

@@ -15,7 +15,7 @@ import {
 } from '@mdi/js'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { DiceOutline } from '@vicons/ionicons5'
-import { useConfigStore } from '../../store'
+import { useConfigStore } from '@/store'
 const dices = [mdiDice1Outline, mdiDice2Outline, mdiDice3Outline, mdiDice4Outline, mdiDice5Outline, mdiDice6Outline]
 const diceNumber = ref(1)
 

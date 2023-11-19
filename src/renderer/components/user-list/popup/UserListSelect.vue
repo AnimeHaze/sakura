@@ -1,7 +1,7 @@
 <script setup>
 import UserListEmpty from './UserListEmpty.vue'
 import UserListAction from './UserListAction.vue'
-import { useUserStore } from '../../../store'
+import { useUserStore } from '@/store'
 import { ref } from 'vue'
 
 const config = useUserStore()

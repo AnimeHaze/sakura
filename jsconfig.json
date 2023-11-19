@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "types": ["vidstack/vue"],
+    "paths": {
+      "@/*": [
+        "./src/renderer/*"
+      ],
+      "@assets/*": [
+        "./assets/*"
+      ],
+      "@enums/*": [
+        "./src/enums/*"
+      ]
+    }
+  }
+}

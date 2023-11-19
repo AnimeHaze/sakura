@@ -9,7 +9,7 @@ import Search from '../views/SearchView.vue'
 import Player from '../views/PlayerView.vue'
 import NotFound from '../views/NotFoundView.vue'
 
-import { useUserStore } from '../store'
+import { useUserStore } from '@/store'
 
 import DefaultLayout from '../layouts/DefaultLayout.vue'
 import PlayerLayout from '../layouts/PlayerLayout.vue'

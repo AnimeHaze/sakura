@@ -1,5 +1,6 @@
 const rules = require('./webpack.rules')
 const { VueLoaderPlugin } = require('vue-loader')
+const path = require('node:path')
 
 module.exports = {
   // Put your normal webpack config below here
@@ -22,6 +23,7 @@ module.exports = {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
+          hotReload: true,
           compilerOptions: {
             isCustomElement: tag => {
               if (tag.startsWith('media-')) return true
@@ -49,7 +51,10 @@ module.exports = {
   resolve: {
     extensions: ['*', '.js', '.vue', '.json'],
     alias: {
-      vue: 'vue/dist/vue.esm-bundler.js'
+      vue: 'vue/dist/vue.esm-bundler.js',
+      '@': path.resolve(__dirname, 'src/renderer'),
+      '@assets': path.resolve(__dirname, 'assets'),
+      '@enums': path.resolve(__dirname, 'src/enums')
     },
     fallback: {
       child_process: false,
