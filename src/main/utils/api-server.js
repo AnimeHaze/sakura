@@ -15,7 +15,7 @@ fastify.get('/chapters', function handler () {
   }
 })
 
-class APIServer {
+export class APIServer {
   constructor (bin, ip = '127.0.0.1', port) {
     this.ip = ip
     this.port = port
@@ -27,5 +27,3 @@ class APIServer {
     await fastify.listen({ port: bindPort, host: this.ip })
   }
 }
-
-module.exports = { APIServer }

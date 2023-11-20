@@ -1,4 +1,9 @@
-const { app, BrowserWindow, ipcMain, shell } = require('electron')
+import { app, BrowserWindow, ipcMain, shell } from 'electron'
+import { createMainWindow } from './utils/windows'
+import { preventDisplaySleep } from './utils/power-save-blocker'
+import { ipc } from '../enums'
+import { API } from './api'
+import { APIServer } from './utils/api-server'
 
 let mainWindow = null
 
@@ -17,13 +22,6 @@ if (!process.env.DISABLE_APP_INSTANCE_LOCK) {
   }
 }
 
-const { createMainWindow } = require('./utils/windows')
-const { preventDisplaySleep } = require('./utils/power-save-blocker')
-const { ipc } = require('../enums')
-const { API } = require('./api')
-const { OperaProxy } = require('./utils/opera-proxy')
-const { APIServer } = require('./utils/api-server')
-const path = require('node:path')
 
 const api = new API()
 const apiServer = new APIServer()
@@ -94,17 +92,15 @@ app.on('web-contents-created', async (event, webContents) => {
 
   webContents.on('will-navigate', (event, url) => {
     // eslint-disable-next-line no-undef
-    if (!url.startsWith(MAIN_WINDOW_WEBPACK_ENTRY)) {
-      event.preventDefault()
-      shell.openExternal(url)
-    }
+    event.preventDefault()
+    shell.openExternal(url)
   })
 
   webContents.setWindowOpenHandler(({ url }) => {
     // eslint-disable-next-line no-undef
-    if (url.startsWith(MAIN_WINDOW_WEBPACK_ENTRY)) {
-      return { action: 'allow' }
-    }
+    // if (url.startsWith(MAIN_WINDOW_WEBPACK_ENTRY)) {
+    //   return { action: 'allow' }
+    // }
 
     shell.openExternal(url)
     return { action: 'deny' }

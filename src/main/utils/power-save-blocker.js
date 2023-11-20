@@ -16,7 +16,7 @@ function stopPlanning (intervalMs) {
   }, intervalMs)
 }
 
-function preventDisplaySleep () {
+export function preventDisplaySleep () {
   if (currentSeepBlockerId !== null) {
     d(`[${currentSeepBlockerId}] clear & restart timeout`)
     clearTimeout(timeoutId)
@@ -29,5 +29,3 @@ function preventDisplaySleep () {
     return true
   }
 }
-
-module.exports = { preventDisplaySleep }

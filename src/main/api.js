@@ -1,7 +1,8 @@
-require('axios-debug-log/enable')
+import { enable } from '../utils/axios-debug-logger'
+enable()
+import { nFormatter } from '../utils'
+import axios from 'axios'
 
-const axios = require('axios')
-const { nFormatter } = require('../utils')
 
 /* Mock */
 const userLists = []
@@ -23,9 +24,9 @@ function mockList (title) {
 }
 /* Mock */
 
-class API {
   constructor () {
     this.staticURL = 'https://anilibria.tv/'
+export class API {
     this.client = axios.create({
       baseURL: 'https://api.anilibria.tv/v3'
     })
@@ -258,5 +259,3 @@ class API {
 
   }
 }
-
-module.exports = { API }

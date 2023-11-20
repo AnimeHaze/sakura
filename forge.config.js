@@ -98,23 +98,27 @@ module.exports = {
       }
     },
     {
-      name: '@electron-forge/plugin-webpack',
+      name: '@electron-forge/plugin-vite',
       config: {
-        mainConfig: './webpack.main.config.js',
-        devContentSecurityPolicy: 'default-src * self blob: data: gap:; style-src * self \'unsafe-inline\' blob: data: gap:; script-src * \'self\' \'unsafe-eval\' \'unsafe-inline\' blob: data: gap:; object-src * \'self\' blob: data: gap:; img-src * self \'unsafe-inline\' blob: data: gap:; connect-src self * \'unsafe-inline\' blob: data: gap:; frame-src * self blob: data: gap:;',
-        renderer: {
-          config: './webpack.renderer.config.js',
-          entryPoints: [
-            {
-              html: './src/renderer/index.html',
-              js: './src/renderer/renderer.js',
-              name: 'main_window',
-              preload: {
-                js: './src/renderer/preload.js'
-              }
-            }
-          ]
-        }
+        // `build` can specify multiple entry builds, which can be Main process, Preload scripts, Worker process, etc.
+        // If you are familiar with Vite configuration, it will look really familiar.
+        build: [
+          {
+            // `entry` is just an alias for `build.lib.entry` in the corresponding file of `config`.
+            entry: 'src/main/main.js',
+            config: 'vite.main.config.mjs'
+          },
+          {
+            entry: 'src/renderer/preload.js',
+            config: 'vite.preload.config.mjs'
+          }
+        ],
+        renderer: [
+          {
+            name: 'main_window',
+            config: 'vite.renderer.config.mjs'
+          }
+        ]
       }
     }
   ]

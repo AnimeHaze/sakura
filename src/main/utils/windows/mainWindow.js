@@ -26,7 +26,7 @@ export function createMainWindow () {
     show: false,
     webPreferences: {
       // eslint-disable-next-line no-undef
-      preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY
+      preload: path.join(__dirname, '../build/preload.js')
     },
     icon: nativeImage.createFromPath(icons[process.platform]),
     autoHideMenuBar: true
@@ -36,13 +36,19 @@ export function createMainWindow () {
 
   // and load the index.html of the app.
   // eslint-disable-next-line no-undef
-  mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
+  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+    // eslint-disable-next-line no-undef
+    mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL)
+  } else {
+    // eslint-disable-next-line no-undef
+    mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`))
+  }
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools({ mode: 'detach' })
 
   mainWindow.webContents.once('ready-to-show', () => {
     mainWindow.show()
+    mainWindow.webContents.openDevTools({ mode: 'detach' })
   })
 
   return mainWindow
