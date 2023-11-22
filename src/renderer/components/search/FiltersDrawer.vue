@@ -1,10 +1,11 @@
 <script setup>
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
+import { NCheckbox, NSelect } from 'naive-ui'
 import { useSearchStore } from '@/store'
 
 const search = useSearchStore()
-const { sortList, genresList, seasonList, yearsList, filters } = storeToRefs(search)
+const { filtersList } = storeToRefs(search)
 
 const props = defineProps({
   showFilters: {
@@ -12,6 +13,12 @@ const props = defineProps({
     default: false
   }
 })
+
+const filtersComponents = {
+  checkbox: NCheckbox,
+  select: NSelect,
+  'multi-select': NSelect
+}
 
 const emit = defineEmits(['update:showFilters'])
 
@@ -33,47 +40,32 @@ const showFilters = computed({
   >
     <n-drawer-content title="Фильтры">
       <div>
-        <n-select
-          v-model:value="filters.genres"
-          class="mb-2"
-          placeholder="Выберите жанр"
-          multiple
-          :options="genresList"
-          @change="search.resetPage"
-        />
-
-        <n-select
-          v-model:value="filters.years"
-          class="mb-2"
-          placeholder="Выберите год"
-          multiple
-          :options="yearsList"
-          @change="search.resetPage"
-        />
-
-        <n-select
-          v-model:value="filters.season"
-          class="mb-2"
-          placeholder="Выберите сезон"
-          multiple
-          :options="seasonList"
-          @change="search.resetPage"
-        />
-
-        <n-select
-          v-model:value="filters.sort"
-          class="mb-2"
-          placeholder="Сортировка"
-          :options="sortList"
-          @change="search.resetPage"
-        />
-
-        <n-checkbox
-          v-model:checked="filters.releaseFinished"
-          @change="search.resetPage"
+        <div
+          v-for="filter of filtersList"
+          :key="filter.id"
         >
-          Релиз завершен
-        </n-checkbox>
+          <component
+            :is="filtersComponents[filter.type]"
+            v-if="filter.type === 'select'"
+            v-model:value="search.filters[filter.id]"
+            class="mb-2"
+            :placeholder="filter.name"
+            :options="filter.options"
+            :multiple="filter.multiple"
+            @update="search.resetPage"
+          />
+
+          <component
+            :is="filtersComponents[filter.type]"
+            v-else
+            v-model:checked="search.filters[filter.id]"
+            class="mb-2"
+            :multiple="filter.multiple"
+            @update="search.resetPage"
+          >
+            {{ filter.name }}
+          </component>
+        </div>
 
         <div class="mt-3">
           <n-button

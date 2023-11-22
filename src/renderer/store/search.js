@@ -2,6 +2,8 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useSearchStore = defineStore('search', () => {
+  const filtersList = ref([])
+
   /**
    * @typedef {object} Filters
    * @property {string} text Text to search
@@ -32,12 +34,12 @@ export const useSearchStore = defineStore('search', () => {
   }
 
   function clearFilters () {
+    filters.value.page = 1
     filters.value.text = ''
-    filters.value.genres = []
-    filters.value.years = []
-    filters.value.season = []
-    filters.value.sort = null
-    filters.value.releaseFinished = false
+
+    for (const filterData of filtersList.value) {
+      filters.value[filterData.id] = filterData.default
+    }
   }
 
   function restoreFiltersState ({ q }) {
@@ -54,39 +56,20 @@ export const useSearchStore = defineStore('search', () => {
     }
   }
 
-  const genresList = ref([{
-    label: 'Этти',
-    value: 'etti'
-  }, {
-    label: 'Гарем',
-    value: 'harem'
-  }])
+  async function fetchFilters () {
+    filtersList.value = await window.api.getSearchFilters()
 
-  const yearsList = ref([{
-    label: 'Этти',
-    value: 'etti'
-  }, {
-    label: 'Гарем',
-    value: 'harem'
-  }])
+    // Remove all props
+    for (const prop in filters.value) {
+      if (!['page', 'text'].includes(prop)) delete filters.value[prop]
+    }
 
-  const seasonList = ref([{
-    label: 'Этти',
-    value: 'etti'
-  }, {
-    label: 'Гарем',
-    value: 'harem'
-  }])
-
-  const sortList = ref([{
-    label: 'Этти',
-    value: 'etti'
-  }, {
-    label: 'Гарем',
-    value: 'harem'
-  }])
+    for (const filterData of filtersList.value) {
+      filters.value[filterData.id] = filterData.default
+    }
+  }
 
   return {
-    genresList, yearsList, seasonList, sortList, filters, clearFilters, restoreFiltersState, resetPage
+    filters, clearFilters, restoreFiltersState, resetPage, fetchFilters, filtersList
   }
 })

@@ -245,6 +245,62 @@ export class API {
     }
   }
 
+  async getSearchFilters () {
+    return [{
+      type: 'select',
+      id: 'genres',
+      multiple: true,
+      name: 'Выберите жанр',
+      options: [
+        { value: 1, label: 'Этти' },
+        { value: 2, label: 'Гарем' },
+        { value: 3, label: 'Экшен' },
+        { value: 4, label: 'Сёнен' }
+      ],
+      default: ''
+    }, {
+      type: 'select',
+      multiple: true,
+      name: 'Выберите год',
+      id: 'years',
+      options: Array.from({ length: 51 }, (_, i) => ({
+        value: new Date().getFullYear() - i,
+        label: new Date().getFullYear() - i
+      })),
+      default: []
+    }, {
+      type: 'select',
+      multiple: true,
+      name: 'Выберите сезон',
+      id: 'season',
+      options: [
+        { value: 1, label: 'Лето' },
+        { value: 2, label: 'Весна' },
+        { value: 3, label: 'Осень' },
+        { value: 4, label: 'Зима' }
+      ],
+      default: []
+    },
+    {
+      type: 'select',
+      name: 'Сортировка',
+      id: 'sort',
+      options: [
+        { value: 1, label: 'Один' },
+        { value: 2, label: 'Два' },
+        { value: 3, label: 'Три' },
+        { value: 4, label: 'Четыре' }
+      ],
+      default: ''
+    },
+    {
+      type: 'checkbox',
+      id: 'releaseFinished',
+      name: 'Релиз завершен',
+      default: false
+    }]
+  }
+
   async getUserLists () {
     return userLists
   }

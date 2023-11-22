@@ -83,19 +83,12 @@ const showFilters = ref(false)
 /** @type {Ref<HTMLElement|null>} */
 const searchResultsRef = ref(null)
 
-watch([
-  () => search.filters.page,
-  () => search.filters.season,
-  () => search.filters.text,
-  () => search.filters.sort,
-  () => search.filters.years,
-  () => search.filters.genres,
-  () => search.filters.releaseFinished
-], () => {
+watch(() => search.filters, () => {
   loading.value = true
   if (debounceTimeout) clearTimeout(debounceTimeout)
 
   debounceTimeout = setTimeout(() => {
+    console.log(999, JSON.stringify(search.filters))
     router.replace({
       query: {
         q: JSON.stringify(search.filters)
@@ -110,7 +103,7 @@ watch([
 
     debounceTimeout = null
   }, 1000)
-})
+}, { deep: true })
 
 let debounceTimeout = null
 
@@ -119,6 +112,8 @@ watch(() => route.query, () => {
 })
 
 onMounted(async () => {
+  await search.fetchFilters()
+
   search.restoreFiltersState(route.query)
   loading.value = true
   await load()
