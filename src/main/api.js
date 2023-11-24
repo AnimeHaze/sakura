@@ -257,27 +257,24 @@ export class API {
   }
 
   async getSearchFilters () {
+    const [{ data: years }, { data: genres }] = await Promise.all([
+      this.client.get('/years'),
+      this.client.get('/genres')
+    ])
+
     return [{
       type: 'select',
       id: 'genres',
       multiple: true,
       name: 'Выберите жанр',
-      options: [
-        { value: 1, label: 'Этти' },
-        { value: 2, label: 'Гарем' },
-        { value: 3, label: 'Экшен' },
-        { value: 4, label: 'Сёнен' }
-      ],
-      default: ''
+      options: genres.map(genre => ({ value: genre, label: genre })),
+      default: []
     }, {
       type: 'select',
       multiple: true,
       name: 'Выберите год',
       id: 'years',
-      options: Array.from({ length: 51 }, (_, i) => ({
-        value: new Date().getFullYear() - i,
-        label: new Date().getFullYear() - i
-      })),
+      options: years.sort((a, b) => a - b).map(year => ({ value: year, label: year })),
       default: []
     }, {
       type: 'select',
@@ -302,7 +299,7 @@ export class API {
         { value: 3, label: 'Три' },
         { value: 4, label: 'Четыре' }
       ],
-      default: ''
+      default: null
     },
     {
       type: 'checkbox',
