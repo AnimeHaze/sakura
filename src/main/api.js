@@ -96,7 +96,7 @@ export class API {
 
     const { data: { list, pagination } } = await this.client.get('/title/search', { params: { limit, page, search } })
 
-    const result = list.map(({ names, id, code, posters, description, genres }) => ({
+    const result = list.map(({ names, id, code, posters, description, genres, in_favorites: rating }) => ({
       names: {
         ru: names.ru,
         en: names.en
@@ -228,14 +228,25 @@ export class API {
 
     for (const franchise of Object.values(data.franchises)) {
       const releases = Object.values(franchise.releases).sort((a, b) => a.ordinal - b.ordinal)
-      const ids = releases.map(x => x.id)
 
-      const { data: fetchedReleases } = await this.client.get('/title/list', {
-        params: {
-          id_list: ids.join(','),
-          playlist_type: 'array'
+      const fetchedReleases = []
+
+      for (const { id } of releases) {
+        try {
+          const { data } = await this.client.get('/title', {
+            params: {
+              id,
+              playlist_type: 'array'
+            }
+          })
+
+          fetchedReleases.push(data)
+        } catch (error) {
+          if (axios.isAxiosError(error)) {
+            console.log(error, error.response.status)
+          } else throw error
         }
-      })
+      }
 
       franchisesResult.push(...fetchedReleases.map(x => this.transformRelease(x)))
     }
