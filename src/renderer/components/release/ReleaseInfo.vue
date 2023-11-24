@@ -8,6 +8,7 @@ import Characters from './Characters.vue'
 import Franchises from './franchises.vue'
 import { useConfigStore } from '@/store'
 import { appTheme } from '@enums/index'
+import BackTopButton from "@/components/app/BackTopButton.vue";
 
 const props = defineProps({
   release: {
@@ -65,6 +66,7 @@ const activeEpisode = computed(
           :native-scrollbar="false"
           content-style="padding: 0 24px;"
         >
+          <back-top-button />
           <div class="mt-4">
             <div class="media-cover" />
             <n-space

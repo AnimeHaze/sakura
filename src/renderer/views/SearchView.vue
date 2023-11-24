@@ -14,6 +14,7 @@
         class="p-5 pb-0 py-5 flex flex-col overflow-y-hidden w-auto"
         style="overflow-y: auto"
       >
+        <back-top-button />
         <n-space
           justify="center"
         >
@@ -71,6 +72,7 @@ import ReleaseItemSkeleton from '../components/search/ReleaseItemSkeleton.vue'
 import { useSearchStore, useUserStore } from '@/store'
 import { useRouter, useRoute } from 'vue-router'
 import NotFound from '../components/search/NotFound.vue'
+import BackTopButton from '@/components/app/BackTopButton.vue'
 
 const router = useRouter()
 const route = useRoute()
