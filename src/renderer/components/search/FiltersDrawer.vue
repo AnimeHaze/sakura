@@ -39,7 +39,7 @@ const showFilters = computed({
     placement="right"
   >
     <n-drawer-content title="Фильтры">
-      <div>
+      <div class="select-none">
         <div
           v-for="filter of filtersList"
           :key="filter.id"
