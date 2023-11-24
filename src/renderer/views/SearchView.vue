@@ -20,6 +20,7 @@
           <n-pagination
             v-show="releases.length"
             v-model:page="search.filters.page"
+            :disabled="loading"
             :page-count="pagesCount"
             class="mb-2"
           />
@@ -51,6 +52,7 @@
           <n-pagination
             v-show="releases.length"
             v-model:page="search.filters.page"
+            :disabled="loading"
             :page-count="pagesCount"
             class="mt-2 mb-5"
           />
