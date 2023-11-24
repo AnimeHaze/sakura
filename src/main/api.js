@@ -229,26 +229,25 @@ export class API {
     for (const franchise of Object.values(data.franchises)) {
       const releases = Object.values(franchise.releases).sort((a, b) => a.ordinal - b.ordinal)
 
-      const fetchedReleases = []
-
-      for (const { id } of releases) {
-        try {
-          const { data } = await this.client.get('/title', {
+      const fetchedData = await Promise.allSettled(
+        releases
+          .map(({ id }) => this.client.get('/title', {
             params: {
               id,
               playlist_type: 'array'
             }
-          })
+          }))
+      )
 
-          fetchedReleases.push(data)
-        } catch (error) {
-          if (axios.isAxiosError(error)) {
-            console.log(error, error.response.status)
-          } else throw error
+      for (const { value: { data }, status, reason } of fetchedData) {
+        if (status !== 'fulfilled' && reason) {
+          if (axios.isAxiosError(reason)) {
+            console.log(reason, reason.response.status)
+          } else throw reason
         }
-      }
 
-      franchisesResult.push(...fetchedReleases.map(x => this.transformRelease(x)))
+        franchisesResult.push(this.transformRelease(data))
+      }
     }
 
     return {
