@@ -88,11 +88,30 @@ watch(() => search.filters, () => {
   if (debounceTimeout) clearTimeout(debounceTimeout)
 
   debounceTimeout = setTimeout(() => {
-    console.log(999, JSON.stringify(search.filters))
+    const qs = {}
+
+    // Remove default values from url (make shorter)
+    for (const filterData of search.filtersList) {
+      const filterValue = search.filters[filterData.id]
+      if (Array.isArray(filterValue) && filterValue === filterData.default?.toString()) continue
+      if (filterValue === filterData.default) continue
+
+      qs[filterData.id] = search.filters[filterData.id]
+    }
+
+    const hasFilters = Object.keys(qs).length
+    search.filtersActive = hasFilters
+
+    if (search.filters.page) qs.page = search.filters.page
+    if (search.filters.text) qs.text = search.filters.text
+
     router.replace({
-      query: {
-        q: JSON.stringify(search.filters)
-      }
+      query:
+        hasFilters || qs.page || qs.text
+          ? {
+              q: JSON.stringify(qs)
+            }
+          : undefined
     })
 
     load()

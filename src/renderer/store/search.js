@@ -3,16 +3,12 @@ import { ref } from 'vue'
 
 export const useSearchStore = defineStore('search', () => {
   const filtersList = ref([])
+  const filtersActive = ref(0)
 
   /**
    * @typedef {object} Filters
    * @property {string} text Text to search
    * @property {number} page Current page
-   * @property {boolean} releaseFinished If `true` show only finished releases
-   * @property {string[]} genres Array of genres to  search
-   * @property {string[]} season Array of seasons to search
-   * @property {null|string} sort Results sort type
-   * @property {string[]} years Array of years to search
    */
 
   /**
@@ -20,11 +16,6 @@ export const useSearchStore = defineStore('search', () => {
    * @type {import('vue').Ref<Filters>}
    */
   const filters = ref({
-    genres: [],
-    years: [],
-    season: [],
-    sort: null,
-    releaseFinished: false,
     text: '',
     page: 1
   })
@@ -56,6 +47,10 @@ export const useSearchStore = defineStore('search', () => {
     }
   }
 
+  /**
+   * Fetches filters and rebuild ref object
+   * @return {Promise<void>}
+   */
   async function fetchFilters () {
     filtersList.value = await window.api.getSearchFilters()
 
@@ -70,6 +65,6 @@ export const useSearchStore = defineStore('search', () => {
   }
 
   return {
-    filters, clearFilters, restoreFiltersState, resetPage, fetchFilters, filtersList
+    filters, clearFilters, restoreFiltersState, resetPage, fetchFilters, filtersList, filtersActive
   }
 })

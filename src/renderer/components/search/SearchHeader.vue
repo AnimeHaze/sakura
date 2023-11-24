@@ -19,14 +19,18 @@
           @change="search.resetPage"
         />
 
-        <n-button
-          strong
-          secondary
-          type="primary"
-          @click="openFilters"
+        <n-badge
+          :value="search.filtersActive"
         >
-          <span class="mdi mdi-filter" />
-        </n-button>
+          <n-button
+            strong
+            secondary
+            type="primary"
+            @click="openFilters"
+          >
+            <span class="mdi mdi-filter" />
+          </n-button>
+        </n-badge>
       </n-form-item>
     </n-form>
   </div>
