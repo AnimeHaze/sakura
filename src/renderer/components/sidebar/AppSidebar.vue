@@ -25,7 +25,7 @@
 
 <script setup>
 import { computed, h, ref, watch } from 'vue'
-import { NAvatar, NIcon, useDialog } from 'naive-ui'
+import { NAvatar, NIcon, useDialog, useNotification } from 'naive-ui'
 import {
   AppsOutline, BookmarkOutline, BugOutline, CaretDownOutline,
   InformationCircleOutline, SearchOutline, SettingsOutline,
@@ -43,6 +43,7 @@ const user = useUserStore()
 const router = useRouter()
 const dialog = useDialog()
 const route = useRoute()
+const notification = useNotification()
 
 const showBack = ref(false)
 
@@ -119,9 +120,20 @@ const handleRandom = async () => {
   if (config.sidebarDiceLoading) return
 
   config.setDiceLoading(true)
-  const { result: id } = await window.api.getRandomRelease()
-  await router.replace({ name: 'Release', params: { id } })
-  config.setDiceLoading(false)
+  try {
+    const { result: id } = await window.api.getRandomRelease()
+    await router.push({ name: 'Release', params: { id } })
+  } catch (error) {
+    console.log(error)
+    notification.create({
+      type: 'error',
+      content: 'Ошибка получения случайного релиза',
+      closable: true,
+      duration: 3000
+    })
+  } finally {
+    config.setDiceLoading(false)
+  }
 }
 
 const actionMap = {
