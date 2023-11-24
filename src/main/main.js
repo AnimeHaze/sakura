@@ -92,15 +92,17 @@ app.on('web-contents-created', async (event, webContents) => {
 
   webContents.on('will-navigate', (event, url) => {
     // eslint-disable-next-line no-undef
-    event.preventDefault()
-    shell.openExternal(url)
+    if (!url.startsWith(MAIN_WINDOW_VITE_DEV_SERVER_URL)) {
+      event.preventDefault()
+      shell.openExternal(url)
+    }
   })
 
   webContents.setWindowOpenHandler(({ url }) => {
     // eslint-disable-next-line no-undef
-    // if (url.startsWith(MAIN_WINDOW_WEBPACK_ENTRY)) {
-    //   return { action: 'allow' }
-    // }
+    if (url.startsWith(MAIN_WINDOW_VITE_DEV_SERVER_URL)) {
+      return { action: 'allow' }
+    }
 
     shell.openExternal(url)
     return { action: 'deny' }
