@@ -168,7 +168,7 @@ export class API {
   /**
    * Transforms release object
    * @param release
-   * @param franchises
+   * @param [franchises]
    * @return {TransformedRelease}
    */
   transformRelease (release, franchises) {
