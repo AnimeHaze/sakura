@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { appTheme, backButton } from '@enums/index'
 
 export const useConfigStore = defineStore('config', () => {
@@ -24,6 +24,10 @@ export const useConfigStore = defineStore('config', () => {
   const setTheme = (theme) => (themeColor.value = theme)
 
   const setDiceLoading = value => (sidebarDiceLoading.value = value)
+
+  watch(onLine, () => {
+    console.info('onLine status changed:', onLine.value)
+  })
 
   return {
     sidebarDiceLoading,
