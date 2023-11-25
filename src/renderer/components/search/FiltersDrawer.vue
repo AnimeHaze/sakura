@@ -6,6 +6,7 @@ import { useSearchStore } from '@/store'
 
 const search = useSearchStore()
 const { filtersList } = storeToRefs(search)
+const filtersProps = computed(() => filtersList.value.map(x => x.id))
 
 const props = defineProps({
   showFilters: {
@@ -21,6 +22,20 @@ const filtersComponents = {
 }
 
 const emit = defineEmits(['update:showFilters'])
+
+const filters = computed(() => {
+  return filtersList.value
+    .map(filter => {
+      filter.active = !filter.dependsOn ||
+        (
+          filtersProps.value.includes(filter.dependsOn) &&
+          search.filters[filter.dependsOn] !== null &&
+          search.filters[filter.dependsOn] !== undefined
+        )
+
+      return filter
+    })
+})
 
 const showFilters = computed({
   set (value) {
@@ -41,14 +56,17 @@ const showFilters = computed({
     <n-drawer-content title="Фильтры">
       <div class="select-none">
         <div
-          v-for="filter of filtersList"
+          v-for="filter of filters"
           :key="filter.id"
         >
           <component
             :is="filtersComponents[filter.type]"
             v-if="filter.type === 'select'"
+            v-show="filter.active"
             v-model:value="search.filters[filter.id]"
+            :clearable="filter.clearable"
             class="mb-2"
+            :default-value="filter.default"
             :placeholder="filter.name"
             :options="filter.options"
             :multiple="filter.multiple"
@@ -57,9 +75,12 @@ const showFilters = computed({
 
           <component
             :is="filtersComponents[filter.type]"
-            v-else
+            v-if="filter.type !== 'select'"
+            v-show="filter.active"
             v-model:checked="search.filters[filter.id]"
+            :clearable="filter.clearable"
             class="mb-2"
+            :default-value="filter.default"
             :multiple="filter.multiple"
             @update="search.resetPage"
           >

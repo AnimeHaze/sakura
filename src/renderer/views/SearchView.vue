@@ -92,16 +92,25 @@ watch(() => search.filters, () => {
   if (debounceTimeout) clearTimeout(debounceTimeout)
 
   debounceTimeout = setTimeout(() => {
-    const qs = {}
+    let qs = []
 
     // Remove default values from url (make shorter)
     for (const filterData of search.filtersList) {
       const filterValue = search.filters[filterData.id]
-      if (Array.isArray(filterValue) && filterValue === filterData.default?.toString()) continue
+      if (Array.isArray(filterValue) && filterValue.toString() === filterData.default?.toString()) continue
       if (filterValue === filterData.default) continue
 
-      qs[filterData.id] = search.filters[filterData.id]
+      qs.push([filterData.id, search.filters[filterData.id]])
     }
+
+    qs = Object.fromEntries(
+      qs.filter(filter => {
+        const { dependsOn } = search.filtersList.find(x => x.id === filter[0])
+        if (!dependsOn) return true
+
+        return qs.find(([key]) => key === dependsOn) !== undefined
+      })
+    )
 
     const hasFilters = Object.keys(qs).length
     search.filtersActive = hasFilters
@@ -148,7 +157,12 @@ onMounted(async () => {
  * @return {Promise<void>}
  */
 async function load () {
-  const { result, pages } = await window.api.searchReleases({ filters: { year: 2023 }, search: search.filters.text, page: search.filters.page, limit: 20 })
+  const { result, pages } = await window.api.searchReleases({
+    // Ad-hok :D, sometimes toRaw works fine, but IPC can't clone array Proxy, serialisation works fine
+    // TODO: I think I can find a good solution, but I am so lazy...
+    filters: JSON.parse(JSON.stringify(search.filters)),
+    limit: 20
+  })
 
   releases.value = result
   pagesCount.value = pages

@@ -92,9 +92,16 @@ export class API {
 
   async searchReleases (options) {
     // eslint-disable-next-line no-unused-vars
-    const { limit, page, filters, search } = options
+    const { limit, filters } = options
 
-    const { data: { list, pagination } } = await this.client.get('/title/search', { params: { limit, page, search } })
+    const query = {}
+
+    for (let [filterKey, filterValue] of Object.entries(filters)) {
+      if (filterKey === 'text') filterKey = 'search'
+      if (filterValue !== null) query[filterKey] = filterValue?.toString()
+    }
+
+    const { data: { list, pagination } } = await this.client.get('/title/search', { params: { limit, ...query } })
 
     const result = list.map(({ names, id, code, posters, description, genres, in_favorites: rating }) => ({
       names: {
@@ -267,44 +274,50 @@ export class API {
       multiple: true,
       name: 'Выберите жанр',
       options: genres.map(genre => ({ value: genre, label: genre })),
-      default: []
+      default: [],
+      clearable: true
     }, {
       type: 'select',
       multiple: true,
       name: 'Выберите год',
-      id: 'years',
+      id: 'year',
       options: years.sort((a, b) => a - b).map(year => ({ value: year, label: year })),
-      default: []
+      default: [],
+      clearable: true
     }, {
       type: 'select',
       multiple: true,
       name: 'Выберите сезон',
-      id: 'season',
+      id: 'season_code',
       options: [
-        { value: 1, label: 'Лето' },
+        { value: 1, label: 'Зима' },
         { value: 2, label: 'Весна' },
-        { value: 3, label: 'Осень' },
-        { value: 4, label: 'Зима' }
+        { value: 3, label: 'Лето' },
+        { value: 4, label: 'Осень' }
       ],
-      default: []
+      default: [],
+      clearable: true
     },
     {
       type: 'select',
       name: 'Сортировка',
-      id: 'sort',
+      id: 'order_by',
       options: [
-        { value: 1, label: 'Один' },
-        { value: 2, label: 'Два' },
-        { value: 3, label: 'Три' },
-        { value: 4, label: 'Четыре' }
+        { value: 'in_favorites', label: 'Рейтинг' },
+        { value: 'names.ru', label: 'Название' }
       ],
-      default: null
-    },
-    {
-      type: 'checkbox',
-      id: 'releaseFinished',
-      name: 'Релиз завершен',
-      default: false
+      default: null,
+      clearable: true
+    }, {
+      type: 'select',
+      name: 'Направление сортировки',
+      id: 'sort_direction',
+      options: [
+        { value: 0, label: 'По возрастанию' },
+        { value: 1, label: 'По убыванию' }
+      ],
+      default: 1,
+      dependsOn: 'order_by'
     }]
   }
 
