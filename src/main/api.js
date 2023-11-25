@@ -262,6 +262,22 @@ export class API {
     }
   }
 
+  /**
+   * @typedef {object} Filter
+   * @property {'select'|'checkbox'} type
+   * @property {string} id
+   * @property {boolean} [multiple]
+   * @property {string} name
+   * @property {number|string|array} default
+   * @property {array} options
+   * @property {boolean} clearable
+   * @property {string} dependsOn
+   */
+
+  /**
+   * Returns Promise with array of {@link Filter}'s
+   * @return {Promise<Array<Filter>>}
+   */
   async getSearchFilters () {
     const [{ data: years }, { data: genres }] = await Promise.all([
       this.client.get('/years'),
