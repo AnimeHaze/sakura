@@ -21,7 +21,8 @@ const api = {
   isDev: () => process.env.NODE_ENV === 'development',
   inspectElement: (x, y) => invokeIpcRenderer(ipc.INSPECT_ELEMENT, { x, y }),
   memoryUsage: () => invokeIpcRenderer(ipc.MEMORY_USAGE),
-  callApi: (method, options) => invokeIpcRenderer(ipc.API, method, options)
+  callApi: (method, options) => invokeIpcRenderer(ipc.API, method, options),
+  checkOnline: () => invokeIpcRenderer(ipc.CHECK_ONLINE)
 }
 
 contextBridge.exposeInMainWorld(

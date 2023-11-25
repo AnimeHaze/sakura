@@ -4,6 +4,7 @@ import { preventDisplaySleep } from './utils/power-save-blocker'
 import { ipc } from '../enums'
 import { API } from './api'
 import { APIServer } from './utils/api-server'
+import { OnlineChecker } from '../utils/online-checker'
 
 let mainWindow = null
 
@@ -27,6 +28,8 @@ const api = new API()
 const apiServer = new APIServer()
 
 const op = new OperaProxy(path.resolve('./src/opera-proxy'))
+const onlineChecker = new OnlineChecker({ url: process.env.WEBSOCKET_ECHO })
+onlineChecker.startPolling()
 
 const proxyPromise = op.start()
 
@@ -86,6 +89,9 @@ ipcMain.handle(ipc.MEMORY_USAGE, () => {
 
 app.on('web-contents-created', async (event, webContents) => {
   const port = await proxyPromise
+ipcMain.handle(ipc.CHECK_ONLINE, () => {
+  return onlineChecker.onLine
+})
 
   webContents.session
     .setProxy({ proxyRules: 'http://localhost:' + port })

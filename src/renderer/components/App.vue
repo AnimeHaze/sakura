@@ -6,7 +6,8 @@
       <n-notification-provider>
         <n-message-provider>
           <context-menu v-model:show-memory-usage="showMemoryUsage">
-            <router-view />
+            <router-view v-show="config.onLine"/>
+            <offline-layout v-show="!config.onLine"/>
           </context-menu>
           <!--        <search-modal />-->
         </n-message-provider>
@@ -22,7 +23,9 @@ import { useConfigStore } from '@/store'
 import { appTheme } from '@enums/index'
 import ContextMenu from './app/ContextMenu.vue'
 import MemoryWidget from './app/MemoryWidget.vue'
+import OfflineLayout from '@/layouts/OfflineLayout.vue'
 
+let onLineInterval = null
 const showMemoryUsage = ref(false)
 const config = useConfigStore()
 const theme = computed(() => config.theme === appTheme.DARK ? darkTheme : lightTheme)
@@ -34,11 +37,14 @@ function themeChange (event) {
 const mediaDark = window.matchMedia('(prefers-color-scheme: dark)')
 
 onMounted(() => {
+  onLineInterval = setInterval(async () => (config.onLine = await window.api.checkOnline()), 1000)
+
   themeChange(mediaDark)
   mediaDark.addEventListener('change', themeChange)
 })
 
 onBeforeUnmount(() => {
+  clearInterval(onLineInterval)
   mediaDark.removeEventListener('change', themeChange)
 })
 </script>

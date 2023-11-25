@@ -12,7 +12,8 @@ export const ipc = {
   PREVENT_SLEEP: 'prevent-sleep',
   INSPECT_ELEMENT: 'inspect-element',
   API: 'api:call',
-  MEMORY_USAGE: 'memory-usage'
+  MEMORY_USAGE: 'memory-usage',
+  CHECK_ONLINE: 'online-status'
 }
 
 export const appSidebar = {

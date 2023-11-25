@@ -15,6 +15,8 @@ export const useConfigStore = defineStore('config', () => {
   const sidebarDiceLoading = ref(false)
   /** @type {import('vue').Ref<'light'|'dark'>} */
   const theme = computed(() => themeColor.value === appTheme.AUTO ? systemThemeColor.value : themeColor.value)
+  /** @type {import('vue').Ref<boolean>} */
+  const onLine = ref(true)
 
   const collapseSidebar = () => (sidebarCollapsed.value = true)
   const expandSidebar = () => (sidebarCollapsed.value = false)
@@ -34,6 +36,7 @@ export const useConfigStore = defineStore('config', () => {
     expandSidebar,
     toggleTheme,
     setTheme,
-    setDiceLoading
+    setDiceLoading,
+    onLine
   }
 })

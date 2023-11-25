@@ -9,7 +9,7 @@ import Search from '../views/SearchView.vue'
 import Player from '../views/PlayerView.vue'
 import NotFound from '../views/NotFoundView.vue'
 
-import { useUserStore } from '@/store'
+import { useUserStore, useConfigStore } from '@/store'
 
 import DefaultLayout from '../layouts/DefaultLayout.vue'
 import PlayerLayout from '../layouts/PlayerLayout.vue'
@@ -45,7 +45,10 @@ export const router = createRouter({
 
 router.beforeEach(async (to, from) => {
   const user = useUserStore()
+  const config = useConfigStore()
   const isAuthenticated = user.authToken !== null
+
+  if (!config.onLine && to.name !== 'Offline') return { name: 'Offline' }
 
   if (
     !user.authToken &&
