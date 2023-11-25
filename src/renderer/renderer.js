@@ -45,7 +45,11 @@ window.api = new Proxy(window._api, {
         'color: #FFFFFF;font-size: 12px;background: #174919;padding: 2px;',
         property
       )
-      console.table(options)
+      if (options) {
+        console.table(options)
+      } else {
+        console.info('[%d] No options provided', reqId)
+      }
 
       const response = window._api.callApi(property, options)
 
