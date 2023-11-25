@@ -1,8 +1,7 @@
 import { enable } from '../utils/axios-debug-logger'
-enable()
 import { nFormatter } from '../utils'
 import axios from 'axios'
-
+enable()
 
 /* Mock */
 const userLists = []
