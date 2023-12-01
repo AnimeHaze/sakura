@@ -1,8 +1,11 @@
 <template>
   <div
-    class="mb-2 rounded-md p-2 episode cursor-pointer episode"
+    class="mb-2 rounded-md p-2 cursor-pointer"
     :class="{ 'episode-active': active }"
+    :style="{ background: progress }"
     @click="$emit('open')"
+    @mouseover="hover = true"
+    @mouseleave="hover = false"
   >
     <n-space
       justify="space-between"
@@ -54,7 +57,7 @@
           </n-tag>
         </n-space>
 
-        <div class="mt-1 mr-2 text-zinc-500">
+        <div class="mt-1 mr-2 text-zinc-400">
           {{ date }}
         </div>
       </n-space>
@@ -65,8 +68,10 @@
 <script setup>
 import { Eye, EyeOff } from '@vicons/ionicons5'
 import { NIcon } from 'naive-ui'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+import { getRandomIntInclusive } from '../../../utils'
 
+const hover = ref(false)
 defineEmits(['change-watch-status', 'open'])
 
 const props = defineProps({
@@ -98,28 +103,38 @@ const props = defineProps({
   active: {
     type: Boolean,
     default: true
+  },
+  percent: {
+    type: Number,
+    required: false,
+    default: () => getRandomIntInclusive(0, 100)
   }
 })
 
 const watchedText = computed(() => props.watched ? 'Просмотрено' : 'Не просмотрено')
 const watchedIcon = computed(() => props.watched ? Eye : EyeOff)
+
+function calcProgress (backgroundColor, progressColor, percent) {
+  return `linear-gradient(
+    90deg, ${backgroundColor}
+    0%, ${backgroundColor} ${percent}%,
+    ${progressColor} ${percent}%,
+    ${progressColor} 100%
+  )`
+}
+
+const progress = computed(() => {
+  if (props.active) {
+    return hover.value
+      ? calcProgress('rgb(99 226 183 / 13%)', 'rgb(39 102 74 / 13%)', props.percent)
+      : calcProgress('rgb(99 226 183 / 18%)', 'rgb(39 102 74 / 18%)', props.percent)
+  }
+
+  return hover.value
+    ? calcProgress('rgb(255 255 255 / 18%)', 'rgb(102 102 102 / 18%)', props.percent)
+    : calcProgress('rgb(255 255 255 / 18%)', 'rgb(102 102 102 / 13%)', props.percent)
+})
 </script>
 
 <style scoped>
-.episode {
-  background: rgb(102 102 102 / 18%)
-}
-
-.episode:hover {
-  background: rgb(102 102 102 / 13%)
-}
-
-.episode-active {
-  background: rgba(99, 226, 183, 18%)
-}
-
-.episode-active:hover {
-  background: rgba(99, 226, 183, 13%)
-}
-
 </style>
