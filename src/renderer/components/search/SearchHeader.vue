@@ -23,12 +23,15 @@
           :value="search.filtersActive"
         >
           <n-button
+            :loading="loading"
             strong
             secondary
             type="primary"
             @click="openFilters"
           >
-            <span class="mdi mdi-filter" />
+            <template #icon>
+              <span class="mdi mdi-filter" />
+            </template>
           </n-button>
         </n-badge>
       </n-form-item>
