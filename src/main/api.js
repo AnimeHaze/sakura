@@ -178,7 +178,7 @@ export class API {
    * @return {TransformedRelease}
    */
   transformRelease (release, franchises) {
-    const { names, id, code, posters, description, genres, player: { list: episodes }, team } = release
+    const { names, id, code, posters, description, genres, player: { list: episodes, host }, team } = release
 
     return {
       names: {
@@ -202,7 +202,18 @@ export class API {
       },
       description,
       genres: genres.map(x => ({ id: x, label: x })),
-      episodes: episodes.map(x => ({ id: x.uuid, number: x.episode, name: x.name, createdAt: x.created_timestamp, watched: true })),
+      episodes: episodes.map(x => ({
+        id: x.uuid,
+        video: [
+          { name: 'FHD', source: 'https://' + host + x.hls.fhd },
+          { name: 'HD', source: 'https://' + host + x.hls.hd },
+          { name: 'SD', source: 'https://' + host + x.hls.sd }
+        ],
+        number: x.episode,
+        name: x.name,
+        createdAt: x.created_timestamp,
+        watched: true
+      })),
       cover: 'https://s4.anilist.co/file/anilistcdn/media/anime/banner/151807-37yfQA3ym8PA.jpg'
     }
   }
