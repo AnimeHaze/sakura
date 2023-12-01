@@ -1,6 +1,6 @@
 <template>
   <media-radio
-    class="ring-media-focus group relative flex w-full cursor-pointer select-none items-center justify-start rounded-sm p-2.5 outline-none data-[hocus]:bg-white/10 data-[focus]:ring-[3px]"
+    class="ring-media-focus group relative flex cursor-pointer select-none items-center justify-start rounded-sm p-2.5 outline-none data-[hocus]:bg-white/10 data-[focus]:ring-[3px]"
   >
     <media-icon
       class="h-4 w-4 text-white group-data-[checked]:hidden"

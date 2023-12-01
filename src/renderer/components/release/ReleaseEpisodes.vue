@@ -89,7 +89,7 @@ function swapSort () {
     :date="new Date(episode.createdAt * 1000).toLocaleString()"
     :name="episode.name"
     @change-watch-status="changeWatched(episode.id)"
-    @open="$router.push({ name: 'Player', params: { episode: '123' } })"
+    @open="$router.push({ name: 'Player', params: { episode: episode.id } })"
   />
 </template>
 

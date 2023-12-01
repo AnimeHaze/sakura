@@ -11,15 +11,13 @@
   opacity: 0;
 }
 
-[data-media-provider] {
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  box-sizing: border-box;
+[data-media-player] {
+  position: absolute !important;
 }
 
-:where([data-media-provider]) {
+
+
+:where([media-player]) {
   align-items: center;
   width: 100%;
 }

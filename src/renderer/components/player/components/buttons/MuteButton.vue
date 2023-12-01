@@ -14,7 +14,7 @@ const { tooltipPlacement } = defineProps({
   <Tooltip :placement="tooltipPlacement">
     <template #trigger>
       <media-mute-button
-        class="ring-media-focus group relative -mr-1.5 inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-md outline-none ring-inset hover:bg-white/20 data-[focus]:ring-4"
+        class="ring-media-focus group relative mr-2 inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-md outline-none ring-inset hover:bg-white/20 data-[focus]:ring-4"
       >
         <media-icon
           class="hidden h-8 w-8 group-data-[state='muted']:block"

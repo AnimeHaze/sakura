@@ -21,7 +21,7 @@ const { placement, tooltipPlacement } = defineProps({
       <CaptionSubmenu />
     </template>
     <template #tooltip-content>
-      <span>Settings</span>
+      <span>Настройки</span>
     </template>
   </Menu>
 </template>

@@ -12,14 +12,37 @@ import { onMounted, ref } from 'vue'
 import VideoLayout from './components/layouts/VideoLayout.vue'
 import { textTracks } from './track'
 
+const emit = defineEmits(['openEpisodes', 'openRelease', 'openBack', 'openForward', 'canPlay', 'waiting'])
+const canPlayRef = ref(false)
+const waitingRef = ref(false)
+
 /** @type {Ref<MediaPlayerElement>} */
 const $player = ref()
+const showTooltips = ref(undefined)
 
 onMounted(() => {
   for (const track of textTracks) $player.value.textTracks.add(track)
 
-  return $player.value.subscribe(({ paused, viewType }) => {
+  return $player.value.subscribe((data) => {
+    console.log(data)
+    const { paused, viewType, controlsVisible, canPlay, waiting } = data
+
+    if (canPlayRef.value !== canPlay) {
+      canPlayRef.value = canPlay
+      emit('canPlay', canPlay)
+    }
+
+    if (waitingRef.value !== waiting) {
+      waitingRef.value = waiting
+      emit('waiting', waiting)
+    }
+
+    showTooltips.value = controlsVisible ? true : undefined
+
+    console.log('is waiting?', '->', waiting)
+    console.log('is canPlay?', '->', canPlay)
     console.log('is paused?', '->', paused)
+    console.log('is controlsVisible?', '->', controlsVisible)
     console.log('is audio view?', '->', viewType === 'audio')
   })
 })
@@ -45,19 +68,49 @@ const { poster } = defineProps({
   poster: {
     required: true,
     type: String
+  },
+  source: {
+    required: true,
+    type: String
+  },
+  backEpisodeText: {
+    type: String,
+    required: true
+  },
+  forwardEpisodeText: {
+    type: String,
+    required: true
+  },
+  backDisabled: {
+    type: Boolean,
+    required: false,
+    default: false
+  },
+  forwardDisabled: {
+    type: Boolean,
+    required: false,
+    default: false
+  },
+  episodeName: {
+    type: String,
+    required: false,
+    default: undefined
+  },
+  releaseName: {
+    type: String,
+    required: false,
+    default: undefined
   }
 })
-
-defineEmits(['openEpisodes', 'openRelease'])
 </script>
 
 <template>
   <div>
     <media-player
       ref="$player"
-      class="w-full aspect-video text-white font-sans overflow-hidden rounded-md ring-media-focus data-[focus]:ring-4"
+      class="h-full m-0 top-1/2 -translate-y-1/2 w-full aspect-video text-white font-sans overflow-hidden ring-media-focus data-[focus]:ring-4"
       title="Sprite Fight"
-      src="https://stream.mux.com/VZtzUzGRv02OhRnZCxcNg49OilvolTqdnFLEqBsTwaxU/high.mp4"
+      :src="source"
       crossorigin
       @provider-change="onProviderChange"
       @can-play="onCanPlay"
@@ -70,10 +123,18 @@ defineEmits(['openEpisodes', 'openRelease'])
           alt="Girl walks into campfire with gnomes surrounding her friend ready for their next meal!"
         />
       </media-provider>
-
       <VideoLayout
+        :release-name="releaseName"
+        :episode-name="episodeName"
+        :back-disabled="backDisabled"
+        :forward-disabled="forwardDisabled"
+        :back-episode-text="backEpisodeText"
+        :forward-episode-text="forwardEpisodeText"
+        :show-tooltips="showTooltips"
         :poster="poster"
         thumbnails="https://image.mux.com/VZtzUzGRv02OhRnZCxcNg49OilvolTqdnFLEqBsTwaxU/storyboard.vtt"
+        @open-back="$emit('openBack')"
+        @open-forward="$emit('openForward')"
         @open-release="$emit('openRelease')"
         @open-episodes="$emit('openEpisodes')"
       />

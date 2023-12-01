@@ -12,7 +12,7 @@ import Submenu from './Submenu.vue'
       />
     </template>
     <template #content>
-      <media-captions-radio-group class="w-full flex flex-col">
+      <media-captions-radio-group class="flex flex-col">
         <template>
           <MenuRadio />
         </template>
