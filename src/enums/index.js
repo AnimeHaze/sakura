@@ -35,3 +35,7 @@ export const backButton = {
   REPLACE_CATALOG: '0',
   EXTRA: '1'
 }
+
+export const onlineChecker = {
+  PING: 'p'
+}
