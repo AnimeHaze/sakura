@@ -351,7 +351,8 @@ export class API {
       id: 'order_by',
       options: [
         { value: 'in_favorites', label: 'Рейтинг' },
-        { value: 'names.ru', label: 'Название' }
+        { value: 'names.ru', label: 'Название' },
+        { value: 'updated', label: 'Новизна' }
       ],
       default: null,
       clearable: true
