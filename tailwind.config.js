@@ -1,9 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./index.html', 'src/**/*.vue'],
+  content: ['./index.html', 'src/renderer/**/*.vue'],
   future: {
     hoverOnlyWhenSupported: true
   },
+  mode: 'jit',
   theme: {
     extend: {
       colors: {

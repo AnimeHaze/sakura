@@ -1,3 +1,4 @@
 import { createMainWindow } from './mainWindow'
+import { createNotifyWindow } from './notifyWindow'
 
-export { createMainWindow }
+export { createMainWindow, createNotifyWindow }

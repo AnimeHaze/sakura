@@ -23,10 +23,31 @@ function mockList (title) {
 }
 /* Mock */
 
-  constructor () {
-    this.staticURL = 'https://anilibria.tv/'
 export class API {
+  /**
+   *
+   * @param {string} userAgent
+   * @param {URL} proxy
+   */
+  constructor ({ userAgent, proxy }) {
+    this.staticURL = 'https://anilibria.tv'
+
+    let proxyServer
+
+    if (proxy) {
+      proxyServer = {
+        protocol: proxy.protocol.replace(':', ''),
+        auth: (!!proxy.password && !!proxy.username) ? { password: proxy.password, username: proxy.username } : undefined,
+        host: proxy.hostname,
+        port: proxy.port
+      }
+
+      console.info('Main proxy', proxy.toString())
+    }
+
     this.client = axios.create({
+      headers: { 'User-Agent': userAgent },
+      proxy: proxyServer,
       baseURL: 'https://api.anilibria.tv/v3'
     })
   }

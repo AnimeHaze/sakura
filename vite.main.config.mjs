@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import createExternal from 'vite-plugin-external'
+import { fileURLToPath, URL } from "url"
 
 // https://vitejs.dev/config
 export default defineConfig({
@@ -8,12 +9,15 @@ export default defineConfig({
       externals: {
         bufferutil: 'bufferutil'
       }
-    }),
+    })
   ],
   resolve: {
     // Some libs that can run in both Web and Node.js, such as `axios`, we need to tell Vite to build them in Node.js.
     browserField: false,
     conditions: ['node'],
-    mainFields: ['module', 'jsnext:main', 'jsnext']
+    mainFields: ['module', 'jsnext:main', 'jsnext'],
+    alias: [
+      { find: '@enums', replacement: fileURLToPath(new URL('./src/enums', import.meta.url)) }
+    ]
   }
 })

@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite'
-import { fileURLToPath, URL } from "url"
+import { fileURLToPath, URL } from 'url'
 
 // https://vitejs.dev/config
 export default defineConfig({

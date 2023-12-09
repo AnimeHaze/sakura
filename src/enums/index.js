@@ -13,10 +13,18 @@ export const ipc = {
   INSPECT_ELEMENT: 'inspect-element',
   API: 'api:call',
   MEMORY_USAGE: 'memory-usage',
-  CHECK_ONLINE: 'online-status'
+  CHECK_ONLINE: 'online-status',
+  SET_NOTIFY_SHAPE: 'notify-shape',
+  NOTIFY_READY: 'notify-ready',
+  RECEIVE_NOTIFY: 'receive-ready',
+  NOTIFY_CLOSED: 'notify-closed',
+  NOTIFY_AFTER_LEAVE: 'notify-after-leave',
+  NOTIFY_INTERNAL: 'notify-internal'
 }
 
 export const appSidebar = {
+  RECENT: 'recent',
+  SCHEDULE: 'schedule',
   BACK: 'back',
   RANDOM_ANIME: 'random-anime',
   CATALOG: 'catalog',

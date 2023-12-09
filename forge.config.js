@@ -109,14 +109,22 @@ module.exports = {
             config: 'vite.main.config.mjs'
           },
           {
-            entry: 'src/renderer/preload.js',
+            entry: 'src/renderer/main-window/preload.js',
             config: 'vite.preload.config.mjs'
+          },
+          {
+            entry: 'src/renderer/notify-window/preload-notify.js',
+            config: 'vite.preload-notify.config.mjs'
           }
         ],
         renderer: [
           {
             name: 'main_window',
             config: 'vite.renderer.config.mjs'
+          },
+          {
+            name: 'notify_window',
+            config: 'vite.renderer-notify.config.mjs'
           }
         ]
       }

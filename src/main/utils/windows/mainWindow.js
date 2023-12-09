@@ -25,6 +25,12 @@ export function createMainWindow () {
     // frame: false,
     show: false,
     webPreferences: {
+      contextIsolation: true,
+      enableRemoteModule: false,
+      sandbox: true,
+      nodeIntegration: false,
+      nodeIntegrationInWorker: false,
+      // webSecurity: false,
       // eslint-disable-next-line no-undef
       preload: path.join(__dirname, '../build/preload.js')
     },
@@ -43,8 +49,6 @@ export function createMainWindow () {
     // eslint-disable-next-line no-undef
     mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`))
   }
-
-  // Open the DevTools.
 
   mainWindow.webContents.once('ready-to-show', () => {
     mainWindow.show()

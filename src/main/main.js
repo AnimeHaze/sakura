@@ -3,12 +3,21 @@ import { createMainWindow } from './utils/windows'
 import { preventDisplaySleep } from './utils/power-save-blocker'
 import { ipc } from '../enums'
 import { API } from './api'
+import { Notify } from '../utils/notify'
+// const { OperaProxy } = require('./utils/opera-proxy')
 import { APIServer } from './utils/api-server'
 import { OnlineChecker } from '../utils/online-checker'
+import path from 'node:path'
+import { getBaseURL, isOpenShellSecure } from '../utils'
 
 let mainWindow = null
 
-if (!process.env.DISABLE_APP_INSTANCE_LOCK) {
+// Check startup and quit if it's a Squirrel startup event
+if (require('electron-squirrel-startup')) {
+  app.quit()
+}
+
+if (!import.meta.env.VITE_DISABLE_APP_INSTANCE_LOCK) {
   const gotTheLock = app.requestSingleInstanceLock()
 
   if (!gotTheLock) {
@@ -23,15 +32,35 @@ if (!process.env.DISABLE_APP_INSTANCE_LOCK) {
   }
 }
 
+// const proxyURL = new URL('http://127.0.0.1:8082')
+//
+// console.log('Renderer proxy', proxyURL.toString())
 
-const api = new API()
+// app.commandLine.appendSwitch('ignore-certificate-errors')
+// app.commandLine.appendSwitch('proxy-server', '127.0.0.1:8082')
+// app.commandLine.appendSwitch('disable-features', 'OutOfBlinkCors')
+const appName = app.getName()
+const appVersion = app.getVersion()
+const metaInfo = [
+  process.platform,
+  app.getLocaleCountryCode(),
+  app.getPreferredSystemLanguages()
+].join('; ')
+const userAgent = `${appName}/${appVersion} (${metaInfo})`
+
+const api = new API({
+  userAgent
+  /*, proxy: proxyURL */
+})
 const apiServer = new APIServer()
 
-const op = new OperaProxy(path.resolve('./src/opera-proxy'))
-const onlineChecker = new OnlineChecker({ url: process.env.WEBSOCKET_ECHO })
+const onlineChecker = new OnlineChecker({ url: import.meta.env.VITE_WEBSOCKET_ECHO })
 onlineChecker.startPolling()
+const notify = new Notify()
 
-const proxyPromise = op.start()
+notify.on('openRelease', (data) => console.log('openRelease', data))
+notify.on('watchEpisode', (data) => console.log('watchEpisode', data))
+
 
 const handleToggleDevelopmentTools = () => {
   const { webContents } = BrowserWindow.getFocusedWindow()
@@ -57,6 +86,8 @@ const handleAppMaximizeMinimize = () => {
 }
 
 const handleAPI = (event, method, options) => {
+  if (method === 'testNotify') return notify.sendNotify(options)
+
   const allowedMethods = new Set([
     'getLastReleases', 'getNews', 'searchReleases', 'getRelease', 'getRandomRelease',
     'getUserLists', 'createUserList', 'getSearchFilters'
@@ -70,14 +101,14 @@ const handleAPI = (event, method, options) => {
   return api[method](options)
 }
 
-// Check startup and quit if it's a Squirrel startup event
-if (require('electron-squirrel-startup')) {
-  app.quit()
-}
-
 ipcMain.handle(ipc.TOGGLE_DEVTOOLS, handleToggleDevelopmentTools)
 ipcMain.handle(ipc.INSPECT_ELEMENT, handleInspectElement)
-ipcMain.handle(ipc.APP_CLOSE, () => app.quit())
+ipcMain.handle(ipc.APP_CLOSE, async () => {
+  await onlineChecker.stopPolling()
+  await notify.destroy(true)
+  app.quit()
+})
+
 ipcMain.handle(ipc.APP_MAXIMIZE_MINIMIZE, handleAppMaximizeMinimize)
 ipcMain.handle(ipc.APP_COLLAPSE, () => BrowserWindow.getFocusedWindow().minimize())
 ipcMain.handle(ipc.PREVENT_SLEEP, () => preventDisplaySleep())
@@ -87,31 +118,62 @@ ipcMain.handle(ipc.MEMORY_USAGE, () => {
   return process.memoryUsage()
 })
 
-app.on('web-contents-created', async (event, webContents) => {
-  const port = await proxyPromise
 ipcMain.handle(ipc.CHECK_ONLINE, () => {
   return onlineChecker.onLine
 })
 
-  webContents.session
-    .setProxy({ proxyRules: 'http://localhost:' + port })
+app.on('web-contents-created', async (event, webContents) => {
+  // const port = await proxyPromise
+  //
+  // webContents.session
+  //   .setProxy({ proxyRules: 'http://localhost:' + port })
 
-  webContents.on('will-navigate', (event, url) => {
+  const allowedList = [
     // eslint-disable-next-line no-undef
-    if (!url.startsWith(MAIN_WINDOW_VITE_DEV_SERVER_URL)) {
+    path.join('file://', __dirname, `../renderer/${NOTIFY_WINDOW_VITE_NAME}/notify-index.html`),
+    // eslint-disable-next-line no-undef
+    path.join('file://', __dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`)
+  ]
+
+  const allowListDev = [
+    // eslint-disable-next-line no-undef
+    MAIN_WINDOW_VITE_DEV_SERVER_URL,
+    // eslint-disable-next-line no-undef
+    NOTIFY_WINDOW_VITE_DEV_SERVER_URL
+  ]
+
+  // eng-disable LIMIT_NAVIGATION_JS_CHECK
+  webContents.on('will-navigate', (event, url) => {
+    if (!isOpenShellSecure(url)) {
       event.preventDefault()
-      shell.openExternal(url)
+      return
+    }
+
+    // eslint-disable-next-line no-undef
+    if (!allowedList.includes(url) && !allowListDev.includes(getBaseURL(url))) {
+      event.preventDefault()
+
+      shell.openExternal(url) // eng-disable OPEN_EXTERNAL_JS_CHECK
     }
   })
 
-  webContents.setWindowOpenHandler(({ url }) => {
+  // eng-disable LIMIT_NAVIGATION_JS_CHECK
+  webContents.setWindowOpenHandler(({ url }) => { /* eng-disable LIMIT_NAVIGATION_JS_CHECK */
+    if (!isOpenShellSecure(url)) return { action: 'deny' }
+
     // eslint-disable-next-line no-undef
-    if (url.startsWith(MAIN_WINDOW_VITE_DEV_SERVER_URL)) {
+    if (allowedList.includes(url) && allowListDev.includes(getBaseURL(url))) {
       return { action: 'allow' }
     }
 
-    shell.openExternal(url)
+    shell.openExternal(url) // eng-disable OPEN_EXTERNAL_JS_CHECK
     return { action: 'deny' }
+  })
+
+  // Prevent auxclick
+  // eng-disable LIMIT_NAVIGATION_JS_CHECK
+  webContents.on('new-window', e => { /* eng-disable LIMIT_NAVIGATION_JS_CHECK */
+    e.preventDefault()
   })
 })
 
@@ -120,5 +182,11 @@ app.on('ready', async () => {
   mainWindow = createMainWindow()
 })
 
-app.on('window-all-closed', () => process.platform !== 'darwin' && app.quit())
+app.on('window-all-closed', async () => {
+  if (process.platform !== 'darwin') {
+    await onlineChecker.stopPolling()
+    await notify.destroy(true)
+    app.quit()
+  }
+})
 app.on('activate', () => BrowserWindow.getAllWindows().length === 0 && (mainWindow = createMainWindow()))

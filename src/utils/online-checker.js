@@ -3,8 +3,6 @@ import WS from 'ws'
 import debug from 'debug'
 import { onlineChecker } from '../enums/index.js'
 const d = debug('online-checker')
-d.enabled = true
-
 export class OnlineChecker {
   constructor (options) {
     this._socket = new ReconnectingWebSocket(options.url, [], {
@@ -44,8 +42,18 @@ export class OnlineChecker {
     return (Date.now() - this._lastOnLine) < 2000
   }
 
-  stopPolling () {
-    this._socket.close()
+  async stopPolling () {
+    const waitForClose = new Promise((resolve) => {
+      this._socket.addEventListener('close', () => {
+        resolve()
+
+        setTimeout(resolve, 3000)
+      })
+    })
+
     clearTimeout(this._timeout)
+    this._socket.close()
+
+    await waitForClose
   }
 }

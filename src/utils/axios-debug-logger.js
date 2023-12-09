@@ -32,7 +32,7 @@
 import axios from 'axios'
 
 import debug0 from 'debug'
-const axiosDebug = debug0('axios')
+const axiosDebug = debug0('http')
 
 const URL_KEY = '__AXIOS-DEBUG-LOG_URL__'
 
@@ -98,5 +98,5 @@ export function config (userOptions) {
 }
 
 export function enable () {
-  debug0.enable('axios')
+  debug0.enable('http')
 }

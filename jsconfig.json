@@ -1,9 +1,13 @@
 {
   "compilerOptions": {
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "types": ["vidstack/vue"],
     "paths": {
       "@/*": [
-        "./src/renderer/*"
+        "./src/renderer/main-window/*"
+      ],
+      "@notify/*": [
+        "./src/renderer/notify-window/*"
       ],
       "@assets/*": [
         "./assets/*"
