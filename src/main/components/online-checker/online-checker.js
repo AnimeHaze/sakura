@@ -1,11 +1,12 @@
 import ReconnectingWebSocket from 'reconnecting-websocket'
 import WS from 'ws'
 import debug from 'debug'
-import { onlineChecker } from '../enums/index.js'
+import { onlineChecker } from '@enums/index.js'
 const d = debug('online-checker')
+
 export class OnlineChecker {
-  constructor (options) {
-    this._socket = new ReconnectingWebSocket(options.url, [], {
+  constructor ({ onlineWs }) {
+    this._socket = new ReconnectingWebSocket(onlineWs, [], {
       WebSocket: WS,
       connectionTimeout: 1000,
       maxReconnectionDelay: 4000,
@@ -20,13 +21,15 @@ export class OnlineChecker {
       d(...arguments)
     }
 
+    d.enabled = true
+
     this._socket.reconnect()
 
     this._timeout = null
     this._lastOnLine = Date.now()
   }
 
-  startPolling () {
+  async init () {
     this._socket.addEventListener('open', () => {
       this._timeout = setInterval(() => this._socket.send(onlineChecker.PING), 1000)
     })
@@ -42,7 +45,7 @@ export class OnlineChecker {
     return (Date.now() - this._lastOnLine) < 2000
   }
 
-  async stopPolling () {
+  async dispose () {
     const waitForClose = new Promise((resolve) => {
       this._socket.addEventListener('close', () => {
         resolve()

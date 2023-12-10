@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import createExternal from 'vite-plugin-external'
 import { fileURLToPath, URL } from "url"
+import path from "node:path";
 
 // https://vitejs.dev/config
 export default defineConfig({
@@ -19,5 +20,10 @@ export default defineConfig({
     alias: [
       { find: '@enums', replacement: fileURLToPath(new URL('./src/enums', import.meta.url)) }
     ]
+  },
+  build: {
+    rollupOptions: {
+      external: ['pouchdb']
+    }
   }
 })

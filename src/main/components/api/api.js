@@ -1,7 +1,10 @@
-import { enable } from '../utils/axios-debug-logger'
-import { nFormatter } from '../utils'
+import { enable } from '../../../utils/axios-debug-logger'
+import { nFormatter } from '../../../utils'
 import axios from 'axios'
+import debug from 'debug'
 enable()
+const d = debug('api-service')
+d.enabled = true
 
 /* Mock */
 const userLists = []
@@ -29,7 +32,8 @@ export class API {
    * @param {string} userAgent
    * @param {URL} proxy
    */
-  constructor ({ userAgent, proxy }) {
+  constructor ({ userAgent }) {
+    const proxy = undefined
     this.staticURL = 'https://anilibria.tv'
 
     let proxyServer
@@ -50,6 +54,14 @@ export class API {
       proxy: proxyServer,
       baseURL: 'https://api.anilibria.tv/v3'
     })
+  }
+
+  async init () {
+    d('init')
+  }
+
+  async dispose () {
+    d('dispose')
   }
 
   /**

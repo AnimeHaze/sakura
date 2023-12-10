@@ -1,9 +1,9 @@
-import { createNotifyWindow } from '../main/utils/windows'
 import { ipc } from '@enums/index'
 import { EventEmitter } from 'node:events'
 import { ipcMain } from 'electron'
 import { v4 as uuidv4 } from 'uuid'
 import debug from 'debug'
+import { createNotifyWindow } from '../../windows'
 const d = debug('notify')
 d.enabled = true
 
@@ -51,11 +51,11 @@ export class Notify extends EventEmitter {
   /**
    *
    * @param {{
-     closable: boolean,
-     description?: string,
-     duration?: number,
-     keepAliveOnHover?: boolean,
-     meta?: string
+   closable: boolean,
+   description?: string,
+   duration?: number,
+   keepAliveOnHover?: boolean,
+   meta?: string
    }} notify
    * @return {Promise<{ id: string }>}
    */
@@ -72,6 +72,15 @@ export class Notify extends EventEmitter {
     this._window.webContents.send(ipc.RECEIVE_NOTIFY, { id: notifyId, ...notify })
 
     return { id: notifyId }
+  }
+
+  async init () {
+    d('init')
+  }
+
+  async dispose () {
+    d('dispose')
+    return await this.destroy(true)
   }
 
   async destroy (removeHandlers = false) {

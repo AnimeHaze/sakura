@@ -1,6 +1,6 @@
 import { BrowserWindow, ipcMain, screen } from 'electron'
 import path from 'node:path'
-import { pointInRect } from '../../../utils'
+import { pointInRect } from '../../utils'
 import { ipc } from '@enums/index'
 
 export function createNotifyWindow () {
