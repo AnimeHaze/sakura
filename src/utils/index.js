@@ -1,18 +1,19 @@
 /**
  * Formats number
  * @param {number} num Number to format
+ * @param {number} baseNumber
  * @param {number} [digits] Digits
  * @return {string|string}
  */
-export function nFormatter (num, digits) {
+export function nFormatter (num, baseNumber = 1000, digits) {
   const lookup = [
     { value: 1, symbol: '' },
-    { value: 1e3, symbol: 'K' },
-    { value: 1e6, symbol: 'M' },
-    { value: 1e9, symbol: 'G' },
-    { value: 1e12, symbol: 'T' },
-    { value: 1e15, symbol: 'P' },
-    { value: 1e18, symbol: 'E' }
+    { value: baseNumber, symbol: 'K' },
+    { value: baseNumber * 1000, symbol: 'M' },
+    { value: baseNumber * 1000000, symbol: 'G' },
+    { value: baseNumber * 1000000000, symbol: 'T' },
+    { value: baseNumber * 1000000000000, symbol: 'P' },
+    { value: baseNumber * 1000000000000000, symbol: 'E' }
   ]
   const rx = /\.0+$|(\.[0-9]*[1-9])0+$/
 
