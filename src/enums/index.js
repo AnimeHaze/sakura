@@ -19,7 +19,9 @@ export const ipc = {
   RECEIVE_NOTIFY: 'receive-ready',
   NOTIFY_CLOSED: 'notify-closed',
   NOTIFY_AFTER_LEAVE: 'notify-after-leave',
-  NOTIFY_INTERNAL: 'notify-internal'
+  NOTIFY_INTERNAL: 'notify-internal',
+  CACHE_SIZE: 'cache-size',
+  CLEAR_CACHE: 'CLEAR_CACHE'
 }
 
 export const appSidebar = {

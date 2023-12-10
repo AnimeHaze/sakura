@@ -22,7 +22,9 @@ const api = {
   inspectElement: (x, y) => invokeIpcRenderer(ipc.INSPECT_ELEMENT, { x, y }),
   memoryUsage: () => invokeIpcRenderer(ipc.MEMORY_USAGE),
   callApi: (method, options) => invokeIpcRenderer(ipc.API, method, options),
-  checkOnline: () => invokeIpcRenderer(ipc.CHECK_ONLINE)
+  checkOnline: () => invokeIpcRenderer(ipc.CHECK_ONLINE),
+  getCacheSize: () => invokeIpcRenderer(ipc.CACHE_SIZE),
+  clearCache: () => invokeIpcRenderer(ipc.CLEAR_CACHE)
 }
 
 contextBridge.exposeInMainWorld(

@@ -1,6 +1,6 @@
 import { app, BrowserWindow, ipcMain, shell } from 'electron'
 import path from 'node:path'
-import { getBaseURL, isOpenShellSecure } from '../../../utils'
+import { getBaseURL, isOpenShellSecure, nFormatter } from '../../../utils'
 import { createMainWindow } from '../../windows'
 import { ipc } from '@enums/index'
 import debug from 'debug'
@@ -69,6 +69,8 @@ export class App {
     ipcMain.handle(ipc.API, (event, method, options) => this.handleAPI(event, method, options))
     ipcMain.handle(ipc.APP_COLLAPSE, () => this.handleAppCollapse())
     ipcMain.handle(ipc.PREVENT_SLEEP, () => this._powerSaveBlocker.preventDisplaySleep())
+    ipcMain.handle(ipc.CACHE_SIZE, () => this.handleGetCacheSize())
+    ipcMain.handle(ipc.CLEAR_CACHE, () => this.handleClearCache())
   }
 
   async init () {
@@ -188,6 +190,41 @@ export class App {
         webContents.devToolsWebContents.focus()
       }
     }
+  }
+
+  async handleGetCacheSize () {
+    /** @type {BrowserWindow} */
+    const mainWindow = this._windowsManager.getWindow('main')
+
+    const data = { size: 0, formatted: 0 }
+
+    if (mainWindow) {
+      const bytes = await mainWindow.webContents.session.getCacheSize()
+      data.size = bytes
+      data.formatted = nFormatter(bytes, 1024)
+    }
+
+    return data
+  }
+
+  async handleClearCache () {
+    /** @type {BrowserWindow} */
+    const mainWindow = this._windowsManager.getWindow('main')
+
+    if (mainWindow) {
+      await Promise.all([
+        mainWindow.webContents.session.clearCache(),
+        mainWindow.webContents.session.clearStorageData(),
+        mainWindow.webContents.session.clearCodeCaches({})
+      ])
+      return true
+    }
+
+    return false
+  }
+
+  async handlerMemoryUsage () {
+    return process.memoryUsage()
   }
 
   handlerOnlineCheck () {

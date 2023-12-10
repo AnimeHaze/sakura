@@ -113,12 +113,23 @@
       >
         <n-space>
           <n-button
+            @click="clearCache"
           >
             Очистить кеш приложения
+
+            <n-skeleton
+              v-if="cacheLoading"
+              class="ml-2"
+              :height="14"
+              :width="14"
+              :sharp="false"
+              size="medium"
+            />
+
+            <span v-else>&nbsp;({{ cacheSize }}B)</span>
           </n-button>
 
-          <n-button
-          >
+          <n-button>
             Установить настройки по умолчанию
           </n-button>
         </n-space>
@@ -130,10 +141,32 @@
 <script setup>
 import { useConfigStore } from '@/store'
 import { appTheme, backButton } from '@enums/index'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 const config = useConfigStore()
-
+const cacheSize = ref(0)
 const useVPN = ref(true)
+const cacheLoading = ref(true)
+
+onMounted(async () => {
+  cacheLoading.value = true
+  const { formatted } = await window.api.getCacheSize()
+
+  cacheSize.value = formatted
+  cacheLoading.value = false
+})
+
+async function clearCache () {
+  cacheLoading.value = true
+
+  await window.api.clearCache()
+
+  const { formatted } = await window.api.getCacheSize()
+
+  cacheSize.value = formatted
+
+  cacheLoading.value = false
+}
+
 const vpnRegion = [
   {
     label: 'Europe',
