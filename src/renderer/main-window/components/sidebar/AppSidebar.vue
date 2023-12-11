@@ -1,5 +1,6 @@
 <template>
   <n-layout-sider
+    :native-scrollbar="false"
     class="z-20"
     bordered
     collapse-mode="width"
@@ -10,21 +11,27 @@
     @collapse="config.collapseSidebar"
     @expand="config.expandSidebar"
   >
-    <n-menu
-      :value="selectedKey"
-      :collapsed="config.sidebarCollapsed"
-      :collapsed-width="64"
-      :collapsed-icon-size="28"
-      :options="menuOptions"
-      :render-icon="renderMenuIcon"
-      :expand-icon="expandIcon"
-      @update:value="handleClick"
-    />
+    <template #default>
+      <div ref="menuRef">
+        <n-menu
+          class="mb-1.5"
+          :class="{ 'pr-1': menuPadding }"
+          :value="selectedKey"
+          :collapsed="config.sidebarCollapsed"
+          :collapsed-width="64"
+          :collapsed-icon-size="28"
+          :options="menuOptions"
+          :render-icon="renderMenuIcon"
+          :expand-icon="expandIcon"
+          @update:value="handleClick"
+        />
+      </div>
+    </template>
   </n-layout-sider>
 </template>
 
 <script setup>
-import { computed, h, ref, watch } from 'vue'
+import { computed, h, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { NAvatar, NIcon, useDialog, useNotification } from 'naive-ui'
 import {
   AppsOutline, BookmarkOutline, BugOutline, CaretDownOutline,
@@ -59,6 +66,25 @@ const mappingKeys = {
 
 const selectedKey = computed(() => mappingKeys[route.name] ?? null)
 const showCatalog = computed(() => !(showBack.value && config.backButtonType === backButton.REPLACE_CATALOG))
+
+// Enable / disable left margin when scroll active to prevent menu overlap
+/** @type {import('vue').Ref<HTMLElement>} */
+const menuRef = ref(null)
+const menuPadding = ref(false)
+onMounted(() => {
+  window.addEventListener('resize', onWindowResize)
+  menuPadding.value = menuRef.value.parentElement.scrollHeight > document.body.clientHeight
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', onWindowResize)
+})
+
+function onWindowResize (event) {
+  if (menuRef.value !== null) {
+    menuPadding.value = menuRef.value.parentElement.scrollHeight > document.body.clientHeight
+  }
+}
 
 const generateOption = (label, key, href, show) => ({ label, key, href, show })
 
