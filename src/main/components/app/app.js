@@ -51,6 +51,7 @@ export class App {
       }
     }
 
+    app.commandLine.appendSwitch('lang', 'en-US')
     app.on(
       'web-contents-created',
       (event, webContents) =>

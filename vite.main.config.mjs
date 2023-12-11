@@ -20,10 +20,5 @@ export default defineConfig({
     alias: [
       { find: '@enums', replacement: fileURLToPath(new URL('./src/enums', import.meta.url)) }
     ]
-  },
-  build: {
-    rollupOptions: {
-      external: ['pouchdb']
-    }
   }
 })
