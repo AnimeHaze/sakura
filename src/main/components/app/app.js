@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, shell } from 'electron'
+import { app, BrowserWindow, ipcMain, shell, screen } from 'electron'
 import path from 'node:path'
 import { getBaseURL, isOpenShellSecure, nFormatter } from '../../../utils'
 import { createMainWindow } from '../../windows'
@@ -24,7 +24,6 @@ export class App {
     powerSaveBlocker,
     instanceLockEnabled
   }) {
-    console.log('app init construct')
     this._powerSaveBlocker = powerSaveBlocker
     this._windowsManager = windowsManager
     this._onlineCheckerService = onlineCheckerService
@@ -61,10 +60,11 @@ export class App {
     app.on('window-all-closed', () => this.windowAllClosed())
     app.on('activate', () => this.activate())
 
+    ipcMain.on(ipc.MOVE_MAIN_WINDOW, (event, ...args) => this.handleMainWindowMove(event, ...args))
     ipcMain.handle(ipc.TOGGLE_DEVTOOLS, () => this.handleToggleDevelopmentTools())
     ipcMain.handle(ipc.INSPECT_ELEMENT, (_, data) => this.handleInspectElement(_, data))
-    ipcMain.handle(ipc.MEMORY_USAGE, () => this.handlerMemoryUsage())
-    ipcMain.handle(ipc.CHECK_ONLINE, () => this.handlerOnlineCheck())
+    ipcMain.handle(ipc.MEMORY_USAGE, () => this.handleMemoryUsage())
+    ipcMain.handle(ipc.CHECK_ONLINE, () => this.handleOnlineCheck())
     ipcMain.handle(ipc.APP_MAXIMIZE_MINIMIZE, () => this.handleAppMaximizeMinimize())
     ipcMain.handle(ipc.APP_CLOSE, () => this.handleAppClose())
     ipcMain.handle(ipc.API, (event, method, options) => this.handleAPI(event, method, options))
@@ -108,6 +108,10 @@ export class App {
     }
   }
 
+  /**
+   * @param {IpcMainEvent} event
+   * @param {WebContents} webContents
+   */
   webContentsCreated (event, webContents) {
     // const port = await proxyPromise
     //
@@ -224,11 +228,11 @@ export class App {
     return false
   }
 
-  async handlerMemoryUsage () {
+  async handleMemoryUsage () {
     return process.memoryUsage()
   }
 
-  handlerOnlineCheck () {
+  handleOnlineCheck () {
     return this._onlineCheckerService.onLine
   }
 
@@ -248,6 +252,12 @@ export class App {
     app.quit()
   }
 
+  /**
+   * @param {IpcMainEvent} event
+   * @param {string} method
+   * @param {object} options
+   * @return {Promise}
+   */
   handleAPI (event, method, options) {
     if (method === 'testNotify') return this._notifyService.sendNotify(options)
 
@@ -262,5 +272,21 @@ export class App {
 
     // eslint-disable-next-line security/detect-object-injection
     return this._apiService[method](options)
+  }
+
+  /**
+   * @param {IpcMainEvent} _
+   * @param {number} startX
+   * @param {number} startY
+   */
+  handleMainWindowMove (_, { startX, startY }) {
+  /** @type {BrowserWindow} */
+    const mainWindow = this._windowsManager.getWindow('main')
+
+    if (mainWindow) {
+      const { x, y } = screen.getCursorScreenPoint()
+      console.log(x - startX, y - startY)
+      mainWindow.setPosition(x - startX, y - startY)
+    }
   }
 }

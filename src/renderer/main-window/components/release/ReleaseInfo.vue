@@ -48,7 +48,7 @@ const activeEpisode = computed(
       vertical
     >
       <n-layout
-        class="h-screen"
+        class="full-page-height"
         position="absolute"
         has-sider
       >

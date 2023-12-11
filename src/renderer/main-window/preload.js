@@ -11,6 +11,7 @@ window.addEventListener('error', error => {
 })
 
 const invokeIpcRenderer = (command, ...arguments_) => ipcRenderer.invoke(command, ...arguments_)
+const sendIpcRenderer = (command, ...arguments_) => ipcRenderer.send(command, ...arguments_)
 
 const api = {
   toggleDevtools: () => invokeIpcRenderer(ipc.TOGGLE_DEVTOOLS),
@@ -24,7 +25,8 @@ const api = {
   callApi: (method, options) => invokeIpcRenderer(ipc.API, method, options),
   checkOnline: () => invokeIpcRenderer(ipc.CHECK_ONLINE),
   getCacheSize: () => invokeIpcRenderer(ipc.CACHE_SIZE),
-  clearCache: () => invokeIpcRenderer(ipc.CLEAR_CACHE)
+  clearCache: () => invokeIpcRenderer(ipc.CLEAR_CACHE),
+  moveWindow: (startX, startY) => sendIpcRenderer(ipc.MOVE_MAIN_WINDOW, { startX, startY })
 }
 
 contextBridge.exposeInMainWorld(

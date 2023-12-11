@@ -6,12 +6,18 @@
     :locale="ruRU"
     :date-locale="dateRuRU"
   >
+    <title-bar-context-menu>
+      <template #default="{ titleBarDrag }">
+        <title-bar :title-bar-drag="titleBarDrag" />
+      </template>
+    </title-bar-context-menu>
+
     <n-dialog-provider>
       <n-notification-provider>
         <n-message-provider>
           <context-menu v-model:show-memory-usage="showMemoryUsage">
-            <router-view v-show="config.onLine"/>
-            <offline-layout v-show="!config.onLine"/>
+            <router-view v-show="config.onLine" />
+            <offline-layout v-show="!config.onLine" />
           </context-menu>
           <!--        <search-modal />-->
         </n-message-provider>
@@ -29,6 +35,8 @@ import { appTheme } from '@enums/index'
 import ContextMenu from './app/ContextMenu.vue'
 import MemoryWidget from './app/MemoryWidget.vue'
 import OfflineLayout from '@/layouts/OfflineLayout.vue'
+import TitleBarContextMenu from '@/components/app/TitleBarContextMenu.vue'
+import TitleBar from '@/components/app/TitleBar.vue'
 
 let onLineInterval = null
 const showMemoryUsage = ref(false)

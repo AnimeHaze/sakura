@@ -1,6 +1,6 @@
 <template>
   <n-layout
-    class="h-screen select-none"
+    class="full-page-height select-none"
     has-sider
   >
     <Sidebar />

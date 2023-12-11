@@ -22,7 +22,8 @@ export function createMainWindow () {
     minHeight: 516,
     width: mainWindowState.width,
     height: mainWindowState.height,
-    // frame: false,
+    frame: false,
+    transparent: true,
     show: false,
     webPreferences: {
       contextIsolation: true,

@@ -11,7 +11,7 @@ import ReleaseEpisodesSkeleton from './ReleaseEpisodesSkeleton.vue'
       vertical
     >
       <n-layout
-        class="h-screen"
+        class="full-page-height"
         has-sider
       >
         <n-layout-sider
