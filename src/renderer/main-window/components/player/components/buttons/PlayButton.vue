@@ -6,6 +6,11 @@ const { tooltipPlacement } = defineProps({
   tooltipPlacement: {
     type: String,
     default: 'bottom'
+  },
+  disabled: {
+    type: Boolean,
+    required: false,
+    default: false
   }
 })
 </script>
@@ -14,6 +19,7 @@ const { tooltipPlacement } = defineProps({
   <Tooltip :placement="tooltipPlacement">
     <template #trigger>
       <media-play-button
+        :class="{ disabled }"
         class="ring-media-focus relative inline-flex h-20 w-20 cursor-pointer items-center justify-center rounded-[60px] outline-none ring-inset hover:bg-white/20 data-[focus]:ring-4"
       >
         <media-icon
@@ -33,3 +39,10 @@ const { tooltipPlacement } = defineProps({
     </template>
   </Tooltip>
 </template>
+
+<style scoped>
+.disabled {
+  color: rgb(119 115 115 / 70%);
+  pointer-events: none
+}
+</style>
