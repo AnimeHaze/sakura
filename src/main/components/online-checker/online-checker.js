@@ -16,6 +16,8 @@ export class OnlineChecker {
       startClosed: true
     })
 
+    this._socket.addEventListener('error', err => d(err))
+
     // Patch debug logger
     this._socket._debug = function () {
       d(...arguments)
