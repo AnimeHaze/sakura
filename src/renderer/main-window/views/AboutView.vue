@@ -1,29 +1,52 @@
 <template>
-  <div class="absolute text-center transform -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2">
+  <div class="p-3">
     <div
-      :class="{ animate: animate }"
-      class="sakura-logo sakura-color"
-      @click="animate = true"
+      class="absolute text-center transform -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2"
     >
-      桜
+      <n-space
+        class="text-center"
+        justify="center"
+      >
+        <n-space
+          vertical
+        >
+          <div
+            :class="{ animate: animate }"
+            @click="animate = true"
+          >
+            <n-image
+              :width="170"
+              :src="Logo"
+              alt=""
+            />
+          </div>
+          <div>
+            <div>
+              <h1 class="sakura-color font-bold text-2xl">
+                桜 SAKURA
+              </h1>
+              <n-divider />
+              <p>
+                <b>Версия:</b> {{ meta.version }} (64-разрядный)
+              </p>
+              <p>
+                <b>Разработчик:</b> {{ meta.author.name }}
+              </p>
+              <p>
+                <b>Спасибов за вклад:</b> Senkai
+              </p>
+            </div>
+          </div>
+        </n-space>
+      </n-space>
     </div>
-    <h1 class="font-bold text-2xl">
-      SAKURA
-    </h1>
-    <n-divider />
-    <p>
-      <b>Версия:</b> {{ meta.version }} (64-разрядный)
-    </p>
-    <p>
-      <b>Разработчик:</b> {{ meta.author.name }}
-    </p>
   </div>
 </template>
 
 <script setup>
 import meta from '../../../../package.json'
 import { ref, watch } from 'vue'
-
+import Logo from '../../../../assets/logo/logo.png'
 const animate = ref(false)
 
 watch(() => animate.value, (value) => {
@@ -38,24 +61,19 @@ watch(() => animate.value, (value) => {
   color: #dfb6c4;
 }
 
-.sakura-logo {
-  transform: scale(5);
-  margin-bottom: 30px;
-}
-
 .animate {
   animation: bounce 2s ease-out;
 }
 
 @keyframes bounce {
   0% {
-    transform: rotate(-10deg) scale(5);
+    transform: rotate(-10deg);
   }
   50% {
-    transform: rotate(10deg) scale(5);
+    transform: rotate(10deg);
   }
   100% {
-    transform: rotate(-10deg) scale(5);
+    transform: rotate(-10deg);
   }
 }
 </style>
