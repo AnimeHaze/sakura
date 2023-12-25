@@ -9,6 +9,7 @@ module.exports = {
     'no-secrets'
   ],
   rules: {
+    'security/detect-object-injection': 0,
     'unicorn/prefer-top-level-await': 1,
     'unicorn/prefer-ternary': 1,
     'unicorn/prefer-spread': 1,

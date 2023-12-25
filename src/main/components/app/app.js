@@ -265,12 +265,11 @@ export class App {
       'getLastReleases', 'getNews', 'searchReleases', 'getRelease', 'getRandomRelease',
       'getUserLists', 'createUserList', 'getSearchFilters'
     ])
-    // eslint-disable-next-line security/detect-object-injection
+
     if (!allowedMethods.has(method) || this._apiService[method] === undefined) {
       throw TypeError('Unknown API method')
     }
 
-    // eslint-disable-next-line security/detect-object-injection
     return this._apiService[method](options)
   }
 
@@ -285,7 +284,6 @@ export class App {
 
     if (mainWindow) {
       const { x, y } = screen.getCursorScreenPoint()
-      console.log(x - startX, y - startY)
       mainWindow.setPosition(x - startX, y - startY)
     }
   }
