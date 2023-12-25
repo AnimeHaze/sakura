@@ -5,6 +5,7 @@ export const appTheme = {
 }
 
 export const ipc = {
+  MOVE_MAIN_WINDOW: 'move-main-window',
   TOGGLE_DEVTOOLS: 'toggle:devtools',
   APP_CLOSE: 'app:close',
   APP_MAXIMIZE_MINIMIZE: 'app:maximize-minimize',
