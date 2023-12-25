@@ -1,6 +1,17 @@
+database
+.env.*
+
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
 # IDEA
 .idea
-.yarn
+
 # Logs
 logs
 *.log
