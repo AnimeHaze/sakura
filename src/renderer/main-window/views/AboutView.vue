@@ -69,10 +69,10 @@ watch(() => animate.value, (value) => {
   0% {
     transform: rotate(-10deg);
   }
-  50% {
+  25% {
     transform: rotate(10deg);
   }
-  100% {
+  50% {
     transform: rotate(-10deg);
   }
 }
