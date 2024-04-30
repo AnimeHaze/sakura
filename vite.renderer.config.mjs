@@ -2,22 +2,26 @@ import { fileURLToPath, URL } from 'url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'node:path'
+import VueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vitejs.dev/config
 export default defineConfig({
   root: path.join(__dirname, 'src', 'renderer', 'main-window'),
-  plugins: [vue({
-    template: {
-      compilerOptions: {
-        // treat all components starting with `my-lit` as custom elements
-        isCustomElement: tag => {
-          if (tag.startsWith('media-')) return true
+  plugins: [
+    vue({
+      template: {
+        compilerOptions: {
+          // treat all components starting with `my-lit` as custom elements
+          isCustomElement: tag => {
+            if (tag.startsWith('media-')) return true
 
-          return ['track'].includes(tag)
+            return ['track'].includes(tag)
+          }
         }
       }
-    }
-  })],
+    }),
+    //VueDevTools()
+  ],
   resolve: {
     alias: [
       { find: 'vue' , replacement: 'vue/dist/vue.esm-bundler.js' },
