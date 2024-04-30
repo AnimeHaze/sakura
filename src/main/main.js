@@ -7,6 +7,7 @@ import { WindowsManager } from './components/windows-manager'
 import { App } from './components/app'
 import { Notify } from './components/notify'
 import { PowerSaveBlocker } from './components/power-save-blocker'
+import { Torrent } from './components/webtorrent'
 
 // Check startup and quit if it's a Squirrel startup event
 if (require('electron-squirrel-startup')) {
@@ -59,6 +60,11 @@ diContainer.register({
     asyncInitPriority: 2,
     asyncDispose: 'dispose',
     asyncInit: 'init'
+  }),
+  torrent: asClass(Torrent, {
+    lifetime: Lifetime.SINGLETON,
+    asyncInit: 'init',
+    asyncDispose: 'dispose'
   })
 })
 
