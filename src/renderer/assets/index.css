@@ -42,3 +42,22 @@ img {
 .full-page-height {
   height: calc(100vh - 32px);
 }
+
+/*
+ TODO:
+  Fixes ugly youtube recommendations. Check:
+  https://discord.com/channels/742612686679965696/1188930717095297034
+ */
+.vds-blocker {
+  height: 100% !important;
+}
+
+/*
+ TODO:
+  Fixes youtube poser overscale. Check:
+  https://discord.com/channels/742612686679965696/1188930717095297034
+ */
+iframe.vds-youtube[data-no-controls] {
+  height: 100% !important;
+}
+
