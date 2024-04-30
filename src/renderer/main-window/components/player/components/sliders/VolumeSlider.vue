@@ -16,6 +16,7 @@ import SliderThumb from './SliderThumb.vue'
       />
     </div>
     <SliderThumb />
+
     <SliderPreview no-clamp>
       <media-slider-value class="rounded-sm bg-black px-2 py-px text-[13px] font-medium" />
     </SliderPreview>

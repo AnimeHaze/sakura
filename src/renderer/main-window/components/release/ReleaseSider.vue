@@ -25,7 +25,7 @@
       secondary
       type="primary"
       class="w-full mb-3"
-      @click="$router.push({ name: 'Player', params: { episode: activeEpisode.id } })"
+      @click="$router.push({ name: 'Player', params: { video: activeEpisode.id } })"
     >
       Смотреть с {{ activeEpisode.number }} серии
     </n-button>

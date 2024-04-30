@@ -10,6 +10,10 @@ const { tooltipPlacement, poster } = defineProps({
   poster: {
     type: String,
     required: true
+  },
+  icon: {
+    type: Object,
+    required: false
   }
 })
 </script>
@@ -17,15 +21,28 @@ const { tooltipPlacement, poster } = defineProps({
 <template>
   <Tooltip :placement="tooltipPlacement">
     <template #trigger>
-      <media-toggle-button
+      <div
         class="ring-media-focus relative inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-md outline-none ring-inset hover:bg-white/20 data-[focus]:ring-4"
       >
         <n-image
+          v-if="!icon"
           lazy
           :src="poster"
+          :show-toolbar="false"
           :img-props="{ class: 'h-8 w-8', style: 'border-radius: 0.25rem' }"
-        />
-      </media-toggle-button>
+        >
+          <template #placeholder>
+            <n-skeleton
+              class="h-8 w-8"
+              style="border-radius: 0.25rem"
+            />
+          </template>
+        </n-image>
+
+        <n-icon :size="24" v-else>
+          <component :is="icon"></component>
+        </n-icon>
+      </div>
     </template>
 
     <template #content>

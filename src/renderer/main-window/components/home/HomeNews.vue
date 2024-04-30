@@ -10,15 +10,15 @@
       clickable: true,
     }"
     :grab-cursor="true"
-    @reach-end="loading(load)"
+    @reach-end="news.load"
   >
     <swiper-slide
-      v-for="slide of news"
+      v-for="slide of newsList"
       :id="slide.id"
       :key="slide.id"
     >
       <div
-        @click="showPreview(slide.url, slide.title)"
+        @click="showPreview(slide.url, slide.name, slide.id)"
       >
         <n-image
           class="news-poster"
@@ -29,7 +29,7 @@
           lazy
           object-fit="cover"
           :src="slide.preview"
-          :alt="slide.title"
+          :alt="slide.name"
         >
           <template #placeholder>
             <n-skeleton
@@ -65,38 +65,36 @@
     </swiper-slide>
   </swiper>
 
-  <n-modal
-    v-model:show="showModal"
-    preset="card"
-    :style="{ width: '800px' }"
-    :title="ytInfo.title"
-    :bordered="false"
-    size="medium"
-    :segmented="{
-      content: 'soft',
-      footer: 'soft'
-    }"
-  >
-    <YoutubeIframe
-      :video-id="ytInfo.id"
-      width="100%"
-      @ready="event => event.target.playVideo()"
-    />
-  </n-modal>
+<!--  <n-modal-->
+<!--    v-model:show="showModal"-->
+<!--    preset="card"-->
+<!--    :style="{ width: '800px' }"-->
+<!--    :title="ytInfo.title"-->
+<!--    :bordered="false"-->
+<!--    size="medium"-->
+<!--    :segmented="{-->
+<!--      content: 'soft',-->
+<!--      footer: 'soft'-->
+<!--    }"-->
+<!--  >-->
+<!--    <YoutubeIframe-->
+<!--      :video-id="ytInfo.id"-->
+<!--      width="100%"-->
+<!--      @ready="event => event.target.playVideo()"-->
+<!--    />-->
+<!--  </n-modal>-->
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { YoutubeIframe } from '@vue-youtube/component'
+import { onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
 import { Swiper, SwiperSlide } from 'swiper/vue'
+import { useNewsStore } from '@/store'
 import 'swiper/css'
+import { router } from '@/router'
 
-const showModal = ref(false)
-const ytInfo = ref({})
-
-const loadingSwiper = ref(true)
-const page = ref(1)
-const news = ref([])
+const news = useNewsStore()
+const { loadingSwiper, newsList /*, ytInfo, showModal */ } = storeToRefs(news)
 
 const breakpoints = {
   860: { slidesPerView: 2, spaceBetween: 50 },
@@ -107,27 +105,21 @@ const breakpoints = {
   2160: { slidesPerView: 6, spaceBetween: 60 }
 }
 
-function showPreview (url, title) {
-  ytInfo.value.id = url.split('/').pop().split('=').pop()
-  ytInfo.value.title = title
-  showModal.value = true
-}
-
-async function loading (callback) {
-  loadingSwiper.value = true
-  const result = await callback()
-  loadingSwiper.value = false
-  return result
-}
-
-async function load () {
-  const { result } = await window.api.getNews({ page: page.value, limit: 20 })
-  news.value.push(...result)
-  page.value++
+function showPreview (url, title, id) {
+  // ytInfo.value.id = url.split('/').pop().split('=').pop()
+  // ytInfo.value.title = title
+  // showModal.value = true
+  router.push({
+    name: 'Player',
+    params: {
+      id: 'youtube',
+      video: id
+    }
+  })
 }
 
 onMounted(() => {
-  return loading(load)
+  if (!newsList.value.length) news.load()
 })
 </script>
 

@@ -28,8 +28,8 @@ const { tooltipPlacement } = defineProps({
     </template>
 
     <template #content>
-      <span class="media-captions:block hidden">Closed-Captions Off</span>
-      <span class="media-captions:hidden">Closed-Captions On</span>
+      <span class="media-captions:block hidden">Субтитры выкл.</span>
+      <span class="media-captions:hidden">Субтитры вкл.</span>
     </template>
   </Tooltip>
 </template>

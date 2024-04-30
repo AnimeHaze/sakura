@@ -50,3 +50,8 @@ export const backButton = {
 export const onlineChecker = {
   PING: 'p'
 }
+
+export const sortType = {
+  ASC: 0,
+  DESC: 1
+}

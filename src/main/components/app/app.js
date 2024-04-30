@@ -92,7 +92,6 @@ export class App {
   }
 
   ready () {
-    console.log('ready')
     // await apiServer.start()
     this._windowsManager.addWindow(
       'main',

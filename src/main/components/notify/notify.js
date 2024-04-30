@@ -1,9 +1,10 @@
 import { ipc } from '@enums/index'
 import { EventEmitter } from 'node:events'
 import { ipcMain } from 'electron'
-import { v4 as uuidv4 } from 'uuid'
+import { randomUUID as uuidv4 } from 'node:crypto'
 import debug from 'debug'
 import { createNotifyWindow } from '../../windows'
+
 const d = debug('notify')
 d.enabled = true
 

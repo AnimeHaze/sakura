@@ -1,9 +1,9 @@
 <template>
   <div
-    class="mb-2 rounded-md p-2 cursor-pointer"
-    :class="{ 'episode-active': active }"
+    class="mb-2 rounded-md p-2"
+    :class="{ 'cursor-pointer': !loading, 'cursor-wait': loading }"
     :style="{ background: progress }"
-    @click="$emit('open')"
+    @click="!loading && $emit('open')"
     @mouseover="hover = true"
     @mouseleave="hover = false"
   >
@@ -16,26 +16,29 @@
       >
         <n-space
           class="ml-1 mt-1"
+          inline
           justify="start"
         >
-          <n-tooltip
-            placement="right"
-            trigger="hover"
-          >
-            <template #trigger>
-              <n-icon
-                size="20"
-                @click.stop="$emit('change-watch-status')"
-              >
-                <component :is="watchedIcon" />
-              </n-icon>
-            </template>
-            {{ watchedText }}
-          </n-tooltip>
+          <div v-if="showWatchButton">
+            <n-tooltip
+              placement="right"
+              trigger="hover"
+            >
+              <template #trigger>
+                <n-icon
+                  size="20"
+                  @click.stop="$emit('change-watch-status')"
+                >
+                  <component :is="watchedIcon" />
+                </n-icon>
+              </template>
+              {{ watchedText }}
+            </n-tooltip>
+          </div>
 
           <n-space>
-            <div class="font-bold">
-              Серия {{ episodeNumber }}
+            <div v-if="number" class="font-bold">
+              Серия {{ number }}
             </div>
 
             <div>
@@ -57,8 +60,8 @@
           </n-tag>
         </n-space>
 
-        <div class="mt-1 mr-2 text-zinc-400">
-          {{ date }}
+        <div v-if="date" class="mt-1 mr-2 text-zinc-400">
+          {{ new Date(date * 1000).toLocaleString() }}
         </div>
       </n-space>
     </n-space>
@@ -79,21 +82,26 @@ const props = defineProps({
     type: Array,
     required: true
   },
-  episodeId: {
+  id: {
     type: [String, Number],
     required: true
   },
-  episodeNumber: {
+  number: {
     type: [String, Number],
-    required: true
+    required: false
   },
   watched: {
     type: Boolean,
-    required: true
+    required: false,
+    default: false
+  },
+  showWatchButton: {
+    type: Boolean,
+    default: true
   },
   date: {
     type: String,
-    required: true
+    required: false
   },
   name: {
     type: String,
@@ -108,6 +116,10 @@ const props = defineProps({
     type: Number,
     required: false,
     default: () => getRandomIntInclusive(0, 100)
+  },
+  loading: {
+    type: Boolean,
+    default: false
   }
 })
 

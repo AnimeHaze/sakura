@@ -7,6 +7,7 @@ import Release from '@/views/ReleaseView.vue'
 import Settings from '@/views/SettingsView.vue'
 import Search from '@/views/SearchView.vue'
 import Player from '@/views/PlayerView.vue'
+import Favorite from '@/views/FavoriteView.vue'
 import NotFound from '@/views/NotFoundView.vue'
 
 import { useUserStore, useConfigStore } from '@/store'
@@ -20,7 +21,7 @@ const routes = [
     path: '/player/',
     component: PlayerLayout,
     children: [
-      { path: '/:id/:episode', component: Player, name: 'Player' }
+      { path: '/:id/:video', component: Player, name: 'Player' }
     ]
   },
   {
@@ -34,6 +35,7 @@ const routes = [
       { path: '/release/:id', component: Release, name: 'Release' },
       { path: '/search', component: Search, name: 'Search' },
       { path: '/settings', component: Settings, name: 'Settings' },
+      { path: '/favorite', component: Favorite, name: 'Favorite' },
       { path: '/', component: Home, name: 'Home' },
       { path: '/:pathMatch(.*)', component: NotFound, name: 'NotFound' }
     ]

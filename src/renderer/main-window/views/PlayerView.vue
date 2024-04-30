@@ -1,75 +1,48 @@
 <script setup>
 import VideoPlayer from '@/components/player/VideoPlayer.vue'
-import { ref, computed, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import ReleaseEpisodes from '@/components/release/ReleaseEpisodes.vue'
+import PlayList from '@/components/playlist/PlayList.vue'
 import { Animations } from '@assets/animations'
 import { getRandomIntInclusive } from '../../../utils'
-import { PauseSharp, PlaySharp } from '@vicons/ionicons5'
+import { AppsOutline, PauseSharp, PlaySharp } from '@vicons/ionicons5'
+import { useNewsStore, usePlayerStore } from '@/store'
+import { storeToRefs } from 'pinia'
+import { sortType } from '@enums/index'
 
 const router = useRouter()
 const route = useRoute()
-
-const showEpisodesDrawer = ref(false)
-const release = ref(null)
-const backEpisode = ref({})
-const forwardEpisode = ref(null)
-const activeEpisode = ref(null)
-const loading = ref(true)
-const canPlay = ref(false)
-const waiting = ref(false)
-
-const poster = computed(() => release.value?.posters?.medium || release.value?.posters?.original)
-
-function computeEpisodes () {
-  const { episodes } = release.value
-
-  const activeEpisodeIndex = episodes.findIndex(x => route.params.episode === x.id)
-  activeEpisode.value = episodes[activeEpisodeIndex]
-
-  backEpisode.value = episodes[activeEpisodeIndex - 1] || null
-  forwardEpisode.value = episodes[activeEpisodeIndex + 1] || null
-}
+const player = usePlayerStore()
+const news = useNewsStore()
+const { headerText, isYoutube, isPlay, showPlayListDrawer, activeVideo, backVideo, forwardVideo, loading, playerReady, showLoadMoreButton } = storeToRefs(player)
+const release = ref({})
 
 watch(() => route.params.id, async (value) => {
-  loading.value = true
-  const { result } = await window.api.getRelease({ id: value })
-  release.value = result
-  computeEpisodes()
+  isYoutube.value = value === 'youtube'
+  showLoadMoreButton.value = isYoutube && true
+
+  if (isYoutube.value) {
+    player.computeMenuPlayListInfo(news.newsList, route.params.video)
+  } else {
+    loading.value = true
+    const { result } = await window.api.getRelease({ id: value })
+    release.value = result
+    headerText.value = release.value.names?.ru
+    player.poster = release.value?.posters?.medium || release.value?.posters?.original
+    player.computeMenuPlayListInfo(release.value.episodes, route.params.video)
+  }
+
   loading.value = false
 }, { immediate: true })
 
-watch(() => route.params.episode, () => {
-  if (release.value) computeEpisodes()
+watch(() => route.params.video, () => {
+  if (isYoutube.value) {
+    player.computeMenuPlayListInfo(news.newsList, route.params.video)
+  } else player.computeMenuPlayListInfo(release.value.episodes, route.params.video)
 })
-
-const backEpisodeName = computed(() => {
-  if (backEpisode.value === null) return
-  const { name, number } = backEpisode.value
-  let episodeName = `Эпизод ${number}`
-  if (name) episodeName += ` (${name})`
-  return episodeName
-})
-
-const forwardEpisodeName = computed(() => {
-  if (forwardEpisode.value === null) return
-  const { name, number } = forwardEpisode.value
-  let episodeName = `Эпизод ${number}`
-  if (name) episodeName += ` (${name})`
-  return episodeName
-})
-
-const activeEpisodeName = computed(() => {
-  const { name, number } = activeEpisode.value
-  let episodeName = `Эпизод ${number}`
-  if (name) episodeName += ` (${name})`
-  return episodeName
-})
-
-const playerReady = computed(() => canPlay.value && !loading.value && !waiting.value)
 
 const animatedPausePlay = ref(true)
-const isPlay = ref(false)
+
 let playPauseTimeout = null
 
 function animatePausePlay (play) {
@@ -82,13 +55,55 @@ function animatePausePlay (play) {
     }, 500)
   }
 }
+
+async function openForward () {
+  if (isYoutube && !forwardVideo.value) {
+    await loadMore()
+    player.computeMenuPlayListInfo(news.newsList, route.params.video)
+  }
+
+  if (forwardVideo.value) {
+    await router.push({
+      name: 'Player',
+      params: { video: forwardVideo.value.id }
+    })
+  }
+}
+
+async function loadMore () {
+  showLoadMoreButton.value = await news.load()
+}
+
+const sources = computed(() => {
+  const headers = '#EXTM3U\n' +
+    '#EXT-X-VERSION:3\n' +
+    '\n'
+
+  const mapping = {
+    SD: '720x480',
+    HD: '1280x720',
+    FHD: '1920x1080'
+  }
+
+  if (activeVideo.value?.video) {
+    return window.URL.createObjectURL(new Blob([
+      activeVideo.value.video
+        .map((video) => {
+          return headers +
+            '#EXT-X-STREAM-INF:RESOLUTION=' + mapping[video.name] + '\n' +
+            video.source + '\n'
+        })
+    ], { type: 'application/x-mpegurl' }))
+  }
+})
 </script>
 
 <template>
   <div>
     <div>
+      {{ sources }}
       <n-drawer
-        v-model:show="showEpisodesDrawer"
+        v-model:show="showPlayListDrawer"
         to="media-player"
         class="select-none"
         resizable
@@ -105,32 +120,37 @@ function animatePausePlay (play) {
           title="Эпизоды"
         >
           <div class="p-4">
-            <release-episodes
-              :active-episode="activeEpisode"
-              :episodes="release.episodes"
+            <play-list
+              v-if="!isYoutube"
+              :active-item="activeVideo"
+              :items="release.episodes"
+              :loading="!playerReady"
+            />
+
+            <play-list
+              v-else
+              :loading-more-button="news.loadingSwiper"
+              :show-load-more-button="showLoadMoreButton"
+              :active-item="activeVideo"
+              :items="news.newsList"
+              :loading="loading"
+              :show-watch-button="false"
+              :default-sort="isYoutube ? sortType.DESC : sortType.ASC"
+              @load-more="loadMore"
             />
           </div>
         </n-drawer-content>
       </n-drawer>
-      <div v-if="activeEpisode">
+
+      <div v-if="activeVideo">
         <video-player
-          :back-episode-text="backEpisodeName"
-          :back-disabled="!backEpisode"
-          :forward-disabled="!forwardEpisode"
-          :forward-episode-text="forwardEpisodeName"
-          :poster="poster"
-          :source="activeEpisode.video?.[0]?.source"
-          :forward-episode="forwardEpisode"
-          :episode-name="activeEpisodeName"
-          :release-name="release.names.ru"
-          @waiting="waiting = $event"
-          @can-play="canPlay = $event"
+          :source="!isYoutube ? { src: sources, type: 'application/x-mpegurl' } : activeVideo.url"
+          :open-page-icon="isYoutube ? AppsOutline : null"
           @play="animatePausePlay(true)"
           @pause="animatePausePlay(false)"
-          @open-forward="$router.push({ name: 'Player', params: { episode: forwardEpisode.id } })"
-          @open-back="$router.push({ name: 'Player', params: { episode: backEpisode.id } })"
-          @open-episodes="showEpisodesDrawer = true"
-          @open-release="router.push({ name: 'Release', params: { id: route.params.id } })"
+          @open-forward="openForward"
+          @open-back="$router.push({ name: 'Player', params: { video: backVideo.id } })"
+          @open-page="router.push(isYoutube ? { name: 'Home' } : { name: 'Release', params: { id: route.params.id } })"
         >
           <template #loader>
             <div

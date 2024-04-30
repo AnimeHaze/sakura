@@ -165,7 +165,7 @@ export class API {
     const { data: { list, pagination } } = await this.client.get('/youtube', { params: { items_per_page: limit, page } })
 
     const result = list.map(({ title, id, preview, youtube_id: youtubeId }) => ({
-      title,
+      name: title,
       id,
       url: 'https://www.youtube.com/watch?v=' + youtubeId,
       // Directly from YouTube, because I don't now why Anilibria server sometimes returns "null" in preview link

@@ -11,10 +11,13 @@ import SettingsMenu from '../menus/SettingsMenu.vue'
 import TimeSlider from '../sliders/TimeSlider.vue'
 import VolumeSlider from '../sliders/VolumeSlider.vue'
 import TimeGroup from '../TimeGroup.vue'
-import ReleaseButton from '../buttons/ReleaseButton.vue'
+import PageButton from '../buttons/PageButton.vue'
 import EpisodesButton from '../buttons/EpisodesButton.vue'
 import ForwardButton from '../buttons/ForwardButton.vue'
 import BackButton from '../buttons/BackButton.vue'
+import { usePlayerStore } from '@/store'
+
+const player = usePlayerStore()
 
 const { thumbnails, poster } = defineProps({
   thumbnails: String,
@@ -26,93 +29,81 @@ const { thumbnails, poster } = defineProps({
     type: [Boolean],
     default: undefined
   },
-  backEpisodeText: {
-    type: String,
-    required: true
-  },
-  forwardEpisodeText: {
+  headerText: {
     type: String,
     required: false,
     default: undefined
   },
-  backDisabled: {
-    type: Boolean,
-    required: false,
-    default: false
-  },
-  forwardDisabled: {
-    type: Boolean,
-    required: false,
-    default: false
-  },
-  episodeName: {
-    type: String,
-    required: false,
-    default: undefined
-  },
-  releaseName: {
-    type: String,
-    required: false,
-    default: undefined
+  openPageIcon: {
+    type: Object,
+    required: false
   }
 })
 
-defineEmits(['openEpisodes', 'openRelease', 'openBack', 'openForward'])
+defineEmits(['openEpisodes', 'openPage', 'openBack', 'openForward'])
 </script>
 
 <template>
-  <Gestures />
-  <Captions />
+  <gestures />
+  <captions />
   <media-controls
     class="media-controls:opacity-100 absolute inset-0 z-10 flex h-full w-full flex-col bg-gradient-to-t from-black/40 to-transparent opacity-0 transition-opacity"
   >
     <div class="flex-1" />
     <media-controls-group class="px-4 pb-2">
-      <div class="text-[20px]">{{ releaseName }}</div>
-      <div class="text-3xl font-bold">{{ episodeName }}</div>
+      <div class="text-[20px]">
+        {{ player.headerText }}
+      </div>
+      <div class="text-3xl font-bold">
+        {{ player.activeVideoName }}
+      </div>
     </media-controls-group>
     <media-controls-group class="flex items-center px-2 pb-3">
-      <TimeSlider :thumbnails="thumbnails" />
+      <time-slider :thumbnails="thumbnails" />
     </media-controls-group>
     <media-controls-group class="-mt-0.5 flex items-center px-2 pb-6">
-      <ReleaseButton
+      <page-button
         :poster="poster"
+        :icon="openPageIcon"
         tooltip-placement="top-start"
-        @click="$emit('openRelease')"
+        @click="$emit('openPage')"
       />
-      <EpisodesButton
+      <episodes-button
         tooltip-placement="top-start"
-        @click="$emit('openEpisodes')"
+        @click="player.showPlayListDrawer = true"
       />
-      <TimeGroup />
-      <ChapterTitle />
-      <BackButton
-        :disabled="backDisabled"
-        :footer-text="backEpisodeText"
+      <time-group />
+      <chapter-title />
+      <back-button
+        :disabled="player.backButtonDisabled"
+        :footer-text="player.backVideoName"
         :show-tooltip="showTooltips"
         class="margin-right: 20px;"
         tooltip-placement="left"
         @open-back="$emit('openBack')"
       />
-      <PlayButton tooltip-placement="top-start" />
-      <ForwardButton
-        :disabled="forwardDisabled"
-        :footer-text="forwardEpisodeText"
+      <play-button
+        :disabled="player.playButtonDisabled"
+        tooltip-placement="top-start"
+      />
+      <forward-button
+        :disabled="player.forwardButtonDisabled"
+        :footer-text="player.forwardVideoName"
         :show-tooltip="showTooltips"
         class="margin-left: 20px;"
         tooltip-placement="right"
         @open-forward="$emit('openForward')"
       />
       <div class="flex-1" />
-      <MuteButton tooltip-placement="top" />
-      <VolumeSlider />
-      <CaptionButton tooltip-placement="top" />
-      <SettingsMenu
+      <mute-button tooltip-placement="top" />
+      <volume-slider />
+      <caption-button tooltip-placement="top" />
+      <settings-menu
         placement="top end"
         tooltip-placement="top"
       />
-      <PIPButton tooltip-placement="top" />
-      <FullscreenButton tooltip-placement="top-end" />
+      <p-i-p-button tooltip-placement="top" />
+      <fullscreen-button tooltip-placement="top-end" />
     </media-controls-group>
   </media-controls>
 </template>

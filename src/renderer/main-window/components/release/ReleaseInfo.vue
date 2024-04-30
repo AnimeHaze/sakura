@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { Star, Heart, Eye, Bookmarks } from '@vicons/ionicons5'
 import ReleaseSider from '@/components/release/ReleaseSider.vue'
 import { NIcon } from 'naive-ui'
-import ReleaseEpisodes from './ReleaseEpisodes.vue'
+import PlayList from '../playlist/PlayList.vue'
 import Characters from './Characters.vue'
 import Franchises from './franchises.vue'
 import { useConfigStore } from '@/store'
@@ -37,7 +37,7 @@ const team = computed(() => {
 })
 
 const activeEpisode = computed(
-  () => props.release.episodes.find(x => x.id === '9a83ad03-1de1-4ee6-848a-5386a028be19')
+  () => props.release.episodes.find(x => x.id === '9ba697d8-73fe-498a-89fe-1e50590f368f')
 )
 </script>
 
@@ -196,9 +196,10 @@ const activeEpisode = computed(
 
                 <div class="py-1">
                   <div>
-                    <release-episodes
+                    <play-list
                       :active-episode="activeEpisode"
-                      :episodes="release.episodes"
+                      :items="release.episodes"
+                      :show-watch-button="true"
                     />
                   </div>
                 </div>

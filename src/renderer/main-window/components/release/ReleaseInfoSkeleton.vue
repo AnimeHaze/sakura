@@ -1,7 +1,7 @@
 <script setup>
 import { Bookmarks, Eye, Heart, Star } from '@vicons/ionicons5'
 import ReleaseSiderSkeleton from './ReleaseSiderSkeleton.vue'
-import ReleaseEpisodesSkeleton from './ReleaseEpisodesSkeleton.vue'
+import PlayListItemsSkeleton from '../playlist/PlayListItemsSkeleton.vue'
 </script>
 
 <template>
@@ -134,7 +134,7 @@ import ReleaseEpisodesSkeleton from './ReleaseEpisodesSkeleton.vue'
                   <div>
                     <n-divider class="n-divider" />
 
-                    <release-episodes-skeleton />
+                    <play-list-items-skeleton />
                   </div>
                 </div>
               </n-tab-pane>

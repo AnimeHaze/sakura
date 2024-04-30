@@ -14,7 +14,10 @@ const { label } = defineProps({ label: String })
       <slot name="icon" />
     </div>
     <span class="ml-1.5 parent-data-[open]:ml-0">{{ label }}</span>
-    <span class="ml-auto text-sm text-white/50" data-part="hint"></span>
+    <span
+      class="ml-auto text-sm text-white/50"
+      data-part="hint"
+    />
     <media-icon
       class="parent-data-[open]:hidden ml-0.5 h-[18px] w-[18px] text-sm text-white/50"
       type="chevron-right"
