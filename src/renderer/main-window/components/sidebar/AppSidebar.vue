@@ -1,7 +1,8 @@
 <template>
+  <!--    @expand="config.expandSidebar"-->
   <n-layout-sider
     :native-scrollbar="false"
-    class="z-20"
+    class="z-20 app-sider"
     bordered
     collapse-mode="width"
     :collapsed-width="64"
@@ -9,7 +10,6 @@
     :collapsed="config.sidebarCollapsed"
     show-trigger
     @collapse="config.collapseSidebar"
-    @expand="config.expandSidebar"
   >
     <template #default>
       <div ref="menuRef">
@@ -92,7 +92,7 @@ const menuOptions = computed(() => [
   generateOption('Назад', appSidebar.BACK, null, showBack.value),
   generateOption('Каталог', appSidebar.CATALOG, '/', showCatalog.value),
   generateOption('AniCoder', appSidebar.PROFILE, '/profile'),
-  generateOption('Избранное', appSidebar.FAVORITE),
+  generateOption('Избранное', appSidebar.FAVORITE, '/favorite'),
   generateOption('Поиск', appSidebar.SEARCH, '/search'),
   generateOption('Случайное аниме', appSidebar.RANDOM_ANIME, null),
   generateOption('Расписание', appSidebar.SCHEDULE, '/schedule'),
@@ -174,7 +174,6 @@ const actionMap = {
 
 function handleClick (key, option) {
   if (option.href) { router.push(option.href) }
-  // eslint-disable-next-line security/detect-object-injection
   if (actionMap[key]) actionMap[key]()
 }
 
@@ -213,3 +212,9 @@ const iconMap = {
   [appSidebar.RECENT]: wrapIcon(TimeOutline)
 }
 </script>
+
+<style>
+.app-sider .n-layout-toggle-button {
+  display: none;
+}
+</style>
