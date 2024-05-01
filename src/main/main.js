@@ -1,3 +1,5 @@
+// process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
 import { app } from 'electron'
 import { AwilixManager } from 'awilix-manager'
 import { InjectionMode, Lifetime, asClass, createContainer, asValue } from 'awilix'
@@ -28,6 +30,7 @@ const diContainer = createContainer({
 
 diContainer.register({
   userAgent: asValue(`${appName}/${appVersion} (${metaInfo})`),
+  proxy: asValue({ uri: 'http://127.0.0.1:8080', rejectUnauthorized: false }),
   onlineWs: asValue(import.meta.env.VITE_WEBSOCKET_ECHO),
   instanceLockEnabled: asValue(!import.meta.env.VITE_DISABLE_APP_INSTANCE_LOCK),
   apiService: asClass(API, {

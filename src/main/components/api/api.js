@@ -1,8 +1,8 @@
-import { enable } from '../../../utils/axios-debug-logger'
 import { nFormatter } from '../../../utils'
-import axios from 'axios'
+import { fetch, ProxyAgent } from 'undici'
+
 import debug from 'debug'
-enable()
+
 const d = debug('api-service')
 d.enabled = true
 
@@ -30,30 +30,64 @@ export class API {
   /**
    *
    * @param {string} userAgent
-   * @param {URL} proxy
+   * @param {{ uri: string|URL, rejectUnauthorized?: boolean }|null} proxy
    */
-  constructor ({ userAgent }) {
-    const proxy = undefined
+  constructor ({ userAgent, proxy }) {
     this.staticURL = 'https://anilibria.tv'
-
-    let proxyServer
+    this.userAgent = userAgent
+    this.baseURL = 'https://api.anilibria.tv'
 
     if (proxy) {
-      proxyServer = {
-        protocol: proxy.protocol.replace(':', ''),
-        auth: (!!proxy.password && !!proxy.username) ? { password: proxy.password, username: proxy.username } : undefined,
-        host: proxy.hostname,
-        port: proxy.port
-      }
+      this.proxyAgent = new ProxyAgent({
+        uri: proxy.uri,
+        requestTls: { // Why this? https://github.com/nodejs/undici/issues/1489#issuecomment-1648992497
+          rejectUnauthorized: proxy.rejectUnauthorized ?? true
+        }
+      })
+    }
+  }
 
-      console.info('Main proxy', proxy.toString())
+  /**
+   * @typedef {object} Params
+   * @property {object} [params] Query parameters
+   * @property {object} [data] Request body
+   * @property {'GET'|'POST'|'PUT'|'DELETE'|'PATCH'|'HEAD'|'OPTIONS'} [method] Request method
+   * @returns {Promise}
+   */
+
+  /**
+   *
+   * @param {string|URL} url
+   * @param {Params} [options]
+   */
+  async request (url, options) {
+    const { params, data, method = 'GET' } = options ?? {}
+
+    if (typeof url === 'string') url = new URL(url, this.baseURL)
+    if (params) {
+      url.search = new URLSearchParams(
+        Object.fromEntries(
+          Object.entries(params).filter(([, value]) => value !== '' && value !== null && value !== undefined)
+        )
+      )
     }
 
-    this.client = axios.create({
-      headers: { 'User-Agent': userAgent },
-      proxy: proxyServer,
-      baseURL: 'https://api.anilibria.tv/v3'
+    const response = await fetch(url, {
+      method,
+      headers: { 'User-Agent': this.userAgent },
+      body: typeof data === 'object' ? JSON.stringify(data) : data,
+      dispatcher: this.proxyAgent
     })
+
+    d(`GET ${this.baseURL ?? ''}${url} ${response.status} ${response.statusText}`)
+
+    const text = await response.text()
+
+    try {
+      return { ok: response.ok, status: response.status, data: JSON.parse(text) }
+    } catch (_) {
+      return { ok: response.ok, status: response.status, data: text }
+    }
   }
 
   async init () {
@@ -95,12 +129,16 @@ export class API {
    * Returns latest releases with pagination
    * @param {object} options - Options for the fetch request.
    * @param {number} options.limit - Limit for the number of items in the response.
-   * @param {number} options.offset - The offset number for pagination.
+   * @param {number} [options.offset] - The offset number for pagination.
    * @returns {Promise<LastReleasesResult>} Promise object represents the result and the total number of items.
    */
   async getLastReleases (options) {
     const { limit, offset } = options
-    const { data: { list, pagination } } = await this.client.get('/title/updates', { params: { limit, after: offset } })
+    const { data: { list, pagination }, ok, data } = await this.request('/v3/title/updates', { params: { limit, after: offset } })
+
+    if (!ok) {
+      throw new Error('Failed to fetch last releases', { cause: data })
+    }
 
     const result = list.map(({ names, id, code, posters }) => ({
       names: {
@@ -133,7 +171,11 @@ export class API {
       if (filterValue !== null) query[filterKey] = filterValue?.toString()
     }
 
-    const { data: { list, pagination } } = await this.client.get('/title/search', { params: { limit, ...query } })
+    const { data: { list, pagination }, ok, data } = await this.request('/v3/title/search', { params: { limit, ...query } })
+
+    if (!ok) {
+      throw new Error('Failed search releases', { cause: data })
+    }
 
     const result = list.map(({ names, id, code, posters, description, genres, in_favorites: rating }) => ({
       names: {
@@ -162,13 +204,17 @@ export class API {
 
   async getNews (options) {
     const { limit, page } = options
-    const { data: { list, pagination } } = await this.client.get('/youtube', { params: { items_per_page: limit, page } })
+    const { data: { list, pagination }, ok, data } = await this.request('/v3/youtube', { params: { items_per_page: limit, page } })
+
+    if (!ok) {
+      throw new Error('Failed to fetch news', { cause: data })
+    }
 
     const result = list.map(({ title, id, preview, youtube_id: youtubeId }) => ({
       name: title,
       id,
       url: 'https://www.youtube.com/watch?v=' + youtubeId,
-      // Directly from YouTube, because I don't now why Anilibria server sometimes returns "null" in preview link
+      // Directly from YouTube, because I don't know why Anilibria server sometimes returns "null" in preview link
       preview: preview.src ? this.staticURL + preview.src : 'https://i3.ytimg.com/vi/' + youtubeId + '/hqdefault.jpg'
     }))
 
@@ -256,7 +302,12 @@ export class API {
    * @return {Promise<number|string>}
    */
   async getRandomRelease () {
-    const { data } = await this.client.get('/title/random')
+    const { data, ok } = await this.request('/v3/title/random')
+
+    if (!ok) {
+      throw new Error('Failed to fetch random release', { cause: data })
+    }
+
     return { result: data.id }
   }
 
@@ -267,7 +318,7 @@ export class API {
    * @return {Promise<{ result: TransformedRelease }>}
    */
   async getRelease (options) {
-    const { data } = await this.client.get('/title', {
+    const { data } = await this.request('/v3/title', {
       params: {
         id: options.id,
         playlist_type: 'array'
@@ -281,7 +332,7 @@ export class API {
 
       const fetchedData = await Promise.allSettled(
         releases
-          .map(({ id }) => this.client.get('/title', {
+          .map(({ id }) => this.request('/v3/title', {
             params: {
               id,
               playlist_type: 'array'
@@ -289,11 +340,9 @@ export class API {
           }))
       )
 
-      for (const { value: { data }, status, reason } of fetchedData) {
-        if (status !== 'fulfilled' && reason) {
-          if (axios.isAxiosError(reason)) {
-            console.log(reason, reason.response.status)
-          } else throw reason
+      for (const { value: { data, status: httpStatus, ok } } of fetchedData) {
+        if (!ok) {
+          console.warn('Failed to fetch release', data, httpStatus)
         }
 
         franchisesResult.push(this.transformRelease(data))
@@ -322,10 +371,18 @@ export class API {
    * @return {Promise<Array<Filter>>}
    */
   async getSearchFilters () {
-    const [{ data: years }, { data: genres }] = await Promise.all([
-      this.client.get('/years'),
-      this.client.get('/genres')
+    const [{ data: years, ok: yearsOk }, { data: genres, ok: genresOk }] = await Promise.all([
+      this.request('/v3/years'),
+      this.request('/v3/genres')
     ])
+
+    if (!yearsOk) {
+      throw new Error('Failed to fetch years', { cause: years })
+    }
+
+    if (!genresOk) {
+      throw new Error('Failed to fetch genres', { cause: genres })
+    }
 
     return [{
       type: 'select',
