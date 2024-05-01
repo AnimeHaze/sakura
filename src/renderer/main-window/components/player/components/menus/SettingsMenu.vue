@@ -2,7 +2,7 @@
 import CaptionSubmenu from '../menus/CaptionSubmenu.vue'
 import Menu from '../menus/Menu.vue'
 import QualitySubmenu from '@/components/player/components/menus/QualitySubmenu.vue'
-import { defineCustomElement, MediaSpeedRadioGroupElement, MediaRadioElement, MediaMenuItemsElement, MediaQualityRadioGroupElement } from "vidstack/elements"
+import { defineCustomElement, MediaSpeedRadioGroupElement, MediaRadioElement, MediaMenuItemsElement } from 'vidstack/elements'
 import Submenu from '@/components/player/components/menus/Submenu.vue'
 
 /** @type {{ placement: import('vidstack').MenuPlacement, tooltipPlacement: import('vidstack').TooltipPlacement }} */
@@ -11,7 +11,7 @@ const { placement, tooltipPlacement } = defineProps({
   tooltipPlacement: String
 })
 
-defineCustomElement(MediaSpeedRadioGroupElement);
+defineCustomElement(MediaSpeedRadioGroupElement)
 defineCustomElement(MediaRadioElement)
 defineCustomElement(MediaMenuItemsElement)
 </script>
@@ -30,8 +30,6 @@ defineCustomElement(MediaMenuItemsElement)
     <template #content>
       <CaptionSubmenu />
       <QualitySubmenu />
-
-
 
       <submenu label="Скорость">
         <template #icon>
@@ -57,7 +55,10 @@ defineCustomElement(MediaMenuItemsElement)
                   class="hidden h-4 w-4 group-data-[checked]:block"
                 />
 
-                <span class="ml-2" data-part="label"></span>
+                <span
+                  class="ml-2"
+                  data-part="label"
+                />
               </media-radio>
             </template>
           </media-speed-radio-group>

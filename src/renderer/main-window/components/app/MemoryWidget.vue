@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch, onBeforeUnmount } from 'vue'
+
 const totalJSHeapSize = ref(0)
 const usedJSHeapSize = ref(0)
 const jsHeapSizeLimit = ref(0)

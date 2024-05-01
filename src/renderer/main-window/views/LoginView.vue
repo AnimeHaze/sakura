@@ -8,7 +8,7 @@
       >
         <template #icon>
           <n-icon>
-            <shikimori-icon :color="theme.textColorBase"/>
+            <shikimori-icon :color="theme.textColorBase" />
           </n-icon>
         </template>
         SHIKIMORI

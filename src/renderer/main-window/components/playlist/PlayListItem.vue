@@ -37,7 +37,10 @@
           </div>
 
           <n-space>
-            <div v-if="number" class="font-bold">
+            <div
+              v-if="number"
+              class="font-bold"
+            >
               Серия {{ number }}
             </div>
 
@@ -60,7 +63,10 @@
           </n-tag>
         </n-space>
 
-        <div v-if="date" class="mt-1 mr-2 text-zinc-400">
+        <div
+          v-if="date"
+          class="mt-1 mr-2 text-zinc-400"
+        >
           {{ new Date(date * 1000).toLocaleString() }}
         </div>
       </n-space>

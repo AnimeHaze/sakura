@@ -39,8 +39,11 @@ const { tooltipPlacement, poster } = defineProps({
           </template>
         </n-image>
 
-        <n-icon :size="24" v-else>
-          <component :is="icon"></component>
+        <n-icon
+          v-else
+          :size="24"
+        >
+          <component :is="icon" />
         </n-icon>
       </div>
     </template>

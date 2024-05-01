@@ -95,13 +95,14 @@ const sources = computed(() => {
         })
     ], { type: 'application/x-mpegurl' }))
   }
+
+  return undefined
 })
 </script>
 
 <template>
   <div>
     <div>
-      {{ sources }}
       <n-drawer
         v-model:show="showPlayListDrawer"
         to="media-player"

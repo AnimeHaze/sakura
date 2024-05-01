@@ -47,6 +47,7 @@
 import meta from '../../../../package.json'
 import { ref, watch } from 'vue'
 import Logo from '../../../../assets/logo/logo.png'
+
 const animate = ref(false)
 
 watch(() => animate.value, (value) => {

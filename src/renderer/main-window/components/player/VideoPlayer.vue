@@ -7,10 +7,9 @@ import 'vidstack/player/ui'
 import 'vidstack/icons'
 
 import { isHLSProvider, isYouTubeProvider, TextTrack } from 'vidstack'
-import { nextTick, onMounted, ref, watch } from 'vue'
+import { onMounted, ref } from 'vue'
 
 import VideoLayout from './components/layouts/VideoLayout.vue'
-import { textTracks } from './track'
 import { usePlayerStore } from '@/store'
 import { storeToRefs } from 'pinia'
 
@@ -33,9 +32,7 @@ onMounted(() => {
     default: true
   })
 
-
   $player.value.textTracks.add(track)
-  // for (const track of textTracks) $player.value.textTracks.add(track)ca
 
   $player.value.subscribe(({ volume, muted, canPlay }) => {
     if (!canPlay) return
@@ -44,7 +41,7 @@ onMounted(() => {
   })
 
   return $player.value.subscribe((data) => {
-    const { paused, viewType, controlsVisible, canPlay, waiting } = data
+    const { paused, controlsVisible, canPlay, waiting } = data
 
     if (pausedRef.value !== paused) {
       pausedRef.value = paused

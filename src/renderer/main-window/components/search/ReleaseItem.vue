@@ -114,6 +114,7 @@ import { computed } from 'vue'
 import { Star } from '@vicons/ionicons5'
 import { useRouter } from 'vue-router'
 import UserListSelect from '../user-list/popup/UserListSelect.vue'
+
 const router = useRouter()
 
 const properties = defineProps({

@@ -35,8 +35,8 @@ import { appTheme } from '@enums/index'
 import ContextMenu from './app/ContextMenu.vue'
 import MemoryWidget from './app/MemoryWidget.vue'
 import OfflineLayout from '@/layouts/OfflineLayout.vue'
-import TitleBarContextMenu from '@/components/app/TitleBarContextMenu.vue'
-import TitleBar from '@/components/app/TitleBar.vue'
+// import TitleBarContextMenu from '@/components/app/TitleBarContextMenu.vue'
+// import TitleBar from '@/components/app/TitleBar.vue'
 
 let onLineInterval = null
 const showMemoryUsage = ref(false)

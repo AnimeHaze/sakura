@@ -1,5 +1,4 @@
 <script setup>
-import MenuRadio from './MenuRadio.vue'
 import Submenu from './Submenu.vue'
 </script>
 
@@ -27,7 +26,10 @@ import Submenu from './Submenu.vue'
               class="hidden h-4 w-4 group-data-[checked]:block"
             />
 
-            <span class="ml-2" data-part="label"></span>
+            <span
+              class="ml-2"
+              data-part="label"
+            />
           </media-radio>
         </template>
       </media-captions-radio-group>

@@ -1,6 +1,6 @@
 <script setup>
 import { ArrowUpOutline } from '@vicons/ionicons5'
-import {nextTick, onBeforeUnmount, onMounted, ref} from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 
 const x = ref(0)
 const y = ref(0)

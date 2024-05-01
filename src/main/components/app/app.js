@@ -4,6 +4,7 @@ import { getBaseURL, isOpenShellSecure, nFormatter } from '../../../utils'
 import { createMainWindow } from '../../windows'
 import { ipc } from '@enums/index'
 import debug from 'debug'
+
 const d = debug('app')
 d.enabled = true
 
