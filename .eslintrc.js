@@ -26,6 +26,25 @@ module.exports = {
     'unicorn/error-message': 1,
     'unicorn/consistent-destructuring': 1,
     'unicorn/catch-error-name': 1,
-    'no-secrets/no-secrets': 0 // TODO: enable
+    'no-secrets/no-secrets': 0, // TODO: enable
+    'import/no-duplicates': 1,
+    'import/newline-after-import': 1,
+    'import/first': 1,
+    'import/no-self-import': 1,
+    'import/no-absolute-path': 1,
+    'import/no-deprecated': 1,
+    'vue/component-api-style ': ['error',
+      ['script-setup', 'composition'] // "script-setup", "composition", "composition-vue2", or "options"
+    ],
+    'vue/component-name-in-template-casing': ['error', 'kebab-case', {
+      registeredComponentsOnly: true,
+      ignores: []
+    }],
+    'vue/custom-event-name-casing': ['error', 'kebab-case', {
+      ignores: []
+    }],
+    'vue/define-macros-order': ['error', {
+      order: ['defineProps', 'defineEmits']
+    }]
   }
 }
