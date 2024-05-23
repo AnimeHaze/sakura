@@ -2,6 +2,7 @@ import ReconnectingWebSocket from 'reconnecting-websocket'
 import WS from 'ws'
 import debug from 'debug'
 import { onlineChecker } from '@enums/index.js'
+
 const d = debug('online-checker')
 
 export class OnlineChecker {
@@ -22,8 +23,6 @@ export class OnlineChecker {
     this._socket._debug = function () {
       d(...arguments)
     }
-
-    d.enabled = true
 
     this._socket.reconnect()
 
