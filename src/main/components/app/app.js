@@ -57,7 +57,13 @@ export class App {
       (event, webContents) =>
         this.webContentsCreated(event, webContents)
     )
-    app.on('ready', () => this.ready())
+
+    /*
+      app.whenReady instead of `app.on('ready', () => this.ready())` because event can be subscribed after fire
+      Just do not change it. It just works. Never touch it. :3 Suka nya.
+    */
+    app.whenReady().then(() => this.ready())
+
     app.on('window-all-closed', () => this.windowAllClosed())
     app.on('activate', () => this.activate())
 
