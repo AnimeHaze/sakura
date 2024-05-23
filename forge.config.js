@@ -47,7 +47,7 @@ module.exports = {
       const files = await fsp.readdir(localesDir)
 
       for (const file of files) {
-        if (path.parse(file).name === 'en-US') {
+        if (path.parse(file).name !== 'en-US') {
           // eslint-disable-next-line security/detect-non-literal-fs-filename
           await fsp.unlink(path.join(localesDir, file))
         }
