@@ -6,11 +6,11 @@
     :locale="ruRU"
     :date-locale="dateRuRU"
   >
-    <title-bar-context-menu>
-      <template #default="{ titleBarDrag }">
-        <title-bar :title-bar-drag="titleBarDrag" />
-      </template>
-    </title-bar-context-menu>
+    <!--    <title-bar-context-menu>-->
+    <!--      <template #default="{ titleBarDrag }">-->
+    <!--        <title-bar :title-bar-drag="titleBarDrag" />-->
+    <!--      </template>-->
+    <!--    </title-bar-context-menu>-->
 
     <n-dialog-provider>
       <n-notification-provider>
