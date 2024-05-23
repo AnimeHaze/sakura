@@ -36,7 +36,6 @@ export class OperaProxy {
     rl.on('line', line => {
       if (!isFirst) {
         const [code, name] = line.split(',')
-        // eslint-disable-next-line security/detect-object-injection
         countries[code] = name
       } else isFirst = false
     })
