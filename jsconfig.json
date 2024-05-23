@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "types": ["vidstack/vue"],
+    "types": ["vidstack/vue", "vidstack/globals"],
     "paths": {
       "@/*": [
         "./src/renderer/main-window/*"
