@@ -135,7 +135,7 @@ module.exports = {
     // },
     {
       name: '@electron-forge/maker-zip',
-      platforms: [/*'darwin', 'windows',*/ 'linux']
+      platforms: [/*'darwin', 'win32', 'linux'*/'linux']
     },
     // {
     //   name: '@electron-forge/maker-snap',
