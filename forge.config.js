@@ -59,7 +59,7 @@ module.exports = {
     executableName: meta.productName,
     icon: path.resolve(__dirname, 'assets', 'logo', 'logo'),
     prune: true,
-    afterPrune: [async (buildPath, electronVersion, platform, arch, callback) => {
+    packageAfterPrune: [async (buildPath, electronVersion, platform, arch) => {
       // Remove empty dirs after prune
       await cleanupEmptyFolders(path.join(buildPath, 'node_modules'))
 
@@ -80,6 +80,12 @@ module.exports = {
       await fsp.writeFile(packageDotJson, JSON.stringify(result, null, 2))
     }],
     ignore: [
+      'node_modules/.vite',
+      'node_modules/naiveui',
+      'node_modules/@babel',
+      'node_modules/@css-render',
+      'node_modules/@types',
+      'node_modules/@vue',
       '.commitlintrc.js',
       '.editorconfig',
       '.env.development',
