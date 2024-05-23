@@ -76,6 +76,7 @@
     "@jamescoyle/vue-icon": "^0.1.2",
     "@mdi/font": "^7.4.47",
     "@mdi/js": "^7.4.47",
+    "@msgpack/msgpack": "^3.0.0-beta2",
     "awilix": "^10.0.2",
     "awilix-manager": "^5.2.1",
     "debug": "^4.3.4",
