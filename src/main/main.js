@@ -10,6 +10,7 @@ import { App } from './components/app'
 import { Notify } from './components/notify'
 import { PowerSaveBlocker } from './components/power-save-blocker'
 import { Torrent } from './components/webtorrent'
+import { Config } from './config'
 
 // Check startup and quit if it's a Squirrel startup event
 if (require('electron-squirrel-startup')) {
@@ -31,8 +32,14 @@ const diContainer = createContainer({
 diContainer.register({
   userAgent: asValue(`${appName}/${appVersion} (${metaInfo})`),
   proxy: asValue({ uri: 'http://127.0.0.1:8080', rejectUnauthorized: false }),
+  configPath: asValue(app.getPath('userData')),
   onlineWs: asValue(import.meta.env.VITE_WEBSOCKET_ECHO),
   instanceLockEnabled: asValue(!import.meta.env.VITE_DISABLE_APP_INSTANCE_LOCK),
+  config: asClass(Config, {
+    lifetime: Lifetime.SINGLETON,
+    asyncInit: 'init',
+    asyncDispose: 'dispose'
+  }),
   apiService: asClass(API, {
     lifetime: Lifetime.SINGLETON,
     asyncInit: 'init',
@@ -77,4 +84,8 @@ const awilixManager = new AwilixManager({
   asyncDispose: true
 })
 
-awilixManager.executeInit()
+async function main () {
+  await awilixManager.executeInit()
+}
+
+main()

@@ -23,7 +23,8 @@ export class App {
     apiService,
     notifyService,
     powerSaveBlocker,
-    instanceLockEnabled
+    instanceLockEnabled,
+    config
   }) {
     this._powerSaveBlocker = powerSaveBlocker
     this._windowsManager = windowsManager
