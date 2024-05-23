@@ -1,21 +1,23 @@
 <template>
-  <div class="pl-6 pr-6 full-page-height">
+  <div class="full-page-height">
     <n-scrollbar
       x-scrollable
       class="h-full"
+      content-style="padding: 15x;"
     >
       <div
-        class="flex gap-x-5 flex-row mt-4"
+        class="flex gap-x-5 flex-row mt-2"
       >
         <NCard
           v-for="favoriteView in 10"
+          :key="favoriteView"
           style="width: 400px"
           title="Смотрю"
           :segmented="{ content: true, footer: true }"
           size="small"
           :bordered="false"
         >
-          <Draggable
+          <draggable
             :force-fallback="true"
             ghost-class="ghost"
             drag-class="drag"
@@ -33,21 +35,20 @@
                 </n-tag><span class="ml-2">{{ element.name }}</span>
               </div>
             </template>
-          </Draggable>
+          </draggable>
         </NCard>
       </div>
     </n-scrollbar>
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { computed, reactive } from 'vue'
 import Draggable from 'vuedraggable'
 import { useConfigStore } from '@/store'
-import { appTheme } from '@enums'
+import { appTheme } from '@enums/index'
 
 const config = useConfigStore()
-
 
 const demandList = reactive([
   { name: 'Джудзюцу Кайсен', id: 1 },
@@ -74,6 +75,12 @@ const demandList = reactive([
 
 const itemBackgroundColor = computed(() => config.theme === appTheme.LIGHT ? '#d5d4d4' : '#312f2f')
 </script>
+
+<style>
+.n-scrollbar-rail--horizontal > .n-scrollbar-rail__scrollbar {
+  height: 10px !important;
+}
+</style>
 
 <style scoped>
 .draggable-ul {
