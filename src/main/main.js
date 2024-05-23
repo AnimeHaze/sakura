@@ -31,7 +31,7 @@ const diContainer = createContainer({
 
 diContainer.register({
   userAgent: asValue(`${appName}/${appVersion} (${metaInfo})`),
-  proxy: asValue({ uri: 'http://127.0.0.1:8080', rejectUnauthorized: false }),
+  proxy: asValue(/*{ uri: 'http://127.0.0.1:8080', rejectUnauthorized: false}*/null),
   configPath: asValue(app.getPath('userData')),
   onlineWs: asValue(import.meta.env.VITE_WEBSOCKET_ECHO),
   instanceLockEnabled: asValue(!import.meta.env.VITE_DISABLE_APP_INSTANCE_LOCK),
