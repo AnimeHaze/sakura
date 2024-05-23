@@ -79,7 +79,7 @@ export class API {
       dispatcher: this.proxyAgent
     })
 
-    d(`GET ${this.baseURL ?? ''}${url} ${response.status} ${response.statusText}`)
+    d(`GET ${url} ${response.status} ${response.statusText}`)
 
     const text = await response.text()
 
