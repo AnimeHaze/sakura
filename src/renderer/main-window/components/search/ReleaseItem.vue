@@ -115,8 +115,6 @@ import { Star } from '@vicons/ionicons5'
 import { useRouter } from 'vue-router'
 import UserListSelect from '../user-list/popup/UserListSelect.vue'
 
-const router = useRouter()
-
 const properties = defineProps({
   releaseInfo: {
     type: Object,
@@ -127,6 +125,8 @@ const properties = defineProps({
     required: true
   }
 })
+
+const router = useRouter()
 
 const poster = computed(x => properties.releaseInfo.posters.medium ?? properties.releaseInfo.posters.small)
 

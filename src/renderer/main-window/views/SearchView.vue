@@ -31,6 +31,7 @@
           <release-item-skeleton
             v-for="release in 20"
             :key="release"
+            class="mb-3"
           />
         </div>
 
@@ -45,7 +46,7 @@
           />
         </div>
 
-        <NotFound v-show="!loading && !releases.length" />
+        <not-found v-show="!loading && !releases.length" />
 
         <n-space
           justify="center"

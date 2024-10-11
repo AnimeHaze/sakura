@@ -106,7 +106,7 @@ const props = defineProps({
     default: true
   },
   date: {
-    type: String,
+    type: Number,
     required: false
   },
   name: {

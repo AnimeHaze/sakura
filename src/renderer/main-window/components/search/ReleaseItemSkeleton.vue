@@ -41,6 +41,8 @@
         </n-skeleton>
       </div>
       <n-skeleton
+        v-for="line in 5"
+        :key="line"
         text
         :sharp="false"
         class="mt-1 h-29 w-full"

@@ -6,8 +6,6 @@ import { computed, ref } from 'vue'
 import Fuse from 'fuse.js'
 import { sortType } from '@enums/index'
 
-defineEmits(['loadMore'])
-
 const properties = defineProps({
   items: {
     type: Array,
@@ -40,6 +38,8 @@ const properties = defineProps({
     default: sortType.ASC
   }
 })
+
+defineEmits(['load-more'])
 
 const fuse = new Fuse(properties.items, {
   keys: [
@@ -86,7 +86,7 @@ function swapSort () {
             class="transition"
             :style="{ transform: `rotate(${sortDeg}deg)` }"
           >
-            <SwapVerticalOutline />
+            <swap-vertical-outline />
           </n-icon>
         </n-button>
       </div>
@@ -130,7 +130,7 @@ function swapSort () {
       size="large"
       strong
       secondary
-      @click="$emit('loadMore')"
+      @click="$emit('load-more')"
     >
       Загрузить еще
     </n-button>
